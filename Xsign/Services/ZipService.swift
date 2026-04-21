@@ -11,12 +11,6 @@ class ZipService {
     }
 
     func zip(directory: URL, to destination: URL) throws {
-        let fileManager = FileManager.default
-        let archive = try Archive(url: destination, accessMode: .create)
-
-        let contents = try fileManager.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil)
-        for item in contents {
-            try archive.addEntry(with: item.lastPathComponent, relativeTo: directory)
-        }
+        try FileManager.default.zipItem(at: directory, to: destination)
     }
 }

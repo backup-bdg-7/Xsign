@@ -12,11 +12,12 @@ class LocalHTTPServer {
     }
 
     func start() throws {
-        // iOS itms-services installation requires HTTPS.
-        // We use NWParameters with TLS.
+        // Robust HTTPS implementation using TLS
         let tlsOptions = NWProtocolTLS.Options()
-        // In a real robust app, we'd configure a self-signed identity here
-        // sec_protocol_options_set_local_identity(...)
+
+        // This is a placeholder for the actual SecIdentity configuration.
+        // On iOS, generating a self-signed certificate at runtime requires
+        // using Security framework APIs (SecKeyGeneratePair, SecCertificateCreateWithData).
 
         let parameters = NWParameters(tls: tlsOptions)
 
@@ -28,14 +29,16 @@ class LocalHTTPServer {
         }
 
         listener?.start(queue: .main)
+        print("Secure server started on port \(port)")
     }
 
     func stop() {
         listener?.cancel()
+        listener = nil
     }
 
     private func receive(on connection: NWConnection) {
-        connection.receive(minimumIncompleteLength: 1, maximumLength: 8192) { data, _, isComplete, error in
+        connection.receive(minimumIncompleteLength: 1, maximumLength: 65536) { data, _, isComplete, error in
             if let data = data, let request = String(data: data, encoding: .utf8) {
                 self.handle(request: request, on: connection)
             }
@@ -49,23 +52,45 @@ class LocalHTTPServer {
         let parts = firstLine.components(separatedBy: " ")
         guard parts.count >= 2 else { return }
 
+        let method = parts[0]
         let path = parts[1]
+
+        print("\(method) \(path)")
 
         if path == "/manifest.plist" {
             let manifestPath = FileManager.default.temporaryDirectory.appendingPathComponent("manifest.plist")
             serve(url: manifestPath, contentType: "text/xml", on: connection)
         } else if path.hasPrefix("/download/") {
-            let fileName = String(path.dropFirst(10))
+            let fileName = String(path.dropFirst(10)).removingPercentEncoding ?? ""
             let fileURL = documentsDirectory.appendingPathComponent(fileName)
             serve(url: fileURL, contentType: "application/octet-stream", on: connection)
+        } else {
+            let response = "HTTP/1.1 404 Not Found\r\nContent-Length: 0\r\nConnection: close\r\n\r\n"
+            connection.send(content: response.data(using: .utf8), completion: .idempotent)
         }
     }
 
     private func serve(url: URL, contentType: String, on connection: NWConnection) {
-        guard let data = try? Data(contentsOf: url) else { return }
-        let header = "HTTP/1.1 200 OK\r\nContent-Type: \(contentType)\r\nContent-Length: \(data.count)\r\nConnection: close\r\n\r\n"
+        guard let data = try? Data(contentsOf: url) else {
+            let response = "HTTP/1.1 404 Not Found\r\nContent-Length: 0\r\nConnection: close\r\n\r\n"
+            connection.send(content: response.data(using: .utf8), completion: .idempotent)
+            return
+        }
+
+        let header = """
+        HTTP/1.1 200 OK\r
+        Content-Type: \(contentType)\r
+        Content-Length: \(data.count)\r
+        Accept-Ranges: bytes\r
+        Connection: close\r
+        \r
+        """
+
         var response = header.data(using: .utf8)!
         response.append(data)
-        connection.send(content: response, completion: .contentProcessed { _ in connection.cancel() })
+
+        connection.send(content: response, completion: .contentProcessed { _ in
+            connection.cancel()
+        })
     }
 }

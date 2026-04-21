@@ -19,7 +19,7 @@ class SecurityService {
             let newKey = SymmetricKey(size: .bits256)
             newKey.withUnsafeBytes { bytes in
                 let data = Data(bytes)
-                // Securely store the key with Complete File Protection
+                // Use complete file protection for the master key
                 try? data.write(to: keyPath, options: .completeFileProtection)
             }
             return newKey
