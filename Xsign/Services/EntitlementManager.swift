@@ -2,30 +2,37 @@ import Foundation
 
 class EntitlementManager {
     static let shared = EntitlementManager()
-
     private init() {}
 
-    func extractEntitlements(from appURL: URL) -> [String: Any]? {
-        // 1. Locate the executable
-        // 2. Run 'codesign -d --entitlements - <binary>' or parse Mach-O __TEXT,__entitlements
-
-        let executableURL = appURL.appendingPathComponent("executable_placeholder")
-
-        // Simplified extraction logic:
-        // In a real robust app, we would use a C binding to Security.framework
-        // or parse the Mach-O section directly.
-
-        print("Extracting entitlements from \(appURL.path)")
-
-        return [
-            "application-identifier": "TEAMID.com.example.app",
-            "get-task-allow": true,
-            "aps-environment": "production"
-        ]
+    /// Extracts entitlements from a certificate's provisioning profile.
+    func extractFromProfile(data: Data) -> [String: Any]? {
+        guard let profile = ProvisioningParser.shared.parse(data: data) else { return nil }
+        return profile.entitlements
     }
 
-    func saveEntitlements(_ entitlements: [String: Any], to url: URL) throws {
-        let data = try PropertyListSerialization.data(fromPropertyList: entitlements, format: .xml, options: 0)
-        try data.write(to: url)
+    /// Extracts entitlements from an IPA bundle's embedded.mobileprovision.
+    func extractFromIPA(at url: URL) -> [String: Any]? {
+        let fileManager = FileManager.default
+        let workingDir = fileManager.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+
+        do {
+            try fileManager.createDirectory(at: workingDir, withIntermediateDirectories: true)
+            // 1. Unzip to temp
+            try ZipService.shared.unzip(at: url, to: workingDir)
+
+            // 2. Find embedded.mobileprovision
+            let payloadDir = workingDir.appendingPathComponent("Payload")
+            let contents = try fileManager.contentsOfDirectory(at: payloadDir, includingPropertiesForKeys: nil)
+            if let appDir = contents.first(where: { $0.pathExtension == "app" }) {
+                let profileURL = appDir.appendingPathComponent("embedded.mobileprovision")
+                if let profileData = try? Data(contentsOf: profileURL) {
+                    return extractFromProfile(data: profileData)
+                }
+            }
+        } catch {
+            print("Failed to extract entitlements from IPA: \(error)")
+        }
+
+        return nil
     }
 }

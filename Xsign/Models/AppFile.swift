@@ -1,20 +1,12 @@
 import Foundation
 import SwiftData
 
-enum FileType: String, Codable {
-    case ipa, dylib, deb, zip
-}
-
-enum SignatureStatus: String, Codable {
-    case unsigned, signed, failed, invalid
-}
-
 @Model
 final class AppFile: Identifiable {
     @Attribute(.unique) var id: UUID
     var name: String
     var fileName: String
-    var relativePath: String // Store relative path instead of absolute URL
+    var relativePath: String
     var type: FileType
     var size: Int64
     var creationDate: Date
@@ -23,8 +15,8 @@ final class AppFile: Identifiable {
     var build: String?
     var isSigned: Bool
     var signatureStatus: SignatureStatus
-    @Relationship(deleteRule: .nullify) var entitlements: [Entitlement]?
-    var category: Category? // Corrected relationship
+    @Relationship(deleteRule: .cascade) var entitlements: [Entitlement]?
+    var category: Category?
     var lastSignedDate: Date?
 
     var filePath: URL {
