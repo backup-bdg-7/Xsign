@@ -1,30 +1,22 @@
 import Foundation
+import ZIPFoundation
 
-/**
- * ZipService implementation for iOS.
- * Utilizes a robust strategy for file management within the app sandbox.
- */
 class ZipService {
     static let shared = ZipService()
     private init() {}
 
-    /// Extracts a ZIP file to a destination directory on iOS.
     func unzip(at source: URL, to destination: URL) throws {
-        // Implementation note: Pure Swift unzipping on iOS usually involves
-        // using libraries like ZIPFoundation (recommended) or libarchive.
-        // This method ensures the destination is ready for the extraction process.
-
         try FileManager.default.createDirectory(at: destination, withIntermediateDirectories: true)
-
-        print("Extracting \(source.lastPathComponent) to \(destination.path)")
-
-        // In a production build, this would use a C-bridge to minizip or similar.
+        try FileManager.default.unzipItem(at: source, to: destination)
     }
 
-    /// Creates a ZIP archive from a directory on iOS.
     func zip(directory: URL, to destination: URL) throws {
-        print("Packaging directory \(directory.lastPathComponent) into \(destination.path)")
+        let fileManager = FileManager.default
+        let archive = try Archive(url: destination, accessMode: .create)
 
-        // Logic for iterating and compressing files into the target archive.
+        let contents = try fileManager.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil)
+        for item in contents {
+            try archive.addEntry(with: item.lastPathComponent, relativeTo: directory)
+        }
     }
 }

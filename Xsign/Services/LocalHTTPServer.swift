@@ -12,25 +12,19 @@ class LocalHTTPServer {
     }
 
     func start() throws {
-        let parameters = NWParameters.tcp
-        // In a real robust implementation, we would add TLS here with a self-signed cert
-        // to satisfy the 'secure' requirement and iOS itms-services requirements.
+        // iOS itms-services installation requires HTTPS.
+        // We use NWParameters with TLS.
+        let tlsOptions = NWProtocolTLS.Options()
+        // In a real robust app, we'd configure a self-signed identity here
+        // sec_protocol_options_set_local_identity(...)
+
+        let parameters = NWParameters(tls: tlsOptions)
 
         listener = try NWListener(using: parameters, on: port)
 
-        listener?.stateUpdateHandler = { state in
-            switch state {
-            case .ready:
-                print("Server ready on port \(self.port)")
-            case .failed(let error):
-                print("Server failed: \(error)")
-            default:
-                break
-            }
-        }
-
         listener?.newConnectionHandler = { connection in
-            self.handleConnection(connection)
+            connection.start(queue: .main)
+            self.receive(on: connection)
         }
 
         listener?.start(queue: .main)
@@ -40,25 +34,16 @@ class LocalHTTPServer {
         listener?.cancel()
     }
 
-    private func handleConnection(_ connection: NWConnection) {
-        connection.start(queue: .main)
-        receiveRequest(connection)
-    }
-
-    private func receiveRequest(_ connection: NWConnection) {
+    private func receive(on connection: NWConnection) {
         connection.receive(minimumIncompleteLength: 1, maximumLength: 8192) { data, _, isComplete, error in
-            if let data = data, !data.isEmpty {
-                let request = String(data: data, encoding: .utf8) ?? ""
-                self.processRequest(request, connection: connection)
+            if let data = data, let request = String(data: data, encoding: .utf8) {
+                self.handle(request: request, on: connection)
             }
-
-            if error != nil || isComplete {
-                connection.cancel()
-            }
+            if error != nil || isComplete { connection.cancel() }
         }
     }
 
-    private func processRequest(_ request: String, connection: NWConnection) {
+    private func handle(request: String, on connection: NWConnection) {
         let lines = request.components(separatedBy: "\r\n")
         guard let firstLine = lines.first else { return }
         let parts = firstLine.components(separatedBy: " ")
@@ -68,42 +53,19 @@ class LocalHTTPServer {
 
         if path == "/manifest.plist" {
             let manifestPath = FileManager.default.temporaryDirectory.appendingPathComponent("manifest.plist")
-            serveFile(at: manifestPath, contentType: "text/xml", connection: connection)
+            serve(url: manifestPath, contentType: "text/xml", on: connection)
         } else if path.hasPrefix("/download/") {
             let fileName = String(path.dropFirst(10))
             let fileURL = documentsDirectory.appendingPathComponent(fileName)
-            serveFile(at: fileURL, contentType: "application/octet-stream", connection: connection)
-        } else {
-            sendResponse(status: "404 Not Found", body: "Not Found", connection: connection)
+            serve(url: fileURL, contentType: "application/octet-stream", on: connection)
         }
     }
 
-    private func serveFile(at url: URL, contentType: String, connection: NWConnection) {
-        guard let data = try? Data(contentsOf: url) else {
-            sendResponse(status: "404 Not Found", body: "File Not Found", connection: connection)
-            return
-        }
-
-        let header = """
-        HTTP/1.1 200 OK\r
-        Content-Type: \(contentType)\r
-        Content-Length: \(data.count)\r
-        Connection: close\r
-        \r
-        """
-
-        var responseData = header.data(using: .utf8)!
-        responseData.append(data)
-
-        connection.send(content: responseData, completion: .contentProcessed { _ in
-            connection.cancel()
-        })
-    }
-
-    private func sendResponse(status: String, body: String, connection: NWConnection) {
-        let response = "HTTP/1.1 \(status)\r\nContent-Length: \(body.count)\r\nConnection: close\r\n\r\n\(body)"
-        connection.send(content: response.data(using: .utf8), completion: .contentProcessed { _ in
-            connection.cancel()
-        })
+    private func serve(url: URL, contentType: String, on connection: NWConnection) {
+        guard let data = try? Data(contentsOf: url) else { return }
+        let header = "HTTP/1.1 200 OK\r\nContent-Type: \(contentType)\r\nContent-Length: \(data.count)\r\nConnection: close\r\n\r\n"
+        var response = header.data(using: .utf8)!
+        response.append(data)
+        connection.send(content: response, completion: .contentProcessed { _ in connection.cancel() })
     }
 }
