@@ -3,6 +3,7 @@
 #include "../External/zsign/src/signing.h"
 #include "../External/zsign/src/bundle.h"
 #include "../External/zsign/src/openssl.h"
+#include "../External/zsign/src/common/archive.h"
 
 /**
  * ZSignWrapper implementation.
@@ -41,11 +42,27 @@
     NSLog(@"[ZSign] Signing IPA: %@", ipaPath);
 
     // Bridge to the real ZBundle core
-    return bundle.SignFolder(&asset, ipaPath.UTF8String,
-                             bundleID ? bundleID.UTF8String : "",
-                             bundleVersion ? bundleVersion.UTF8String : "",
-                             bundleName ? bundleName.UTF8String : "",
-                             arrDylibs, {}, true, false, false);
+    if (!bundle.SignFolder(&asset, ipaPath.UTF8String,
+                          bundleID ? bundleID.UTF8String : "",
+                          bundleVersion ? bundleVersion.UTF8String : "",
+                          bundleName ? bundleName.UTF8String : "",
+                          arrDylibs, {}, true, false, false)) {
+        return NO;
+    }
+
+    // Repackage signed folder into IPA
+    // zsign's SignFolder populates m_strAppFolder with the actual .app path
+    // We need the parent directory of "Payload"
+    string strAppPath = bundle.m_strAppFolder;
+    size_t pos = strAppPath.rfind("/Payload");
+    if (string::npos != pos && pos > 0) {
+        string strPayloadParent = strAppPath.substr(0, pos);
+        NSLog(@"[ZSign] Archiving signed bundle to: %@", outputPath);
+        return Zip::Archive(strPayloadParent, outputPath.UTF8String, 0);
+    }
+
+    NSLog(@"[ZSign] Failed to find Payload directory for archiving.");
+    return NO;
 }
 
 @end

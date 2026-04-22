@@ -34,7 +34,6 @@ targets:
       - package: SWCompression
       - package: OpenSSL
       - package: Crypto
-      - package: Zsign
 packages:
   ZIPFoundation:
     url: https://github.com/weichsel/ZIPFoundation.git
@@ -60,6 +59,3 @@ packages:
   Crypto:
     url: https://github.com/apple/swift-crypto.git
     from: 3.12.3
-  Zsign:
-    url: https://github.com/CLARATION/Zsign-Package.git
-    branch: package

@@ -164,11 +164,9 @@ struct SignModalView: View {
 
     private func startInstallation() {
         guard let url = signedIPAURL else { return }
-        Task {
-            if let installURL = try? await LocalServerService.shared.startServer(for: url, bundleID: newID, version: newVersion, name: newName) {
-                UIApplication.shared.open(installURL)
-            }
-            dismiss()
+        if let installURL = LocalServerService.shared.startServer(for: url, bundleID: newID, version: newVersion, name: newName) {
+            UIApplication.shared.open(installURL)
         }
+        dismiss()
     }
 }
