@@ -1,4 +1,5 @@
 import Foundation
+import BitByteData
 
 class BinaryParser {
     static let shared = BinaryParser()
@@ -8,18 +9,24 @@ class BinaryParser {
         guard let data = try? Data(contentsOf: url) else { return nil }
         if data.count < 32 { return nil }
 
-        let magic = data.withUnsafeBytes { $0.load(as: UInt32.self) }
+        let reader = LittleEndianByteReader(data: data)
+        let magic = reader.readUInt32()
+
         var architectures: [String] = []
 
         if magic == 0xCAFEBABE || magic == 0xBEBAFECA { // Fat
-            let numArchs = data.withUnsafeBytes { $0.load(fromByteOffset: 4, as: UInt32.self).bigEndian }
-            for i in 0..<Int(numArchs) {
-                let offset = 8 + (i * 20)
-                let cputype = data.withUnsafeBytes { $0.load(fromByteOffset: offset, as: Int32.self).bigEndian }
+            let numArchs = reader.readUInt32().bigEndian
+            for _ in 0..<Int(numArchs) {
+                let cputype = reader.readUInt32().bigEndian
+                let _ = reader.readUInt32() // cpusubtype
+                let _ = reader.readUInt32().bigEndian // offset
+                let _ = reader.readUInt32().bigEndian // size
+                let _ = reader.readUInt32().bigEndian // align
+
                 if cputype == 16777228 { architectures.append("arm64") }
                 else if cputype == 12 { architectures.append("armv7") }
             }
-        } else if magic == 0xFEEDFACF {
+        } else if magic == 0xFEEDFACF { // 64-bit
             architectures.append("arm64")
         }
 

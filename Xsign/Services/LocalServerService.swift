@@ -34,10 +34,9 @@ class LocalServerService {
     func startServer(for appFile: AppFile) -> URL? {
         if !isStarted {
             do {
-                // To support itms-services on iOS, we must serve over HTTPS.
-                // In a robust implementation, we generate a self-signed cert here.
-                // Swifter supports this via:
-                // try server.start(8443, forceIPv4: true, tls: self.selfSignedTLS)
+                // itms-services requires HTTPS.
+                // We start the server on 8443. In a real environment,
+                // Swifter requires a .p12 to enable TLS.
                 try server.start(8443, forceIPv4: true)
                 isStarted = true
             } catch {
@@ -52,7 +51,15 @@ class LocalServerService {
         let baseURL = "https://localhost:8443"
         let ipaURL = URL(string: "\(baseURL)/download/\(appFile.fileName)")!
 
-        let manifest = """
+        let manifest = generateManifest(bundleID: bundleID, version: version, name: name, ipaURL: ipaURL)
+        let manifestURL = FileManager.default.temporaryDirectory.appendingPathComponent("manifest.plist")
+        try? manifest.write(to: manifestURL, atomically: true, encoding: .utf8)
+
+        return URL(string: "itms-services://?action=download-manifest&url=\(baseURL)/manifest.plist")
+    }
+
+    private func generateManifest(bundleID: String, version: String, name: String, ipaURL: URL) -> String {
+        return """
         <?xml version="1.0" encoding="UTF-8"?>
         <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
         <plist version="1.0">
@@ -85,11 +92,6 @@ class LocalServerService {
         </dict>
         </plist>
         """
-
-        let manifestURL = FileManager.default.temporaryDirectory.appendingPathComponent("manifest.plist")
-        try? manifest.write(to: manifestURL, atomically: true, encoding: .utf8)
-
-        return URL(string: "itms-services://?action=download-manifest&url=\(baseURL)/manifest.plist")
     }
 
     func stopServer() {

@@ -1,16 +1,16 @@
 import Foundation
-import ZIPFoundation
+import Zip
 
 class ZipService {
     static let shared = ZipService()
     private init() {}
 
     func unzip(at source: URL, to destination: URL) throws {
-        try FileManager.default.createDirectory(at: destination, withIntermediateDirectories: true)
-        try FileManager.default.unzipItem(at: source, to: destination)
+        try Zip.unzipFile(source, destination: destination, overwrite: true, password: nil)
     }
 
     func zip(directory: URL, to destination: URL) throws {
-        try FileManager.default.zipItem(at: directory, to: destination)
+        let contents = try FileManager.default.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil)
+        try Zip.zipFiles(paths: contents, zipFilePath: destination, password: nil, progress: nil)
     }
 }

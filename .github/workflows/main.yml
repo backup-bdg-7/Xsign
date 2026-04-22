@@ -1,4 +1,4 @@
-name: Build Xsign
+name: Build Xsign IPA
 
 on:
   push:
@@ -26,11 +26,27 @@ jobs:
     - name: Generate Project
       run: xcodegen generate
 
-    - name: Build App
+    - name: Build and Archive
       run: |
         xcodebuild -project Xsign.xcodeproj \
                    -scheme Xsign \
                    -configuration Release \
                    -archivePath Xsign.xcarchive \
                    archive \
-                   CODE_SIGNING_ALLOWED=NO
+                   CODE_SIGNING_ALLOWED=NO \
+                   CODE_SIGNING_REQUIRED=NO
+
+    - name: Export IPA
+      run: |
+        xcodebuild -exportArchive \
+                   -archivePath Xsign.xcarchive \
+                   -exportOptionsPlist ExportOptions.plist \
+                   -exportPath build/ \
+                   CODE_SIGNING_ALLOWED=NO \
+                   CODE_SIGNING_REQUIRED=NO
+
+    - name: Upload IPA Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Xsign-IPA
+        path: build/*.ipa
