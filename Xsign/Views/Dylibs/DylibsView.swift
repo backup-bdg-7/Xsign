@@ -11,16 +11,17 @@ struct DylibsView: View {
                 XsignTheme.background.ignoresSafeArea()
 
                 if dylibs.isEmpty {
-                    ContentUnavailableView("No Dylibs", systemImage: "bolt.fill", description: Text("Import .dylib files to manage them here."))
+                    ContentUnavailableView("No Dylibs", systemImage: "bolt.fill", description: Text("Import .dylib files to inject them into apps."))
                 } else {
                     List(dylibs) { dylib in
-                        NavigationLink(destination: DylibDetailView(appFile: dylib)) {
+                        NavigationLink(destination: AppDetailView(appFile: dylib)) {
                             HStack {
                                 Image(systemName: "bolt.horizontal.circle.fill")
                                     .foregroundColor(XsignTheme.primary)
                                 VStack(alignment: .leading) {
                                     Text(dylib.name).foregroundColor(XsignTheme.textPrimary)
-                                    Text("\(ByteCountFormatter.string(fromByteCount: dylib.size, countStyle: .file))").font(.caption).foregroundColor(XsignTheme.textSecondary)
+                                    Text(ByteCountFormatter.string(fromByteCount: dylib.size, countStyle: .file))
+                                        .font(.caption).foregroundColor(XsignTheme.textSecondary)
                                 }
                             }
                         }

@@ -11,16 +11,17 @@ struct DebsView: View {
                 XsignTheme.background.ignoresSafeArea()
 
                 if debs.isEmpty {
-                    ContentUnavailableView("No Debs", systemImage: "archivebox.fill", description: Text("Import .deb files to manage them here."))
+                    ContentUnavailableView("No Debs", systemImage: "archivebox.fill", description: Text("Import .deb files to manage tweaks."))
                 } else {
                     List(debs) { deb in
-                        NavigationLink(destination: DebDetailView(appFile: deb)) {
+                        NavigationLink(destination: AppDetailView(appFile: deb)) {
                             HStack {
                                 Image(systemName: "package.fill")
                                     .foregroundColor(XsignTheme.primary)
                                 VStack(alignment: .leading) {
                                     Text(deb.name).foregroundColor(XsignTheme.textPrimary)
-                                    Text("\(ByteCountFormatter.string(fromByteCount: deb.size, countStyle: .file))").font(.caption).foregroundColor(XsignTheme.textSecondary)
+                                    Text(ByteCountFormatter.string(fromByteCount: deb.size, countStyle: .file))
+                                        .font(.caption).foregroundColor(XsignTheme.textSecondary)
                                 }
                             }
                         }

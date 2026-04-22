@@ -11,11 +11,12 @@ struct SignModalView: View {
     @State private var selectedCertificateID: UUID?
     @State private var isSigning = false
     @State private var showSuccess = false
+    @State private var signedIPAURL: URL?
 
     // Modification Overrides
     @State private var newBundleID = ""
+    @State private var newBundleName = ""
     @State private var newVersion = ""
-    @State private var newBuild = ""
     @State private var modifyEnabled = false
     @State private var selectedDylibs: Set<UUID> = []
 
@@ -29,19 +30,14 @@ struct SignModalView: View {
                 VStack(spacing: 24) {
                     if isSigning {
                         VStack(spacing: 20) {
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle(tint: XsignTheme.primary))
-                                .scaleEffect(2)
-                            Text("Signing and Injecting...")
+                            ProgressView().scaleEffect(2)
+                            Text("Signing & Injecting...")
                                 .foregroundColor(XsignTheme.textPrimary)
                         }
                     } else if showSuccess {
                         VStack(spacing: 20) {
-                            Image(systemName: "checkmark.circle.fill")
-                                .font(.system(size: 80))
-                                .foregroundColor(XsignTheme.success)
-                            Text("Ready to Install!")
-                                .font(.title2).fontWeight(.bold).foregroundColor(XsignTheme.textPrimary)
+                            Image(systemName: "checkmark.circle.fill").font(.system(size: 80)).foregroundColor(XsignTheme.success)
+                            Text("Ready!").font(.title2).fontWeight(.bold).foregroundColor(XsignTheme.textPrimary)
                             Button("Install Now") { startInstallation() }
                                 .buttonStyle(.borderedProminent).tint(XsignTheme.success)
                         }
@@ -62,9 +58,9 @@ struct SignModalView: View {
 
                             Section(header: Toggle("Modify App Info", isOn: $modifyEnabled)) {
                                 if modifyEnabled {
+                                    TextField("Name", text: $newBundleName)
                                     TextField("Bundle ID", text: $newBundleID)
                                     TextField("Version", text: $newVersion)
-                                    TextField("Build", text: $newBuild)
                                 }
                             }
 
@@ -80,28 +76,20 @@ struct SignModalView: View {
                         .scrollContentBackground(.hidden)
 
                         Button(action: startSigning) {
-                            Text("Sign App")
-                                .fontWeight(.bold)
-                                .frame(maxWidth: .infinity)
-                                .padding()
+                            Text("Sign App").fontWeight(.bold).frame(maxWidth: .infinity).padding()
                                 .background(selectedCertificateID == nil ? Color.gray : XsignTheme.primary)
-                                .foregroundColor(.white)
-                                .cornerRadius(12)
-                        }
-                        .disabled(selectedCertificateID == nil)
-                        .padding()
+                                .foregroundColor(.white).cornerRadius(12)
+                        }.disabled(selectedCertificateID == nil).padding()
                     }
                 }
             }
             .navigationTitle("Sign IPA")
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) { Button("Close") { dismiss() } }
-            }
+            .toolbar { Button("Close") { dismiss() } }
         }
         .onAppear {
             newBundleID = appFile.bundleID ?? ""
+            newBundleName = appFile.name
             newVersion = appFile.version ?? ""
-            newBuild = appFile.build ?? ""
         }
     }
 
@@ -111,107 +99,42 @@ struct SignModalView: View {
 
         isSigning = true
 
+        let dylibPaths = availableDylibs.filter { selectedDylibs.contains($0.id) }.map { $0.filePath.path }
+        let options = SigningService.SigningOptions(
+            bundleID: modifyEnabled ? newBundleID : nil,
+            bundleName: modifyEnabled ? newBundleName : nil,
+            bundleVersion: modifyEnabled ? newVersion : nil,
+            dylibPaths: dylibPaths.isEmpty ? nil : dylibPaths
+        )
+
         Task {
             do {
-                _ = try await SigningService.shared.sign(appFile: appFile, certificate: certificate)
-
-                withAnimation {
-                    isSigning = false
-                    showSuccess = true
+                let url = try await SigningService.shared.sign(appFile: appFile, certificate: certificate, options: options)
+                await MainActor.run {
+                    self.signedIPAURL = url
+                    withAnimation {
+                        isSigning = false
+                        showSuccess = true
+                    }
                 }
             } catch {
-                isSigning = false
+                await MainActor.run { isSigning = false }
             }
         }
     }
 
     private func startInstallation() {
-        if let url = LocalServerService.shared.startServer(for: appFile) {
-            UIApplication.shared.open(url)
-        }
-        dismiss()
-    }
-}
-
-struct ImportCertificateView: View {
-    @Environment(\.dismiss) var dismiss
-    @Environment(\.modelContext) var modelContext
-
-    @State private var name = ""
-    @State private var password = ""
-    @State private var p12Data: Data?
-    @State private var profileData: Data?
-    @State private var showingP12Picker = false
-    @State private var showingProfilePicker = false
-
-    var body: some View {
-        Form {
-            Section("Certificate Details") {
-                TextField("Name", text: $name)
-                SecureField("P12 Password", text: $password)
+        guard let url = signedIPAURL else { return }
+        Task {
+            if let installURL = try? await LocalServerService.shared.startServer(
+                for: url,
+                bundleID: modifyEnabled ? newBundleID : (appFile.bundleID ?? ""),
+                version: modifyEnabled ? newVersion : (appFile.version ?? ""),
+                name: modifyEnabled ? newBundleName : appFile.name
+            ) {
+                UIApplication.shared.open(installURL)
             }
-
-            Section("Files") {
-                HStack {
-                    Text(".p12 File")
-                    Spacer()
-                    if p12Data != nil {
-                        Image(systemName: "checkmark.circle.fill").foregroundColor(.green)
-                    }
-                    Button("Select") { showingP12Picker = true }
-                }
-
-                HStack {
-                    Text(".mobileprovision")
-                    Spacer()
-                    if profileData != nil {
-                        Image(systemName: "checkmark.circle.fill").foregroundColor(.green)
-                    }
-                    Button("Select") { showingProfilePicker = true }
-                }
-            }
+            dismiss()
         }
-        .navigationTitle("Import Certificate")
-        .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                Button("Save") {
-                    saveCertificate()
-                }
-                .disabled(name.isEmpty || p12Data == nil)
-            }
-        }
-        .fileImporter(isPresented: $showingP12Picker, allowedContentTypes: [.item]) { result in
-            if let url = try? result.get().first {
-                p12Data = try? Data(contentsOf: url)
-            }
-        }
-        .fileImporter(isPresented: $showingProfilePicker, allowedContentTypes: [.item]) { result in
-            if let url = try? result.get().first {
-                profileData = try? Data(contentsOf: url)
-                if let data = profileData, let profile = ProvisioningParser.shared.parse(data: data) {
-                    if name.isEmpty { name = profile.name }
-                }
-            }
-        }
-    }
-
-    private func saveCertificate() {
-        guard let p12 = p12Data else { return }
-
-        let newCert = Certificate(
-            name: name,
-            p12Data: p12,
-            provisioningProfileData: profileData,
-            password: password.isEmpty ? nil : password,
-            type: .distribution,
-            expiryDate: Date().addingTimeInterval(365*24*60*60),
-            commonName: name,
-            fingerprint: UUID().uuidString,
-            canSign: true
-        )
-
-        modelContext.insert(newCert)
-        try? modelContext.save()
-        dismiss()
     }
 }

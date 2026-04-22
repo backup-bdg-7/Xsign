@@ -9,12 +9,9 @@ enum CertificateType: String, Codable {
 final class Certificate: Identifiable {
     @Attribute(.unique) var id: UUID
     var name: String
-
-    // Encrypted storage
     var encryptedP12Data: Data
     var provisioningProfileData: Data?
     var encryptedPassword: Data?
-
     var type: CertificateType
     var expiryDate: Date
     var commonName: String
@@ -33,14 +30,11 @@ final class Certificate: Identifiable {
          canSign: Bool) {
         self.id = id
         self.name = name
-
-        // Encrypt on initialization
         self.encryptedP12Data = (try? SecurityService.shared.encrypt(p12Data)) ?? p12Data
         self.provisioningProfileData = provisioningProfileData
         if let password = password, let passwordData = password.data(using: .utf8) {
             self.encryptedPassword = try? SecurityService.shared.encrypt(passwordData)
         }
-
         self.type = type
         self.expiryDate = expiryDate
         self.commonName = commonName

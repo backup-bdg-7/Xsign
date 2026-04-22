@@ -17,6 +17,8 @@ targets:
     dependencies:
       - package: ZIPFoundation
       - package: Swifter
+      - package: Zsign
+      - package: Zip
 packages:
   ZIPFoundation:
     url: https://github.com/weichsel/ZIPFoundation.git
@@ -24,3 +26,9 @@ packages:
   Swifter:
     url: https://github.com/httpswifter/swifter.git
     from: 1.5.0
+  Zsign:
+    url: https://github.com/CLARATION/Zsign-Package.git
+    branch: package
+  Zip:
+    url: https://github.com/marmelroy/Zip.git
+    from: 2.1.2

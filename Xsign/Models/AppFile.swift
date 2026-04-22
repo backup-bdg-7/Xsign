@@ -1,6 +1,14 @@
 import Foundation
 import SwiftData
 
+enum FileType: String, Codable {
+    case ipa, dylib, deb, zip
+}
+
+enum SignatureStatus: String, Codable {
+    case unsigned, signed, failed, invalid
+}
+
 @Model
 final class AppFile: Identifiable {
     @Attribute(.unique) var id: UUID

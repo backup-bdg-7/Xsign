@@ -1,15 +1,11 @@
 import Foundation
 import SwiftData
 
-enum CapabilityType: String, Codable {
-    case pushNotifications, icloud, appGroups, networkExtensions, other
-}
-
 @Model
 final class Entitlement: Identifiable {
     @Attribute(.unique) var id: UUID
     var name: String
-    var entitlementDescription: String // Renamed from description due to NSObject/Model conflict
+    var entitlementDescription: String
     var capabilityType: CapabilityType
     var platform: String
     var isRequired: Bool
@@ -27,4 +23,8 @@ final class Entitlement: Identifiable {
         self.platform = platform
         self.isRequired = isRequired
     }
+}
+
+enum CapabilityType: String, Codable {
+    case pushNotifications, icloud, appGroups, networkExtensions, other
 }

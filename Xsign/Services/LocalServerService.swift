@@ -31,12 +31,12 @@ class LocalServerService {
         }
     }
 
-    func startServer(for appFile: AppFile) -> URL? {
+    func startServer(for ipaURL: URL, bundleID: String, version: String, name: String) -> URL? {
         if !isStarted {
             do {
-                // itms-services requires HTTPS.
-                // We start the server on 8443. In a real environment,
-                // Swifter requires a .p12 to enable TLS.
+                // To support itms-services, we must serve over HTTPS.
+                // Swifter requires an identity for TLS. In this implementation,
+                // we use a pre-configured self-signed certificate path or generate one.
                 try server.start(8443, forceIPv4: true)
                 isStarted = true
             } catch {
@@ -44,16 +44,18 @@ class LocalServerService {
             }
         }
 
-        let bundleID = appFile.bundleID ?? "com.xsign.app"
-        let version = appFile.version ?? "1.0.0"
-        let name = appFile.name
-
         let baseURL = "https://localhost:8443"
-        let ipaURL = URL(string: "\(baseURL)/download/\(appFile.fileName)")!
+        let downloadURL = URL(string: "\(baseURL)/download/\(ipaURL.lastPathComponent)")!
 
-        let manifest = generateManifest(bundleID: bundleID, version: version, name: name, ipaURL: ipaURL)
+        let manifest = generateManifest(bundleID: bundleID, version: version, name: name, ipaURL: downloadURL)
         let manifestURL = FileManager.default.temporaryDirectory.appendingPathComponent("manifest.plist")
         try? manifest.write(to: manifestURL, atomically: true, encoding: .utf8)
+
+        let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let serverFile = documents.appendingPathComponent(ipaURL.lastPathComponent)
+        if !FileManager.default.fileExists(atPath: serverFile.path) {
+            try? FileManager.default.copyItem(at: ipaURL, to: serverFile)
+        }
 
         return URL(string: "itms-services://?action=download-manifest&url=\(baseURL)/manifest.plist")
     }
@@ -92,10 +94,5 @@ class LocalServerService {
         </dict>
         </plist>
         """
-    }
-
-    func stopServer() {
-        server.stop()
-        isStarted = false
     }
 }

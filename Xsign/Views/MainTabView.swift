@@ -1,44 +1,23 @@
 import SwiftUI
+import SwiftData
 
 struct MainTabView: View {
-    @State private var selectedTab: Int = 0
-
-    init() {
-        UITabBar.appearance().backgroundColor = UIColor(XsignTheme.surface)
-        UITabBar.appearance().unselectedItemTintColor = UIColor(XsignTheme.textSecondary)
-    }
-
     var body: some View {
-        TabView(selection: $selectedTab) {
+        TabView {
             LibraryView()
-                .tabItem {
-                    Label("Library", systemImage: "books.vertical.fill")
-                }
-                .tag(0)
+                .tabItem { Label("Library", systemImage: "books.vertical") }
 
             CategoriesView()
-                .tabItem {
-                    Label("Categories", systemImage: "square.grid.2x2.fill")
-                }
-                .tag(1)
+                .tabItem { Label("Categories", systemImage: "square.grid.2x2") }
 
             DylibsView()
-                .tabItem {
-                    Label("Dylibs", systemImage: "bolt.fill")
-                }
-                .tag(2)
+                .tabItem { Label("Dylibs", systemImage: "bolt.fill") }
 
             DebsView()
-                .tabItem {
-                    Label("Debs", systemImage: "archivebox.fill")
-                }
-                .tag(3)
+                .tabItem { Label("Debs", systemImage: "archivebox.fill") }
 
             GeneralView()
-                .tabItem {
-                    Label("General", systemImage: "gearshape.fill")
-                }
-                .tag(4)
+                .tabItem { Label("General", systemImage: "gear") }
         }
         .accentColor(XsignTheme.primary)
     }
