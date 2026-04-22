@@ -7,7 +7,14 @@ targets:
     platform: iOS
     deploymentTarget: "17.0"
     sources:
-      - Xsign
+      - path: Xsign
+        excludes:
+          - "External/zsign/src/zsign.cpp"
+          - "External/zsign/test/**"
+          - "External/zsign/build/**"
+          - "External/zsign/README.md"
+          - "External/zsign/README.zh-CN.md"
+          - "External/zsign/LICENSE"
     settings:
       base:
         GENERATE_INFOPLIST_FILE: YES
@@ -21,6 +28,9 @@ targets:
         HEADER_SEARCH_PATHS:
           - $(SRCROOT)/Xsign/External/zsign/src
           - $(SRCROOT)/Xsign/External/zsign/src/common
+          - $(SRCROOT)/Xsign/External/zsign/src/third-party
+        OTHER_LDFLAGS:
+          - -lz
         OTHER_CPLUSPLUSFLAGS: -std=c++17
         GCC_PREPROCESSOR_DEFINITIONS:
           - $(inherited)

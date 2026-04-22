@@ -1,9 +1,9 @@
 #import "ZSignWrapper.h"
-#include "../External/zsign/src/common/common.h"
-#include "../External/zsign/src/signing.h"
-#include "../External/zsign/src/bundle.h"
-#include "../External/zsign/src/openssl.h"
-#include "../External/zsign/src/common/archive.h"
+#include <common.h>
+#include <signing.h>
+#include <bundle.h>
+#include <openssl.h>
+#include <archive.h>
 
 /**
  * ZSignWrapper implementation.

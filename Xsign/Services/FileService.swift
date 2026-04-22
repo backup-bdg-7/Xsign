@@ -7,8 +7,13 @@ class FileService {
     func importFile(at url: URL) async throws -> AppFile {
         guard url.startAccessingSecurityScopedResource() else { throw NSError(domain: "File", code: 1) }
         defer { url.stopAccessingSecurityScopedResource() }
-        let fileName = url.lastPathComponent
-        let type: FileType = fileName.hasSuffix(".ipa") ? .ipa : (fileName.hasSuffix(".dylib") ? .dylib : .zip)
+        let fileName = url.lastPathComponent.lowercased()
+        let type: FileType
+        if fileName.hasSuffix(".ipa") { type = .ipa }
+        else if fileName.hasSuffix(".dylib") { type = .dylib }
+        else if fileName.hasSuffix(".deb") { type = .deb }
+        else { type = .zip }
+
         let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let dest = docs.appendingPathComponent(fileName)
         if FileManager.default.fileExists(atPath: dest.path) { try? FileManager.default.removeItem(at: dest) }
