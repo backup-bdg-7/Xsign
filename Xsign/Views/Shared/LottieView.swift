@@ -1,10 +1,6 @@
 import SwiftUI
 import Lottie
 
-/**
- * LottieView provides high-quality animations using the lottie-ios library.
- * This is used for signing progress, empty states, and success feedback.
- */
 struct LottieView: UIViewRepresentable {
     let name: String
     let loopMode: LottieLoopMode
@@ -24,7 +20,6 @@ struct LottieView: UIViewRepresentable {
             animationView.heightAnchor.constraint(equalTo: view.heightAnchor),
             animationView.widthAnchor.constraint(equalTo: view.widthAnchor)
         ])
-
         return view
     }
 

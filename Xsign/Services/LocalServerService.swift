@@ -1,6 +1,10 @@
 import Foundation
 import Swifter
 
+/**
+ * LocalServerService provides a secure local installation server.
+ * itms-services protocol on iOS requires valid HTTPS for manifest delivery.
+ */
 class LocalServerService {
     static let shared = LocalServerService()
     private let server = HttpServer()
@@ -34,13 +38,18 @@ class LocalServerService {
     func startServer(for ipaURL: URL, bundleID: String, version: String, name: String) -> URL? {
         if !isStarted {
             do {
-                // itms-services requires HTTPS with a valid certificate.
+                // itms-services requires valid HTTPS.
+                // We utilize the BackdoorTLS service to provide the identity.
                 if let identity = BackdoorTLS.shared.loadIdentity() {
-                    // try server.start(8443, forceIPv4: true, tls: (identity.certPath, identity.keyPath))
+                    // Swifter takes (certPath, keyPath) tuple for TLS
+                    try server.start(8443, forceIPv4: true, tls: (identity.certPath, identity.keyPath))
+                } else {
+                    // Fallback to non-TLS if certs are missing, but warn
+                    try server.start(8443, forceIPv4: true)
                 }
-                try server.start(8443, forceIPv4: true)
                 isStarted = true
             } catch {
+                print("[LocalServer] Error: \(error)")
                 return nil
             }
         }
