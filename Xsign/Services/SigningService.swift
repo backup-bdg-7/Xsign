@@ -19,6 +19,7 @@ class SigningService {
         let workspace = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: workspace, withIntermediateDirectories: true)
 
+        // 1. Prepare Credentials
         let p12Path = workspace.appendingPathComponent("cert.p12")
         try p12Data.write(to: p12Path)
 
@@ -27,11 +28,15 @@ class SigningService {
             try profileData.write(to: provisionPath)
         }
 
+        // 2. Extract IPA for folder-based signing
+        let unzipDir = workspace.appendingPathComponent("AppPayload")
+        try ZipService.shared.unzip(at: appFile.filePath, to: unzipDir)
+
         let outputPath = workspace.appendingPathComponent("signed_\(appFile.fileName)")
 
-        // Final Bridge call to ZSign engine
+        // 3. Execution
         let success = ZSignWrapper.signIPA(
-            appFile.filePath.path,
+            unzipDir.path,
             p12: p12Path.path,
             password: password,
             provision: provisionPath.path,
