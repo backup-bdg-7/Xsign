@@ -1,11 +1,9 @@
 import SwiftUI
-import SwiftData
 
 struct AppDetailView: View {
     let appFile: AppFile
     @State private var showingSignModal = false
     @State private var extractedDylibs: [String] = []
-
     var body: some View {
         ZStack {
             XsignTheme.background.ignoresSafeArea()
@@ -21,42 +19,19 @@ struct AppDetailView: View {
                         }
                         Spacer()
                     }.padding()
-
-                    HStack(spacing: 16) {
+                    HStack {
                         if appFile.type == .ipa {
-                            ActionButton(title: "Sign & Install", icon: "pencil.and.outline", color: XsignTheme.primary) {
-                                showingSignModal = true
-                            }
+                            ActionButton(title: "Sign & Install", icon: "pencil.and.outline", color: XsignTheme.primary) { showingSignModal = true }
                         }
                     }.padding()
-
-                    InfoSection(title: "File Details") {
-                        InfoRow(label: "Format", value: appFile.type.rawValue.uppercased())
-                        InfoRow(label: "Size", value: ByteCountFormatter.string(fromByteCount: appFile.size, countStyle: .file))
-                        if let version = appFile.version { InfoRow(label: "Version", value: version) }
-                    }.padding()
-
                     InfoSection(title: "Binary Analysis") {
-                        if extractedDylibs.isEmpty {
-                            Text("No external dylibs detected").font(.caption).foregroundColor(XsignTheme.textSecondary)
-                        } else {
-                            ForEach(extractedDylibs, id: \.self) { dylib in
-                                Text(dylib.components(separatedBy: "/").last ?? dylib)
-                                    .font(.system(size: 10, design: .monospaced))
-                                    .foregroundColor(XsignTheme.textPrimary)
-                                    .padding(.vertical, 2)
-                            }
-                        }
+                        if extractedDylibs.isEmpty { Text("None").font(.caption).foregroundColor(.gray) }
+                        else { ForEach(extractedDylibs, id: \.self) { Text($0).font(.system(size: 10, design: .monospaced)).foregroundColor(XsignTheme.textPrimary) } }
                     }.padding()
                 }
             }
         }
-        .navigationTitle("Details")
         .sheet(isPresented: $showingSignModal) { SignModalView(appFile: appFile) }
-        .onAppear {
-            if appFile.type == .ipa || appFile.type == .dylib {
-                extractedDylibs = BinaryParser.shared.getDylibs(at: appFile.filePath)
-            }
-        }
+        .onAppear { if appFile.type == .ipa || appFile.type == .dylib { extractedDylibs = BinaryParser.shared.getDylibs(at: appFile.filePath) } }
     }
 }

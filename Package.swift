@@ -7,7 +7,7 @@ let package = Package(
         .iOS(.v17)
     ],
     products: [
-        .library(name: "XsignCore", targets: ["XsignCore"])
+        .executable(name: "Xsign", targets: ["Xsign"])
     ],
     dependencies: [
         .package(url: "https://github.com/vapor/vapor.git", exact: "4.104.0"),
@@ -16,13 +16,11 @@ let package = Package(
         .package(url: "https://github.com/krzyzanowskim/OpenSSL", exact: "3.3.3001"),
         .package(url: "https://github.com/apple/swift-crypto.git", exact: "3.12.3"),
         .package(url: "https://github.com/tsolomko/BitByteData", exact: "2.0.4"),
-        .package(url: "https://github.com/CLARATION/Zsign-Package.git", branch: "package"),
-        .package(url: "https://github.com/weichsel/ZIPFoundation.git", from: "0.9.19"),
-        .package(url: "https://github.com/httpswifter/swifter.git", from: "1.5.0")
+        .package(url: "https://github.com/CLARATION/Zsign-Package.git", branch: "package")
     ],
     targets: [
-        .target(
-            name: "XsignCore",
+        .executableTarget(
+            name: "Xsign",
             dependencies: [
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "Zip", package: "Zip"),
@@ -30,9 +28,7 @@ let package = Package(
                 .product(name: "OpenSSL", package: "OpenSSL"),
                 .product(name: "Crypto", package: "swift-crypto"),
                 .product(name: "BitByteData", package: "BitByteData"),
-                .product(name: "Zsign", package: "Zsign-Package"),
-                "ZIPFoundation",
-                .product(name: "Swifter", package: "swifter")
+                .product(name: "Zsign", package: "Zsign-Package")
             ],
             path: "Xsign",
             exclude: ["Resources/Info.plist"]

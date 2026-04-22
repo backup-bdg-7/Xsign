@@ -19,7 +19,7 @@ class AppModifier {
         }
 
         let plistURL = appDir.appendingPathComponent("Info.plist")
-        if var plist = try PropertyListSerialization.propertyList(from: Data(contentsOf: plistURL), options: [], format: nil) as? [String: Any] {
+        if var plist = try? PropertyListSerialization.propertyList(from: Data(contentsOf: plistURL), options: [], format: nil) as? [String: Any] {
             if let bundleID = newBundleID { plist["CFBundleIdentifier"] = bundleID }
             if let version = newVersion { plist["CFBundleShortVersionString"] = version }
             if let build = newBuild { plist["CFBundleVersion"] = build }

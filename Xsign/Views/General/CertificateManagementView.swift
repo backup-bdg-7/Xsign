@@ -7,33 +7,43 @@ struct CertificateManagementView: View {
     @State private var showingImport = false
 
     var body: some View {
-        NavigationStack {
-            ZStack {
-                XsignTheme.background.ignoresSafeArea()
-
-                if certificates.isEmpty {
-                    ContentUnavailableView("No Certificates", systemImage: "checkmark.seal", description: Text("Import a .p12 and .mobileprovision to start signing."))
-                } else {
-                    List {
-                        ForEach(certificates) { cert in
-                            CertificateRow(cert: cert)
-                                .listRowBackground(XsignTheme.surface)
-                        }
-                        .onDelete(perform: deleteCertificates)
+        ZStack {
+            XsignTheme.background.ignoresSafeArea()
+            if certificates.isEmpty {
+                VStack {
+                    LottieView(name: "no_data", loopMode: .loop)
+                        .frame(width: 200, height: 200)
+                    Text("No Certificates Found")
+                        .font(.headline)
+                        .foregroundColor(XsignTheme.textSecondary)
+                    Button("Import One") { showingImport = true }
+                        .padding()
+                        .background(XsignTheme.primary)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+            } else {
+                List {
+                    ForEach(certificates) { cert in
+                        CertificateRow(cert: cert)
+                            .listRowBackground(XsignTheme.surface)
                     }
-                    .listStyle(.insetGrouped)
+                    .onDelete(perform: deleteCertificates)
                 }
+                .listStyle(.insetGrouped)
+                .scrollContentBackground(.hidden)
             }
-            .navigationTitle("Certificates")
-            .toolbar {
-                Button(action: { showingImport = true }) {
-                    Image(systemName: "plus")
-                }
+        }
+        .navigationTitle("Certificates")
+        .toolbar {
+            Button(action: { showingImport = true }) {
+                Image(systemName: "plus.circle.fill")
+                    .foregroundColor(XsignTheme.primary)
             }
-            .sheet(isPresented: $showingImport) {
-                NavigationStack {
-                    ImportCertificateView()
-                }
+        }
+        .sheet(isPresented: $showingImport) {
+            NavigationStack {
+                ImportCertificateView()
             }
         }
     }
@@ -47,36 +57,20 @@ struct CertificateManagementView: View {
 
 struct CertificateRow: View {
     let cert: Certificate
-
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
-                Text(cert.name)
-                    .font(.headline)
-                    .foregroundColor(XsignTheme.textPrimary)
+                Text(cert.name).font(.headline).foregroundColor(XsignTheme.textPrimary)
                 Spacer()
-                Text(cert.type.rawValue.capitalized)
-                    .font(.system(size: 10, weight: .bold))
-                    .padding(.horizontal, 6)
-                    .padding(.vertical, 2)
-                    .background(XsignTheme.primary.opacity(0.2))
-                    .foregroundColor(XsignTheme.primary)
-                    .cornerRadius(4)
+                Text(cert.type.rawValue.uppercased()).font(.system(size: 8, weight: .bold))
+                    .padding(4).background(XsignTheme.primary.opacity(0.2)).foregroundColor(XsignTheme.primary).cornerRadius(4)
             }
-
-            Text(cert.commonName)
-                .font(.caption)
-                .foregroundColor(XsignTheme.textSecondary)
-
+            Text(cert.commonName).font(.caption).foregroundColor(XsignTheme.textSecondary)
             HStack {
                 Label(cert.expiryDate.formatted(date: .abbreviated, time: .omitted), systemImage: "calendar")
                 Spacer()
-                Text(cert.fingerprint.prefix(12) + "...")
-            }
-            .font(.system(size: 10))
-            .foregroundColor(XsignTheme.textSecondary)
-            .padding(.top, 4)
-        }
-        .padding(.vertical, 4)
+                Text(cert.fingerprint.prefix(10) + "...").font(.system(size: 8, design: .monospaced))
+            }.font(.caption2).foregroundColor(XsignTheme.textSecondary)
+        }.padding(.vertical, 4)
     }
 }
