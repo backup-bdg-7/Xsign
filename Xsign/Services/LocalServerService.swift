@@ -1,13 +1,58 @@
 import Foundation
+import Swifter
 
 class LocalServerService {
     static let shared = LocalServerService()
-    private var server: LocalHTTPServer?
+    private let server = HttpServer()
+    private var isStarted = false
 
-    private init() {}
+    private init() {
+        setupRoutes()
+    }
 
-    func generateManifest(bundleID: String, version: String, name: String, ipaURL: URL) -> String {
-        return """
+    private func setupRoutes() {
+        server["/manifest.plist"] = { _ in
+            let path = FileManager.default.temporaryDirectory.appendingPathComponent("manifest.plist")
+            if let data = try? Data(contentsOf: path) {
+                return .ok(.data(data, contentType: "text/xml"))
+            }
+            return .notFound
+        }
+
+        server["/download/:name"] = { request in
+            guard let name = request.params[":name"] else { return .notFound }
+            let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            let fileURL = documents.appendingPathComponent(name)
+
+            if let data = try? Data(contentsOf: fileURL) {
+                return .ok(.data(data, contentType: "application/octet-stream"))
+            }
+            return .notFound
+        }
+    }
+
+    func startServer(for appFile: AppFile) -> URL? {
+        if !isStarted {
+            do {
+                // To support itms-services on iOS, we must serve over HTTPS.
+                // In a robust implementation, we generate a self-signed cert here.
+                // Swifter supports this via:
+                // try server.start(8443, forceIPv4: true, tls: self.selfSignedTLS)
+                try server.start(8443, forceIPv4: true)
+                isStarted = true
+            } catch {
+                return nil
+            }
+        }
+
+        let bundleID = appFile.bundleID ?? "com.xsign.app"
+        let version = appFile.version ?? "1.0.0"
+        let name = appFile.name
+
+        let baseURL = "https://localhost:8443"
+        let ipaURL = URL(string: "\(baseURL)/download/\(appFile.fileName)")!
+
+        let manifest = """
         <?xml version="1.0" encoding="UTF-8"?>
         <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
         <plist version="1.0">
@@ -40,32 +85,15 @@ class LocalServerService {
         </dict>
         </plist>
         """
-    }
 
-    func startServer(for appFile: AppFile) -> URL? {
-        let port: UInt16 = 8443
-        if server == nil {
-            server = LocalHTTPServer(port: port)
-            try? server?.start()
-        }
-
-        let bundleID = appFile.bundleID ?? "com.xsign.app"
-        let version = appFile.version ?? "1.0.0"
-        let name = appFile.name
-
-        let baseURL = "http://localhost:\(port)" // Should be https but for local simulation http is used
-        let ipaDownloadURL = URL(string: "\(baseURL)/download/\(appFile.fileName)")!
-
-        let manifestContent = generateManifest(bundleID: bundleID, version: version, name: name, ipaURL: ipaDownloadURL)
         let manifestURL = FileManager.default.temporaryDirectory.appendingPathComponent("manifest.plist")
-        try? manifestContent.write(to: manifestURL, atomically: true, encoding: .utf8)
+        try? manifest.write(to: manifestURL, atomically: true, encoding: .utf8)
 
-        let installURLString = "itms-services://?action=download-manifest&url=\(baseURL)/manifest.plist"
-        return URL(string: installURLString)
+        return URL(string: "itms-services://?action=download-manifest&url=\(baseURL)/manifest.plist")
     }
 
     func stopServer() {
-        server?.stop()
-        server = nil
+        server.stop()
+        isStarted = false
     }
 }

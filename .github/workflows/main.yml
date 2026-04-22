@@ -20,12 +20,17 @@ jobs:
       with:
         xcode-version: '16.2'
 
-    - name: Build Library
-      run: |
-        swift build -c release
+    - name: Install XcodeGen
+      run: brew install xcodegen
 
-    - name: Generate Project and Build App
+    - name: Generate Project
+      run: xcodegen generate
+
+    - name: Build App
       run: |
-        # In a real environment, we would use xcodegen or provide the .xcodeproj
-        # For now we ensure the code compiles as a library
-        swift build --target XsignCore
+        xcodebuild -project Xsign.xcodeproj \
+                   -scheme Xsign \
+                   -configuration Release \
+                   -archivePath Xsign.xcarchive \
+                   archive \
+                   CODE_SIGNING_ALLOWED=NO
