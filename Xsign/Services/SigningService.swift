@@ -10,6 +10,7 @@ class SigningService {
         var bundleName: String?
         var bundleVersion: String?
         var dylibPaths: [String]?
+        var entitlements: String? // XML plist content
     }
 
     func sign(appFile: AppFile, certificate: Certificate, options: SigningOptions) async throws -> URL {
@@ -28,13 +29,21 @@ class SigningService {
             try profileData.write(to: provisionPath)
         }
 
-        // 2. Extract IPA for folder-based signing
+        // 2. Prepare Entitlements if provided
+        var entitlementsPath: String? = nil
+        if let entitlementsData = options.entitlements {
+            let path = workspace.appendingPathComponent("entitlements.plist")
+            try entitlementsData.write(to: path, atomically: true, encoding: .utf8)
+            entitlementsPath = path.path
+        }
+
+        // 3. Extract IPA for folder-based signing
         let unzipDir = workspace.appendingPathComponent("AppPayload")
         try ZipService.shared.unzip(at: appFile.filePath, to: unzipDir)
 
         let outputPath = workspace.appendingPathComponent("signed_\(appFile.fileName)")
 
-        // 3. Execution
+        // 4. Execution
         let success = ZSignWrapper.signIPA(
             unzipDir.path,
             p12: p12Path.path,
@@ -44,6 +53,7 @@ class SigningService {
             bundleName: options.bundleName,
             bundleVersion: options.bundleVersion,
             dylibs: options.dylibPaths ?? [],
+            entitlements: entitlementsPath,
             output: outputPath.path
         )
 

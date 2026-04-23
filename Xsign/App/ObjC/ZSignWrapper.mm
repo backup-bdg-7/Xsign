@@ -20,11 +20,14 @@
     bundleName:(NSString *)bundleName
  bundleVersion:(NSString *)bundleVersion
        dylibs:(NSArray<NSString *> *)dylibs
+ entitlements:(NSString *)entitlementsPath
         output:(NSString *)outputPath {
 
     ZSignAsset asset;
-    // Initialize the signing asset (P12 + Provisioning)
-    if (!asset.Init("", p12Path.UTF8String, provisionPath.UTF8String, "", password.UTF8String, false, false, false)) {
+    // Initialize the signing asset (P12 + Provisioning + Entitlements)
+    if (!asset.Init("", p12Path.UTF8String, provisionPath.UTF8String,
+                   entitlementsPath ? entitlementsPath.UTF8String : "",
+                   password.UTF8String, false, false, false)) {
         NSLog(@"[ZSign] Asset initialization failed.");
         return NO;
     }

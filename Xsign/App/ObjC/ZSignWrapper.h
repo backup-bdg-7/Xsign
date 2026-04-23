@@ -13,6 +13,7 @@
     bundleName:(NSString *)bundleName
  bundleVersion:(NSString *)bundleVersion
        dylibs:(NSArray<NSString *> *)dylibs
+ entitlements:(NSString *)entitlementsPath
         output:(NSString *)outputPath;
 
 @end
