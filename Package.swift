@@ -35,7 +35,6 @@ let package = Package(
             path: "Xsign",
             exclude: [
                 "Resources/Info.plist",
-                "External/zsign/src/zsign.cpp",
                 "External/zsign/test",
                 "External/zsign/build"
             ]

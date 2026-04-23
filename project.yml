@@ -9,7 +9,6 @@ targets:
     sources:
       - path: Xsign
         excludes:
-          - "External/zsign/src/zsign.cpp"
           - "External/zsign/test/**"
           - "External/zsign/build/**"
           - "External/zsign/README.md"
