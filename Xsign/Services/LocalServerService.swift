@@ -1,54 +1,44 @@
 import Foundation
-import Swifter
+import Vapor
+import NIOSSL
 
 class LocalServerService {
     static let shared = LocalServerService()
-    private let server = HttpServer()
-    private var isStarted = false
+    private var app: Application?
+    private let port = 8443
 
-    private init() {
-        setupRoutes()
-    }
-
-    private func setupRoutes() {
-        server["/manifest.plist"] = { _ in
-            let path = FileManager.default.temporaryDirectory.appendingPathComponent("manifest.plist")
-            if let data = try? Data(contentsOf: path) {
-                return .ok(.data(data, contentType: "text/xml"))
-            }
-            return .notFound
-        }
-
-        server["/download/:name"] = { request in
-            guard let name = request.params[":name"] else { return .notFound }
-            let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            let fileURL = documents.appendingPathComponent(name)
-
-            if let data = try? Data(contentsOf: fileURL) {
-                return .ok(.data(data, contentType: "application/octet-stream"))
-            }
-            return .notFound
-        }
-    }
+    private init() {}
 
     func startServer(for ipaURL: URL, bundleID: String, version: String, name: String) -> URL? {
-        if !isStarted {
+        if app == nil {
             do {
-                // itms-services requires valid HTTPS.
+                app = try Application(.development)
+                guard let app = app else { return nil }
+
+                app.http.server.configuration.port = port
+                app.http.server.configuration.hostname = "localhost"
+
                 if let identity = BackdoorTLS.shared.loadIdentity() {
-                    try server.start(8443, forceIPv4: true, tls: (identity.certPath, identity.keyPath))
-                } else {
-                    // Start without TLS as a last resort, though installation will likely fail
-                    try server.start(8443, forceIPv4: true)
+                    let certPath = identity.certPath
+                    let keyPath = identity.keyPath
+
+                    let tlsConfiguration = TLSConfiguration.makeServerConfiguration(
+                        certificateChain: try NIOSSLCertificate.fromPEMFile(certPath).map { .certificate($0) },
+                        privateKey: .file(keyPath)
+                    )
+                    app.http.server.configuration.tlsConfiguration = tlsConfiguration
                 }
-                isStarted = true
+
+                setupRoutes(app)
+
+                try app.start()
             } catch {
-                print("[LocalServer] Error: \(error)")
+                print("[VaporServer] Error: \(error)")
                 return nil
             }
         }
 
-        let baseURL = "https://localhost:8443"
+        let baseURL = "https://localhost:\(port)"
         let downloadURL = URL(string: "\(baseURL)/download/\(ipaURL.lastPathComponent)")!
 
         let manifest = generateManifest(bundleID: bundleID, version: version, name: name, ipaURL: downloadURL)
@@ -62,6 +52,27 @@ class LocalServerService {
         }
 
         return URL(string: "itms-services://?action=download-manifest&url=\(baseURL)/manifest.plist")
+    }
+
+    private func setupRoutes(_ app: Application) {
+        app.get("manifest.plist") { req -> Response in
+            let path = FileManager.default.temporaryDirectory.appendingPathComponent("manifest.plist")
+            if let data = try? Data(contentsOf: path) {
+                return Response(status: .ok, headers: ["Content-Type": "text/xml"], body: .init(data: data))
+            }
+            return Response(status: .notFound)
+        }
+
+        app.get("download", ":name") { req -> Response in
+            guard let name = req.parameters.get("name") else { return Response(status: .notFound) }
+            let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            let fileURL = documents.appendingPathComponent(name)
+
+            if let data = try? Data(contentsOf: fileURL) {
+                return Response(status: .ok, headers: ["Content-Type": "application/octet-stream"], body: .init(data: data))
+            }
+            return Response(status: .notFound)
+        }
     }
 
     private func generateManifest(bundleID: String, version: String, name: String, ipaURL: URL) -> String {
@@ -98,5 +109,10 @@ class LocalServerService {
         </dict>
         </plist>
         """
+    }
+
+    func stopServer() {
+        app?.shutdown()
+        app = nil
     }
 }

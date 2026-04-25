@@ -4,6 +4,7 @@ struct AppDetailView: View {
     let appFile: AppFile
     @State private var showingSignModal = false
     @State private var extractedDylibs: [String] = []
+    @State private var entitlements: [String: Any] = [:]
     var body: some View {
         ZStack {
             XsignTheme.background.ignoresSafeArea()
@@ -24,14 +25,33 @@ struct AppDetailView: View {
                             ActionButton(title: "Sign & Install", icon: "pencil.and.outline", color: XsignTheme.primary) { showingSignModal = true }
                         }
                     }.padding()
-                    InfoSection(title: "Binary Analysis") {
+                    InfoSection(title: "Linked Libraries") {
                         if extractedDylibs.isEmpty { Text("None").font(.caption).foregroundColor(.gray) }
                         else { ForEach(extractedDylibs, id: \.self) { Text($0).font(.system(size: 10, design: .monospaced)).foregroundColor(XsignTheme.textPrimary) } }
+                    }.padding()
+
+                    InfoSection(title: "Entitlements") {
+                        if entitlements.isEmpty { Text("No entitlements found").font(.caption).foregroundColor(.gray) }
+                        else {
+                            ForEach(entitlements.keys.sorted(), id: \.self) { key in
+                                VStack(alignment: .leading) {
+                                    Text(key).font(.caption).fontWeight(.bold).foregroundColor(XsignTheme.primary)
+                                    Text("\(String(describing: entitlements[key] ?? ""))").font(.caption2).foregroundColor(XsignTheme.textSecondary)
+                                }.padding(.bottom, 4)
+                            }
+                        }
                     }.padding()
                 }
             }
         }
         .sheet(isPresented: $showingSignModal) { SignModalView(appFile: appFile) }
-        .onAppear { if appFile.type == .ipa || appFile.type == .dylib { extractedDylibs = BinaryParser.shared.getDylibs(at: appFile.filePath) } }
+        .onAppear {
+            if appFile.type == .ipa || appFile.type == .dylib {
+                extractedDylibs = BinaryParser.shared.getDylibs(at: appFile.filePath)
+            }
+            if appFile.type == .ipa {
+                entitlements = EntitlementManager.shared.extractEntitlements(from: appFile.filePath) ?? [:]
+            }
+        }
     }
 }
