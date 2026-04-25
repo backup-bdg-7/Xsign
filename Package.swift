@@ -7,7 +7,7 @@ let package = Package(
         .iOS(.v17)
     ],
     products: [
-        .library(name: "XsignObjC", targets: ["XsignObjC"]),
+        .library(name: "XsignEngine", targets: ["XsignEngine"]),
         .library(name: "XsignSwift", targets: ["XsignSwift"])
     ],
     dependencies: [
@@ -22,20 +22,29 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "XsignObjC",
+            name: "XsignEngine",
             dependencies: [
                 .product(name: "OpenSSL", package: "OpenSSL")
             ],
-            path: "Xsign/App/ObjC",
+            path: "Xsign/External/zsign/src",
+            exclude: [
+                "zsign.cpp",
+                "test",
+                "build"
+            ],
             cxxSettings: [
-                .headerSearchPath("../../External/zsign/src"),
-                .headerSearchPath("../../External/zsign/src/common")
+                .headerSearchPath("common"),
+                .headerSearchPath("third-party"),
+                .define("ZSIGN_VERSION", to: "\"1.0.0\"")
+            ],
+            linkerSettings: [
+                .linkedLibrary("z")
             ]
         ),
         .target(
             name: "XsignSwift",
             dependencies: [
-                "XsignObjC",
+                "XsignEngine",
                 .product(name: "Zip", package: "Zip"),
                 .product(name: "SWCompression", package: "SWCompression"),
                 .product(name: "Crypto", package: "swift-crypto"),
@@ -46,10 +55,8 @@ let package = Package(
             ],
             path: "Xsign",
             exclude: [
-                "App/ObjC",
-                "Resources/Info.plist",
-                "External/zsign/test",
-                "External/zsign/build"
+                "External/zsign",
+                "Resources/Info.plist"
             ]
         )
     ]

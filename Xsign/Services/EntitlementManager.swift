@@ -9,7 +9,7 @@ class EntitlementManager {
         return profile.entitlements
     }
 
-    func extractFromIPA(at url: URL) -> [String: Any]? {
+    func extractEntitlements(from url: URL) -> [String: Any]? {
         let fileManager = FileManager.default
         let workspace = fileManager.temporaryDirectory.appendingPathComponent(UUID().uuidString)
 
