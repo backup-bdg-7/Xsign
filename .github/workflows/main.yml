@@ -29,6 +29,7 @@ jobs:
       run: |
         xcodebuild -project Xsign.xcodeproj \
                    -scheme Xsign \
+                   -destination 'generic/platform=iOS' \
                    -configuration Release \
                    -archivePath Xsign.xcarchive \
                    archive \
