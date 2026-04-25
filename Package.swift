@@ -57,6 +57,9 @@ let package = Package(
             exclude: [
                 "External/zsign",
                 "Resources/Info.plist"
+            ],
+            swiftSettings: [
+                .interoperabilityMode(.Cxx)
             ]
         )
     ]
