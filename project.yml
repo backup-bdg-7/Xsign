@@ -21,6 +21,8 @@ targets:
         INFOPLIST_FILE: Xsign/Resources/Info.plist
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         SWIFT_OBJC_BRIDGING_HEADER: Xsign/External/zsign/src/Xsign-Bridging-Header.h
+        SUPPORTS_MACCATALYST: NO
+        TARGETED_DEVICE_FAMILY: 1
         ENABLE_BITCODE: NO
         CODE_SIGNING_ALLOWED: NO
         CLANG_ENABLE_MODULES: YES
@@ -44,6 +46,13 @@ targets:
       - package: SWCompression
       - package: OpenSSL
       - package: Crypto
+schemes:
+  Xsign:
+    build:
+      targets:
+        Xsign: [all]
+    archive:
+      config: Release
 packages:
   ZIPFoundation:
     url: https://github.com/weichsel/ZIPFoundation.git
