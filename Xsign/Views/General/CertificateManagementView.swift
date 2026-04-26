@@ -1,5 +1,4 @@
 import SwiftUI
-import SwiftData
 
 struct CertificateManagementView: View {
     @Environment(\.modelContext) private var modelContext

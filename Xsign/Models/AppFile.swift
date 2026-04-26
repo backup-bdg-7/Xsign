@@ -1,5 +1,4 @@
 import Foundation
-import SwiftData
 
 enum FileType: String, Codable {
     case ipa, dylib, deb, zip
@@ -9,9 +8,8 @@ enum SignatureStatus: String, Codable {
     case unsigned, signed, failed, invalid
 }
 
-@Model
 final class AppFile: Identifiable {
-    @Attribute(.unique) var id: UUID
+    var id: UUID
     var name: String
     var fileName: String
     var relativePath: String
@@ -23,15 +21,15 @@ final class AppFile: Identifiable {
     var build: String?
     var isSigned: Bool
     var signatureStatus: SignatureStatus
-    @Relationship(deleteRule: .cascade) var entitlements: [Entitlement]?
+    var entitlements: [Entitlement]?
     var category: Category?
     var lastSignedDate: Date?
-
+    
     var filePath: URL {
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         return documentsDirectory.appendingPathComponent(relativePath)
     }
-
+    
     init(id: UUID = UUID(),
          name: String,
          fileName: String,

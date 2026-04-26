@@ -1,5 +1,4 @@
 import SwiftUI
-import SwiftData
 
 struct DebsView: View {
     @Query private var debs: [AppFile]

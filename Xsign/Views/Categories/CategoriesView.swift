@@ -1,5 +1,4 @@
 import SwiftUI
-import SwiftData
 
 struct CategoriesView: View {
     @Query(sort: \Category.name) private var categories: [Category]

@@ -1,5 +1,4 @@
 import SwiftUI
-import SwiftData
 
 struct DylibsView: View {
     @Query private var dylibs: [AppFile]

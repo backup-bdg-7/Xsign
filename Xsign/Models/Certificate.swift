@@ -1,13 +1,11 @@
 import Foundation
-import SwiftData
 
 enum CertificateType: String, Codable {
     case development, distribution, enterprise
 }
 
-@Model
 final class Certificate: Identifiable {
-    @Attribute(.unique) var id: UUID
+    var id: UUID
     var name: String
     var encryptedP12Data: Data
     var provisioningProfileData: Data?

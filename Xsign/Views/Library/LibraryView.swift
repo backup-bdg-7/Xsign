@@ -1,5 +1,4 @@
 import SwiftUI
-import SwiftData
 
 struct LibraryView: View {
     @Query(sort: \AppFile.creationDate, order: .reverse) private var appFiles: [AppFile]
