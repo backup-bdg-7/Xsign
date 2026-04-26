@@ -3,7 +3,15 @@ import SwiftData
 
 struct GeneralView: View {
     @Query(sort: \AppLog.timestamp, order: .reverse) private var logs: [AppLog]
-    @Query(filter: #Predicate<AppFile> { $0.isSigned == true }) private var signedApps: [AppFile]
+    @Query private var signedApps: [AppFile]
+    
+    init() {
+        let predicate = #Predicate<AppFile> { file in
+            file.isSigned == true
+        }
+        _signedApps = Query(filter: predicate, sort: \AppFile.name)
+    }
+    
     @State private var selectedSegment = 0
     @State private var searchText = ""
 
