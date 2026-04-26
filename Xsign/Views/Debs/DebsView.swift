@@ -6,7 +6,7 @@ struct DebsView: View {
     
     init() {
         let predicate = #Predicate<AppFile> { file in
-            file.type == FileType.deb
+            file.type.rawValue == FileType.deb.rawValue
         }
         _debs = Query(filter: predicate, sort: \AppFile.name)
     }

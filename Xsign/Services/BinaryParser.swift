@@ -71,7 +71,8 @@ class BinaryParser {
             if cmd == 0xC || cmd == 0x80000018 {
                 let offset = reader.uint32()
                 let pathOffset = Int(cmdStart) + Int(offset)
-                let pathData = data.subdata(in: pathOffset..<Int(cmdStart + UInt64(cmdsize)))
+                let endOffset = Int(cmdStart) + Int(cmdsize)
+                let pathData = data.subdata(in: pathOffset..<endOffset)
                 if let path = String(data: pathData, encoding: .utf8)?.split(separator: "\0").first {
                     dylibs.append(String(path))
                 }

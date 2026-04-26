@@ -12,7 +12,7 @@ struct SignModalView: View {
     init(appFile: AppFile) {
         self.appFile = appFile
         let predicate = #Predicate<AppFile> { file in
-            file.type == FileType.dylib
+            file.type.rawValue == FileType.dylib.rawValue
         }
         _availableDylibs = Query(filter: predicate, sort: \AppFile.name)
     }
