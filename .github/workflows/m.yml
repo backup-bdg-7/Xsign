@@ -33,7 +33,7 @@ jobs:
             -project Xsign.xcodeproj \
             -scheme Xsign \
             -sdk iphonesimulator \
-            -destination 'generic/platform=iOS Simulator' \
+            -destination 'name=iPhone 15 Pro' \
             -configuration Release \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
