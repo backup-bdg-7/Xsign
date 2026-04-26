@@ -29,8 +29,8 @@ jobs:
 
       - name: Build Xsign
         run: |
-          # Build for simulator without destination (use default)
-          xcodebuild clean build \
+          # Build for simulator - no clean (avoid destination issues)
+          xcodebuild build \
             -project Xsign.xcodeproj \
             -scheme Xsign \
             -sdk $(xcrun --show-sdk-path --sdk iphonesimulator) \
