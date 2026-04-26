@@ -25,11 +25,18 @@ jobs:
     - name: Generate Project
       run: xcodegen generate
 
+    - name: List Available SDKs
+      run: xcodebuild -showsdks
+
+    - name: List Schemes
+      run: xcodebuild -project Xsign.xcodeproj -list
+
     - name: Build App
       run: |
         xcodebuild build -project Xsign.xcodeproj \
                    -scheme Xsign \
                    -sdk iphoneos \
+                   -destination 'generic/platform=iOS' \
                    -configuration Release \
                    CODE_SIGNING_ALLOWED=NO \
                    CODE_SIGNING_REQUIRED=NO \
@@ -38,7 +45,7 @@ jobs:
     - name: Export IPA
       run: |
         mkdir -p build/Payload
-        cp -r Xsign.xcarchive/Products/Applications/Xsign.app build/Payload/
+        cp -r build/Release-iphoneos/Xsign.app build/Payload/ || cp -r Xsign.xcarchive/Products/Applications/Xsign.app build/Payload/
         cd build
         zip -r Xsign.ipa Payload
 
