@@ -19,7 +19,7 @@ targets:
       base:
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_FILE: Xsign/Resources/Info.plist
-        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        # ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon  # Disabled - icon causing build errors
         SWIFT_OBJC_BRIDGING_HEADER: Xsign/App/Bridge/Xsign-Bridging-Header.h
         SUPPORTS_MACCATALYST: NO
         TARGETED_DEVICE_FAMILY: 1
