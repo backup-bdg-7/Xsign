@@ -33,16 +33,24 @@ jobs:
           xcodebuild -showdestinations -project Xsign.xcodeproj -scheme Xsign 2>&1 | tee destinations.txt
           cat destinations.txt
           
+      - name: Boot Simulator
+        run: |
+          # Boot iPhone 16 Pro simulator
+          xcrun simctl boot "iPhone 16 Pro" 2>/dev/null || \
+          xcrun simctl boot "iPhone 16 Pro Max" 2>/dev/null || \
+          echo "Simulator already booted or not found"
+          
+          # Verify simulator is booted
+          xcrun simctl list devices booted
+          
       - name: Build Xsign
         run: |
-          # Try building with explicit SDK path
-          SDK_PATH=$(xcrun --show-sdk-path --sdk iphonesimulator)
-          echo "SDK Path: $SDK_PATH"
-          
+          # Build for simulator
           xcodebuild build \
             -project Xsign.xcodeproj \
             -scheme Xsign \
-            -sdk "$SDK_PATH" \
+            -sdk $(xcrun --show-sdk-path --sdk iphonesimulator) \
+            -destination 'platform=iOS Simulator,name=iPhone 16 Pro' \
             -configuration Release \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
