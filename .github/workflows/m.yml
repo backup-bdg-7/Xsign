@@ -1,0 +1,74 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Select Xcode 16.2
+        run: |
+          # List available Xcode versions
+          ls /Applications/ | grep Xcode
+          # Select Xcode 16.2
+          sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
+          xcodebuild -version
+          # Show available SDKs (iphoneos should be there)
+          xcodebuild -showsdks
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Project
+        run: xcodegen generate
+
+      - name: Show Xcode and SDK Info
+        run: |
+          xcodebuild -project Xsign.xcodeproj -list
+          xcodebuild -project Xsign.xcodeproj -scheme Xsign -showdestinations
+
+      - name: Build for iOS Device
+        run: |
+          # Build for iOS device (not simulator) as requested
+          # Use the specific SDK version that's installed
+          xcodebuild build -project Xsign.xcodeproj \
+                     -scheme Xsign \
+                     -sdk iphoneos18.2 \
+                     -destination 'generic/platform=iOS' \
+                     -destination-timeout 10 \
+                     -configuration Release \
+                     CODE_SIGNING_ALLOWED=NO \
+                     CODE_SIGNING_REQUIRED=NO \
+                     ONLY_ACTIVE_ARCH=YES 2>&1 | tee build.log
+          
+          # Prepare upload directory
+          mkdir -p upload
+          # Copying the built product for the release step
+          cp -r build/Release-iphoneos/*.app upload/ || cp -r ~/Library/Developer/Xcode/DerivedData/*/Build/Products/Release-iphoneos/*.app upload/
+
+      - name: Extract Version
+        id: get_version
+        run: |
+          VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" upload/*.app/Info.plist)
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Xsign v${{ env.VERSION }}
+          tag_name: ${{ github.ref_name }}
+          files: |
+            upload/*
+          generate_release_notes: true
+          draft: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
