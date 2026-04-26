@@ -7,7 +7,15 @@ struct SignModalView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
     @Query(sort: \Certificate.name) private var certificates: [Certificate]
-    @Query(filter: #Predicate<AppFile> { $0.type == .dylib }) private var availableDylibs: [AppFile]
+    @Query private var availableDylibs: [AppFile]
+    
+    init(appFile: AppFile) {
+        self.appFile = appFile
+        let predicate = #Predicate<AppFile> { file in
+            file.type == FileType.dylib
+        }
+        _availableDylibs = Query(filter: predicate, sort: \AppFile.name)
+    }
 
     @State private var selectedCertificateID: UUID?
     @State private var activeTab = 0

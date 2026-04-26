@@ -2,12 +2,22 @@ import SwiftUI
 import SwiftData
 
 struct DebsView: View {
-    @Query(filter: #Predicate<AppFile> { $0.type == .deb }) private var debs: [AppFile]
+    @Query private var debs: [AppFile]
+    
+    init() {
+        let predicate = #Predicate<AppFile> { file in
+            file.type == FileType.deb
+        }
+        _debs = Query(filter: predicate, sort: \AppFile.name)
+    }
+    
     var body: some View {
         NavigationStack {
             ZStack {
                 XsignTheme.background.ignoresSafeArea()
-                if debs.isEmpty { ContentUnavailableView("No Debs", systemImage: "archivebox.fill") }
+                if debs.isEmpty { 
+                    ContentUnavailableView("No Debs", systemImage: "archivebox.fill") 
+                }
                 else {
                     List(debs) { deb in
                         NavigationLink(destination: AppDetailView(appFile: deb)) {

@@ -16,8 +16,15 @@ class TweakManager {
 
     private func extractDylibFromDeb(at url: URL) throws -> URL {
         let data = try Data(contentsOf: url)
-        let ar = try ArArchive(data: data)
-
+        
+        // Use ArArchive from SWCompression - try different initializers based on version
+        let ar: ArArchive
+        if #available(iOS 16.0, *) {
+            ar = try ArArchive(data: data)
+        } else {
+            ar = try ArArchive(archive: data)
+        }
+        
         guard let dataEntry = ar.files.first(where: { $0.name.contains("data.tar") }) else {
             throw NSError(domain: "TweakManager", code: 1)
         }

@@ -2,12 +2,22 @@ import SwiftUI
 import SwiftData
 
 struct DylibsView: View {
-    @Query(filter: #Predicate<AppFile> { $0.type == .dylib }) private var dylibs: [AppFile]
+    @Query private var dylibs: [AppFile]
+    
+    init() {
+        let predicate = #Predicate<AppFile> { file in
+            file.type == FileType.dylib
+        }
+        _dylibs = Query(filter: predicate, sort: \AppFile.name)
+    }
+    
     var body: some View {
         NavigationStack {
             ZStack {
                 XsignTheme.background.ignoresSafeArea()
-                if dylibs.isEmpty { ContentUnavailableView("No Dylibs", systemImage: "bolt.fill") }
+                if dylibs.isEmpty { 
+                    ContentUnavailableView("No Dylibs", systemImage: "bolt.fill") 
+                }
                 else {
                     List(dylibs) { dylib in
                         NavigationLink(destination: AppDetailView(appFile: dylib)) {
