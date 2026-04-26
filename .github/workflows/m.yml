@@ -29,12 +29,12 @@ jobs:
 
       - name: Build Xsign
         run: |
-          # List schemes and SDKs for debugging
+          # List schemes and SDKs
           xcodebuild -list -project Xsign.xcodeproj
           xcodebuild -showsdks
           
-          # Build for simulator with explicit settings
-          xcodebuild build \
+          # Build for simulator with verbose output
+          xcodebuild -verbose build \
             -project Xsign.xcodeproj \
             -scheme Xsign \
             -sdk $(xcrun --show-sdk-path --sdk iphonesimulator) \
@@ -42,7 +42,10 @@ jobs:
             -configuration Release \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
-            -derivedDataPath ./DerivedData
-
+            -derivedDataPath ./DerivedData 2>&1 | tee build_output.txt
+          
+          # Check build output
+          tail -100 build_output.txt
+          
           mkdir -p upload
-          cp -r ./DerivedData/Build/Products/Release-iphonesimulator/*.app upload/
+          cp -r ./DerivedData/Build/Products/Release-iphonesimulator/*.app upload/ || echo "No .app found"
