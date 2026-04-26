@@ -38,10 +38,14 @@ jobs:
     - name: Build for iOS Device
       run: |
         # Build for iOS device (not simulator) as requested
-        # The iphoneos SDK is included with Xcode
+        # First, let's see what destinations are available
+        xcodebuild -project Xsign.xcodeproj -scheme Xsign -showdestinations
+        # Build for iOS device - use generic destination
         xcodebuild build -project Xsign.xcodeproj \
                    -scheme Xsign \
                    -sdk iphoneos \
+                   -destination 'generic/platform=iOS' \
+                   -destination-timeout 10 \
                    -configuration Release \
                    CODE_SIGNING_ALLOWED=NO \
                    CODE_SIGNING_REQUIRED=NO \
