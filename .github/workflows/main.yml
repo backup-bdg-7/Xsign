@@ -27,12 +27,10 @@ jobs:
 
     - name: Build App
       run: |
-        xcodebuild -project Xsign.xcodeproj \
+        xcodebuild archive -project Xsign.xcodeproj \
                    -scheme Xsign \
-                   -destination 'platform=iOS,name=Any iOS Device' \
-                   -configuration Release \
+                   -destination 'generic/platform=iOS' \
                    -archivePath Xsign.xcarchive \
-                   archive \
                    CODE_SIGNING_ALLOWED=NO \
                    CODE_SIGNING_REQUIRED=NO
 
