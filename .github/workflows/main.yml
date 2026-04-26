@@ -28,11 +28,16 @@ jobs:
       run: brew install xcodegen
 
     - name: Generate Project
-      run: xcodegen generate
+      run: |
+        # Generate Xcode project from project.yml
+        xcodegen generate --spec project.yml --project Xsign.xcodeproj
+        # Verify project was created
+        ls -la Xsign.xcodeproj/
+        # Show project structure
+        xcodebuild -project Xsign.xcodeproj -list
 
     - name: Show Xcode and SDK Info
       run: |
-        xcodebuild -project Xsign.xcodeproj -list
         xcodebuild -project Xsign.xcodeproj -scheme Xsign -showdestinations
 
     - name: Build for iOS Device
