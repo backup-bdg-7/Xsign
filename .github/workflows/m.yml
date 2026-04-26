@@ -29,23 +29,25 @@ jobs:
 
       - name: Build Xsign
         run: |
-          # List schemes and SDKs
-          xcodebuild -list -project Xsign.xcodeproj
-          xcodebuild -showsdks
+          # List available simulators
+          xcrun simctl list devices available | grep -i "iPhone 16"
           
-          # Build for simulator with verbose output
-          xcodebuild -verbose build \
+          # Get the first available iPhone 16 Pro simulator ID (UUID format)
+          SIM_ID=$(xcrun simctl list devices available | grep "iPhone 16 Pro" | head -1 | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}')
+          echo "Using simulator ID: $SIM_ID"
+          
+          # Boot the simulator (required for xcodebuild)
+          xcrun simctl boot "$SIM_ID" || echo "Simulator already booted"
+          
+          # Build for the simulator
+          xcodebuild build \
             -project Xsign.xcodeproj \
             -scheme Xsign \
-            -sdk $(xcrun --show-sdk-path --sdk iphonesimulator) \
-            -arch x86_64 \
+            -destination "platform=iOS Simulator,id=$SIM_ID" \
             -configuration Release \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
-            -derivedDataPath ./DerivedData 2>&1 | tee build_output.txt
-          
-          # Check build output
-          tail -100 build_output.txt
-          
+            -derivedDataPath ./DerivedData
+
           mkdir -p upload
           cp -r ./DerivedData/Build/Products/Release-iphonesimulator/*.app upload/ || echo "No .app found"
