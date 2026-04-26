@@ -17,11 +17,12 @@ class TweakManager {
     private func extractDylibFromDeb(at url: URL) throws -> URL {
         let data = try Data(contentsOf: url)
         
-        // Use ArArchive from SWCompression - try different initializers based on version
+        // Try to initialize ArArchive with different available initializers
         let ar: ArArchive
-        if #available(iOS 16.0, *) {
+        do {
             ar = try ArArchive(data: data)
-        } else {
+        } catch {
+            // Fallback for older API
             ar = try ArArchive(archive: data)
         }
         
