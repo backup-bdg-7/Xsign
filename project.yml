@@ -38,6 +38,9 @@ targets:
         GCC_PREPROCESSOR_DEFINITIONS:
           - $(inherited)
           - ZSIGN_VERSION=1.0.0
+        # Support both device and simulator
+        SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
+        SUPPORTS_UIKITFORMAC: NO
     dependencies:
       - package: ZIPFoundation
       - package: Vapor

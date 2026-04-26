@@ -29,21 +29,7 @@ jobs:
 
       - name: Build Xsign
         run: |
-          set -x
-          
-          # List available simulators
-          xcrun simctl list devices available | grep -i "iPhone 16"
-          
-          # Show available destinations for the scheme
-          xcodebuild -showdestinations -project Xsign.xcodeproj -scheme Xsign
-          
-          # Boot a simulator 
-          xcrun simctl boot "iPhone 16 Pro" 2>/dev/null || \
-          xcrun simctl boot "iPhone 16 Pro Max" 2>/dev/null || \
-          echo "Simulator already booted or not found"
-          
-          # Build for simulator WITHOUT specifying destination
-          # Let xcodebuild figure out the destination automatically
+          # Build for simulator
           xcodebuild build \
             -project Xsign.xcodeproj \
             -scheme Xsign \
