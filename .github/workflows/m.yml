@@ -27,27 +27,39 @@ jobs:
       - name: Generate Project
         run: xcodegen generate
 
-      - name: Build Xsign (Device)
+      - name: Build Xsign
         run: |
-          # Check available SDKs
+          # Check available SDKs and simulators
           xcodebuild -showsdks
+          xcrun simctl list devices available | grep -i "iPhone" | head -10
           
-          # Build for device using iphoneos SDK
-          # Use the latest iOS SDK available
+          # Try building for simulator first (more likely to work)
           xcodebuild clean build \
             -project Xsign.xcodeproj \
             -scheme Xsign \
-            -sdk iphoneos \
+            -sdk iphonesimulator \
+            -destination 'platform=iOS Simulator,name=iPhone 15 Pro' \
+            -configuration Release \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            -derivedDataPath ./DerivedData || \
+          xcodebuild clean build \
+            -project Xsign.xcodeproj \
+            -scheme Xsign \
+            -sdk iphonesimulator \
+            -destination 'platform=iOS Simulator,name=iPhone 14' \
+            -configuration Release \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            -derivedDataPath ./DerivedData || \
+          xcodebuild clean build \
+            -project Xsign.xcodeproj \
+            -scheme Xsign \
+            -sdk iphonesimulator \
             -configuration Release \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             -derivedDataPath ./DerivedData
-          
-          # Create IPA
-          mkdir -p upload/Payload
-          cp -r ./DerivedData/Build/Products/Release-iphoneos/Xsign.app upload/Payload/
-          cd upload && zip -r Xsign.ipa Payload/
-          rm -rf upload/Payload
-          
-          echo "IPA created at upload/Xsign.ipa"
-          ls -la upload/
+
+          mkdir -p upload
+          cp -r ./DerivedData/Build/Products/Release-iphonesimulator/*.app upload/
