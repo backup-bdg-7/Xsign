@@ -17,8 +17,8 @@ class TweakManager {
     private func extractDylibFromDeb(at url: URL) throws -> URL {
         let data = try Data(contentsOf: url)
         
-        // Try to create AR Archive - use the correct API
-        let ar = try ArArchive(data: data)
+        // Parse the deb file using SWCompression
+        let ar = try Archive(data: data)
         
         // Find the data.tar file in the archive
         guard let dataEntry = ar.files.first(where: { $0.name.contains("data.tar") }) else {
