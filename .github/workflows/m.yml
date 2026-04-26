@@ -27,21 +27,27 @@ jobs:
       - name: Generate Project
         run: xcodegen generate
 
-      - name: Build Xsign (Simulator)
+      - name: Build Xsign (Device)
         run: |
-          # Find available simulators
-          xcrun simctl list devices available | grep -i "iPhone" | head -5
+          # Check available SDKs
+          xcodebuild -showsdks
           
-          # Build for simulator with generic destination
+          # Build for device using iphoneos SDK
+          # Use the latest iOS SDK available
           xcodebuild clean build \
             -project Xsign.xcodeproj \
             -scheme Xsign \
-            -sdk iphonesimulator \
-            -destination 'generic/platform=iOS Simulator' \
+            -sdk iphoneos \
             -configuration Release \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             -derivedDataPath ./DerivedData
-
-          mkdir -p upload
-          cp -r ./DerivedData/Build/Products/Release-iphonesimulator/*.app upload/
+          
+          # Create IPA
+          mkdir -p upload/Payload
+          cp -r ./DerivedData/Build/Products/Release-iphoneos/Xsign.app upload/Payload/
+          cd upload && zip -r Xsign.ipa Payload/
+          rm -rf upload/Payload
+          
+          echo "IPA created at upload/Xsign.ipa"
+          ls -la upload/
