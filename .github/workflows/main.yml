@@ -19,35 +19,44 @@ jobs:
       with:
         xcode-version: '16.2'
 
+    - name: Install iOS Platform
+      run: |
+        sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
+        xcodebuild -downloadPlatform iOS || echo "iOS platform may already be installed"
+
     - name: Install XcodeGen
       run: brew install xcodegen
 
     - name: Generate Project
       run: xcodegen generate
 
-    - name: List Available SDKs
-      run: xcodebuild -showsdks
-
-    - name: List Schemes
-      run: xcodebuild -project Xsign.xcodeproj -list
+    - name: List Available SDKs and Destinations
+      run: |
+        xcodebuild -showsdks
+        xcodebuild -project Xsign.xcodeproj -list
+        xcodebuild -project Xsign.xcodeproj -scheme Xsign -showdestinations
 
     - name: Build App
       run: |
         xcodebuild build -project Xsign.xcodeproj \
                    -scheme Xsign \
                    -sdk iphoneos \
-                   -destination 'generic/platform=iOS' \
                    -configuration Release \
                    CODE_SIGNING_ALLOWED=NO \
                    CODE_SIGNING_REQUIRED=NO \
                    ONLY_ACTIVE_ARCH=NO
 
-    - name: Export IPA
+    - name: Create IPA from build output
       run: |
         mkdir -p build/Payload
-        cp -r build/Release-iphoneos/Xsign.app build/Payload/ || cp -r Xsign.xcarchive/Products/Applications/Xsign.app build/Payload/
-        cd build
-        zip -r Xsign.ipa Payload
+        if [ -d "build/Release-iphoneos/Xsign.app" ]; then
+          cp -r build/Release-iphoneos/Xsign.app build/Payload/
+        else
+          echo "Error: Xsign.app not found in build output"
+          find . -name "Xsign.app" -type d 2>/dev/null || echo "No Xsign.app found"
+          exit 1
+        fi
+        cd build && zip -r Xsign.ipa Payload
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
