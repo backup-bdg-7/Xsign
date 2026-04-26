@@ -17,9 +17,12 @@ jobs:
           submodules: recursive
 
       - name: Setup Xcode
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: '16.4'   # Use 16.4 to avoid Xcode 26 compiler bugs
+        run: |
+          # List available Xcode versions
+          ls -la /Applications/ | grep Xcode || true
+          # Use default Xcode on macos-26
+          sudo xcode-select -s /Applications/Xcode.app || sudo xcode-select -s /Applications/Xcode_26.app || true
+          xcodebuild -version
 
       - name: Install XcodeGen
         run: brew install xcodegen
@@ -27,18 +30,28 @@ jobs:
       - name: Generate Project
         run: xcodegen generate
 
-      - name: Build Xsign (Device)
+      - name: Build Xsign (Device) for iOS 15+
         run: |
-          xcodebuild build \
+          xcodebuild clean build \
             -project Xsign.xcodeproj \
             -scheme Xsign \
             -sdk iphoneos \
             -destination 'generic/platform=iOS' \
             -configuration Release \
+            -allowProvisioningUpdates \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
-            ONLY_ACTIVE_ARCH=YES \
-            -derivedDataPath ./DerivedData
+            -derivedDataPath ./DerivedData \
+            IPHONEOS_DEPLOYMENT_TARGET=15.0
 
+          # Create IPA structure
+          mkdir -p Payload/Xsign.app
+          cp -r ./DerivedData/Build/Products/Release-iphoneos/Xsign.app/* Payload/Xsign.app/
+          
+          # Create IPA
           mkdir -p upload
-          cp -r ./DerivedData/Build/Products/Release-iphoneos/*.app upload/
+          zip -r upload/Xsign.ipa Payload/
+          rm -rf Payload
+          
+          echo "IPA created at upload/Xsign.ipa"
+          ls -la upload/
