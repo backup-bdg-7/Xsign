@@ -29,11 +29,11 @@ jobs:
 
       - name: Build Xsign
         run: |
-          # Build for simulator
+          # Use generic platform destination (most compatible)
           xcodebuild build \
             -project Xsign.xcodeproj \
             -scheme Xsign \
-            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
             -configuration Release \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
