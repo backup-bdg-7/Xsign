@@ -34,13 +34,14 @@ jobs:
       run: |
         xcodebuild -showsdks
         xcodebuild -project Xsign.xcodeproj -list
-        xcodebuild -project Xsign.xcodeproj -scheme Xsign -showdestinations
+        xcodebuild -project Xsign.xcodeproj -scheme Xsign -showdestinations 2>&1 | head -50 || echo "Failed to show destinations"
 
     - name: Build App
       run: |
         xcodebuild build -project Xsign.xcodeproj \
                    -scheme Xsign \
-                   -sdk iphoneos \
+                   -sdk iphonesimulator \
+                   -destination 'platform=iOS Simulator,name=iPhone 16' \
                    -configuration Release \
                    CODE_SIGNING_ALLOWED=NO \
                    CODE_SIGNING_REQUIRED=NO \
