@@ -22,12 +22,19 @@ jobs:
         sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
         xcodebuild -version
 
-    - name: Download iOS Platform
+    - name: Download iOS Platform (with retry)
       run: |
-        # Download iOS SDK and Simulator runtime
-        xcodebuild -downloadPlatform iOS -quiet || true
+        # Download iOS SDK - required for iphoneos builds
+        for i in {1..3}; do
+          echo "Attempt $i to download iOS platform..."
+          xcodebuild -downloadPlatform iOS -quiet && break
+          echo "Download failed, retrying in 30s..."
+          sleep 30
+        done
         # Verify SDK is available
-        xcodebuild -showsdks
+        xcodebuild -showsdks || true
+        # List installed platforms
+        ls -la /Applications/Xcode_16.2.app/Contents/Developer/Platforms/ | grep iOS
 
     - name: Install XcodeGen
       run: brew install xcodegen
@@ -43,6 +50,7 @@ jobs:
     - name: Build for iOS Device
       run: |
         # Build for iOS device (not simulator) as requested
+        # Note: -downloadPlatform should have installed the iOS SDK
         xcodebuild build -project Xsign.xcodeproj \
                    -scheme Xsign \
                    -sdk iphoneos \
@@ -50,7 +58,14 @@ jobs:
                    -configuration Release \
                    CODE_SIGNING_ALLOWED=NO \
                    CODE_SIGNING_REQUIRED=NO \
-                   ONLY_ACTIVE_ARCH=YES
+                   ONLY_ACTIVE_ARCH=YES 2>&1 | tee build.log
+        # Check if build succeeded
+        if grep -q "BUILD SUCCEEDED" build.log; then
+          echo "✅ Build succeeded!"
+        elif grep -q "error:" build.log; then
+          echo "❌ Build failed with errors"
+          exit 1
+        fi
 
     - name: Build Succeeded
       run: echo "✅ Xsign built successfully for iOS device"
