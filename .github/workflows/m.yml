@@ -29,12 +29,21 @@ jobs:
 
       - name: Build Xsign
         run: |
+          set -x
+          
           # List available simulators
           xcrun simctl list devices available | grep -i "iPhone 16"
           
           # Get the first available iPhone 16 Pro simulator ID (UUID format)
-          SIM_ID=$(xcrun simctl list devices available | grep "iPhone 16 Pro" | head -1 | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}')
+          SIM_INFO=$(xcrun simctl list devices available | grep "iPhone 16 Pro" | head -1)
+          echo "Sim info: $SIM_INFO"
+          
+          # Extract UUID (format: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX)
+          SIM_ID=$(echo "$SIM_INFO" | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' | head -1)
           echo "Using simulator ID: $SIM_ID"
+          
+          # Show available destinations for the scheme
+          xcodebuild -showdestinations -project Xsign.xcodeproj -scheme Xsign
           
           # Boot the simulator (required for xcodebuild)
           xcrun simctl boot "$SIM_ID" || echo "Simulator already booted"
