@@ -34,22 +34,20 @@ jobs:
           # List available simulators
           xcrun simctl list devices available | grep -i "iPhone 16"
           
-          # Use iPhone 16 Pro by name (avoid UUID issues)
-          SIM_NAME="iPhone 16 Pro"
-          
           # Show available destinations for the scheme
           xcodebuild -showdestinations -project Xsign.xcodeproj -scheme Xsign
           
-          # Boot the simulator (try both available ones)
+          # Boot a simulator 
           xcrun simctl boot "iPhone 16 Pro" 2>/dev/null || \
           xcrun simctl boot "iPhone 16 Pro Max" 2>/dev/null || \
           echo "Simulator already booted or not found"
           
-          # Build for the simulator using name instead of ID
+          # Build for simulator WITHOUT specifying destination
+          # Let xcodebuild figure out the destination automatically
           xcodebuild build \
             -project Xsign.xcodeproj \
             -scheme Xsign \
-            -destination "platform=iOS Simulator,name=$SIM_NAME" \
+            -sdk iphonesimulator \
             -configuration Release \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
