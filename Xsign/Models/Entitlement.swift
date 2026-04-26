@@ -1,7 +1,9 @@
 import Foundation
+import SwiftData
 
+@Model
 final class Entitlement: Identifiable {
-    var id: UUID
+    @Attribute(.unique) var id: UUID
     var name: String
     var entitlementDescription: String
     var capabilityType: CapabilityType

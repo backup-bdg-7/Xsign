@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 struct SignModalView: View {
     let appFile: AppFile

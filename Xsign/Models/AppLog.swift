@@ -1,9 +1,11 @@
 import Foundation
+import SwiftData
 
 enum LogLevel: String, Codable {
     case info, success, warning, error
 }
 
+@Model
 final class AppLog: Identifiable {
     @Attribute(.unique) var id: UUID
     var timestamp: Date
