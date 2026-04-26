@@ -29,11 +29,15 @@ jobs:
 
       - name: Build Xsign (Simulator)
         run: |
+          # Find available simulators
+          xcrun simctl list devices available | grep -i "iPhone" | head -5
+          
+          # Build for simulator with generic destination
           xcodebuild clean build \
             -project Xsign.xcodeproj \
             -scheme Xsign \
             -sdk iphonesimulator \
-            -destination 'platform=iOS Simulator,name=iPhone 15 Pro' \
+            -destination 'generic/platform=iOS Simulator' \
             -configuration Release \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
