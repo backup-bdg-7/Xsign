@@ -14,10 +14,20 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Set up Xcode
-      uses: maxim-lobanov/setup-xcode@v1
-      with:
-        xcode-version: '16.2'
+    - name: Select Xcode 16.2
+      run: |
+        # List available Xcode versions
+        ls /Applications/ | grep Xcode
+        # Select Xcode 16.2
+        sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
+        xcodebuild -version
+
+    - name: Download iOS Platform
+      run: |
+        # Download iOS SDK and Simulator runtime
+        xcodebuild -downloadPlatform iOS -quiet || true
+        # Verify SDK is available
+        xcodebuild -showsdks
 
     - name: Install XcodeGen
       run: brew install xcodegen
@@ -25,13 +35,22 @@ jobs:
     - name: Generate Project
       run: xcodegen generate
 
-    - name: Verify Project Generated
+    - name: Show Xcode and SDK Info
       run: |
-        ls -la Xsign.xcodeproj
         xcodebuild -project Xsign.xcodeproj -list
+        xcodebuild -project Xsign.xcodeproj -scheme Xsign -showdestinations
 
-    - name: Build Status
+    - name: Build for iOS Device
       run: |
-        echo "✅ Project generation successful"
-        echo "Note: iOS SDK not available on GitHub runners"
-        echo "Build on local Mac with Xcode 16.2+ for device deployment"
+        # Build for iOS device (not simulator) as requested
+        xcodebuild build -project Xsign.xcodeproj \
+                   -scheme Xsign \
+                   -sdk iphoneos \
+                   -destination 'generic/platform=iOS' \
+                   -configuration Release \
+                   CODE_SIGNING_ALLOWED=NO \
+                   CODE_SIGNING_REQUIRED=NO \
+                   ONLY_ACTIVE_ARCH=YES
+
+    - name: Build Succeeded
+      run: echo "✅ Xsign built successfully for iOS device"
