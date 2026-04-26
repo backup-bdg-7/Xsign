@@ -27,13 +27,13 @@ jobs:
       - name: Generate Project
         run: xcodegen generate
 
-      - name: Build Xsign (Device)
+      - name: Build Xsign (Simulator)
         run: |
           xcodebuild build \
             -project Xsign.xcodeproj \
             -scheme Xsign \
-            -sdk iphoneos \
-            -destination 'generic/platform=iOS' \
+            -sdk iphonesimulator \
+            -destination 'platform=iOS Simulator,name=iPhone 15 Pro,OS=latest' \
             -configuration Release \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
@@ -41,4 +41,4 @@ jobs:
             -derivedDataPath ./DerivedData
 
           mkdir -p upload
-          cp -r ./DerivedData/Build/Products/Release-iphoneos/*.app upload/
+          cp -r ./DerivedData/Build/Products/Release-iphonesimulator/*.app upload/
