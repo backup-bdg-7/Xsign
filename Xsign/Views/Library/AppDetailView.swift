@@ -63,20 +63,22 @@ struct AppDetailView: View {
                     }.padding()
                     
                     InfoSection(title: "Entitlements") {
-                        if entitlements.isEmpty {
-                            Text("No entitlements found").font(.caption).foregroundColor(.gray)
-                        } else {
-                            VStack(alignment: .leading, spacing: 4) {
-                                ForEach(Array(entitlements.keys.sorted()), id: \.self) { key in
-                                    VStack(alignment: .leading) {
-                                        Text(key)
-                                            .font(.caption)
-                                            .fontWeight(.bold)
-                                            .foregroundColor(XsignTheme.primary)
-                                        Text("\(String(describing: entitlements[key] ?? ""))")
-                                            .font(.caption2)
-                                            .foregroundColor(XsignTheme.textSecondary)
-                                    }.padding(.bottom, 4)
+                        Group {
+                            if entitlements.isEmpty {
+                                Text("No entitlements found").font(.caption).foregroundColor(.gray)
+                            } else {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    ForEach(Array(entitlements.keys.sorted()), id: \.self) { key in
+                                        VStack(alignment: .leading) {
+                                            Text(key)
+                                                .font(.caption)
+                                                .fontWeight(.bold)
+                                                .foregroundColor(XsignTheme.primary)
+                                            Text("\(String(describing: entitlements[key] ?? ""))")
+                                                .font(.caption2)
+                                                .foregroundColor(XsignTheme.textSecondary)
+                                        }.padding(.bottom, 4)
+                                    }
                                 }
                             }
                         }
