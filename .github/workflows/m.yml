@@ -27,14 +27,24 @@ jobs:
       - name: Generate Project
         run: xcodegen generate
 
+      - name: Debug destinations
+        run: |
+          # Show what xcodebuild thinks are valid destinations
+          xcodebuild -showdestinations -project Xsign.xcodeproj -scheme Xsign 2>&1 | tee destinations.txt
+          cat destinations.txt
+          
       - name: Build Xsign
         run: |
-          # Build for simulator (SDK specified in project.yml)
+          # Try building with explicit SDK path
+          SDK_PATH=$(xcrun --show-sdk-path --sdk iphonesimulator)
+          echo "SDK Path: $SDK_PATH"
+          
           xcodebuild build \
             -project Xsign.xcodeproj \
             -scheme Xsign \
+            -sdk "$SDK_PATH" \
             -configuration Release \
-            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             -derivedDataPath ./DerivedData
 
