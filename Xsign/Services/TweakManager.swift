@@ -40,7 +40,7 @@ class TweakManager {
         }
 
         // Parse the tar archive
-        let tar = TarContainer.open(container: tarData)
+        let tar = try TarContainer.open(container: tarData)
         
         // Find the dylib file
         guard let dylibEntry = tar.first(where: { $0.info.name.hasSuffix(".dylib") }) else {
@@ -82,7 +82,7 @@ struct ArArchive {
             // Parse header fields
             // Format: name (16) + timestamp (12) + ownerID (6) + groupID (6) + mode (8) + size (10) + ` (2)
             let name = header.prefix(16).trimmingCharacters(in: .whitespacesAndNewlines)
-            let sizeStr = header.dropFirst(16 + 12 + 6 + 6 + 8).prefix(10).trimmingCharacters(in: .whitespacesAndNewlines())
+            let sizeStr = header.dropFirst(16 + 12 + 6 + 6 + 8).prefix(10).trimmingCharacters(in: .whitespacesAndNewlines)
             
             guard let size = Int(sizeStr) else { break }
             
@@ -92,7 +92,7 @@ struct ArArchive {
             guard offset + size <= data.count else { break }
             let fileData = data.subdata(in: offset..<offset + size)
             
-            entries.append(ArEntry(name: String(name), data: fileData))
+            entries.append(ArEntry(name: name, data: fileData))
             
             // Align to even byte boundary
             offset += size
