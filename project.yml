@@ -41,6 +41,9 @@ targets:
         # Support both device and simulator
         SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
         SUPPORTS_UIKITFORMAC: NO
+        # Explicitly set SDKs
+        SDKROOT: iphonesimulator
+        ARCHS: "x86_64 arm64"
     dependencies:
       - package: ZIPFoundation
       - package: Vapor
