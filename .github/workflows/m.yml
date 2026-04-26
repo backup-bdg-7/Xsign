@@ -29,11 +29,16 @@ jobs:
 
       - name: Build Xsign
         run: |
-          # Build for simulator - no clean (avoid destination issues)
+          # List schemes and SDKs for debugging
+          xcodebuild -list -project Xsign.xcodeproj
+          xcodebuild -showsdks
+          
+          # Build for simulator with explicit settings
           xcodebuild build \
             -project Xsign.xcodeproj \
             -scheme Xsign \
             -sdk $(xcrun --show-sdk-path --sdk iphonesimulator) \
+            -arch x86_64 \
             -configuration Release \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
