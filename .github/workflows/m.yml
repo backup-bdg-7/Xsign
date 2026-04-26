@@ -33,7 +33,6 @@ jobs:
             -project Xsign.xcodeproj \
             -scheme Xsign \
             -sdk iphoneos \
-            -destination 'generic/platform=iOS' \
             -configuration Release \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
