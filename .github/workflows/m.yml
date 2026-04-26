@@ -8,18 +8,18 @@ on:
     
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-26     # ← newer runner, better Xcode pre-install
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           submodules: recursive
 
-      - name: Select Xcode
-        run: |
-          # Selecting Xcode 16.2 as per your build requirements
-          sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
-          xcodebuild -version
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: 'latest-stable'   # or '26.2' / '16.4'
 
       - name: Install XcodeGen
         run: brew install xcodegen
@@ -27,39 +27,18 @@ jobs:
       - name: Generate Project
         run: xcodegen generate
 
-      - name: Build Xsign
+      - name: Build Xsign (Device)
         run: |
-          # Build for iOS device without signing
-          xcodebuild build -project Xsign.xcodeproj \
-                     -scheme Xsign \
-                     -sdk iphoneos \
-                     -destination 'generic/platform=iOS' \
-                     -configuration Release \
-                     CODE_SIGNING_ALLOWED=NO \
-                     CODE_SIGNING_REQUIRED=NO \
-                     ONLY_ACTIVE_ARCH=YES
-          
-          # Prepare upload directory
+          xcodebuild build \
+            -project Xsign.xcodeproj \
+            -scheme Xsign \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -configuration Release \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            ONLY_ACTIVE_ARCH=YES \
+            -derivedDataPath ./DerivedData
+
           mkdir -p upload
-          # Assuming the build output is in the standard build folder
-          # Adjust this path if your project builds to a custom location
-          cp -r build/Release-iphoneos/*.app upload/ || cp -r ~/Library/Developer/Xcode/DerivedData/*/Build/Products/Release-iphoneos/*.app upload/
-
-      - name: Extract Version
-        id: get_version
-        run: |
-          # Pull version from the built Info.plist
-          VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" upload/*.app/Info.plist)
-          echo "VERSION=${VERSION}" >> $GITHUB_ENV
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v2
-        with:
-          name: Xsign v${{ env.VERSION }}
-          tag_name: ${{ github.ref_name }}
-          files: |
-            upload/*
-          generate_release_notes: true
-          draft: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          cp -r ./DerivedData/Build/Products/Release-iphoneos/*.app upload/
