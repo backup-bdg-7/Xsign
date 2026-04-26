@@ -38,12 +38,10 @@ jobs:
     - name: Build for iOS Device
       run: |
         # Build for iOS device (not simulator) as requested
-        # Use the specific SDK version that's installed
+        # Use the exact SDK version - no destination needed for generic build
         xcodebuild build -project Xsign.xcodeproj \
                    -scheme Xsign \
                    -sdk iphoneos18.2 \
-                   -destination 'generic/platform=iOS' \
-                   -destination-timeout 10 \
                    -configuration Release \
                    CODE_SIGNING_ALLOWED=NO \
                    CODE_SIGNING_REQUIRED=NO \
