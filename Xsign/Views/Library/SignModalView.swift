@@ -11,8 +11,9 @@ struct SignModalView: View {
     
     init(appFile: AppFile) {
         self.appFile = appFile
+        let dylibRawValue = FileType.dylib.rawValue
         let predicate = #Predicate<AppFile> { file in
-            file.type.rawValue == FileType.dylib.rawValue
+            file.type.rawValue == dylibRawValue
         }
         _availableDylibs = Query(filter: predicate, sort: \AppFile.name)
     }

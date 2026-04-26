@@ -5,8 +5,9 @@ struct DebsView: View {
     @Query private var debs: [AppFile]
     
     init() {
+        let debRawValue = FileType.deb.rawValue
         let predicate = #Predicate<AppFile> { file in
-            file.type.rawValue == FileType.deb.rawValue
+            file.type.rawValue == debRawValue
         }
         _debs = Query(filter: predicate, sort: \AppFile.name)
     }

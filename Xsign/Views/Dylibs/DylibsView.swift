@@ -5,8 +5,9 @@ struct DylibsView: View {
     @Query private var dylibs: [AppFile]
     
     init() {
+        let dylibRawValue = FileType.dylib.rawValue
         let predicate = #Predicate<AppFile> { file in
-            file.type.rawValue == FileType.dylib.rawValue
+            file.type.rawValue == dylibRawValue
         }
         _dylibs = Query(filter: predicate, sort: \AppFile.name)
     }

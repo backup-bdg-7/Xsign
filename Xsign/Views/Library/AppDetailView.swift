@@ -47,14 +47,16 @@ struct AppDetailView: View {
                     }.padding()
                     
                     InfoSection(title: "Linked Libraries") {
-                        if extractedDylibs.isEmpty {
-                            Text("None").font(.caption).foregroundColor(.gray)
-                        } else {
-                            VStack(alignment: .leading, spacing: 4) {
-                                ForEach(extractedDylibs, id: \.self) { dylib in
-                                    Text(dylib)
-                                        .font(.system(size: 10, design: .monospaced))
-                                        .foregroundColor(XsignTheme.textPrimary)
+                        Group {
+                            if extractedDylibs.isEmpty {
+                                Text("None").font(.caption).foregroundColor(.gray)
+                            } else {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    ForEach(extractedDylibs, id: \.self) { dylib in
+                                        Text(dylib)
+                                            .font(.system(size: 10, design: .monospaced))
+                                            .foregroundColor(XsignTheme.textPrimary)
+                                    }
                                 }
                             }
                         }

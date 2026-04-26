@@ -17,12 +17,12 @@ class TweakManager {
     private func extractDylibFromDeb(at url: URL) throws -> URL {
         let data = try Data(contentsOf: url)
         
-        // Parse the deb file - AR Archive
-        let ar = try ARArchive(archive: data)
+        // Parse the deb file using SWCompression
+        let ar = try ArArchive(archive: data)
         
         // Find the data.tar file in the archive
         guard let dataEntry = ar.files.first(where: { $0.name.contains("data.tar") }) else {
-            throw NSError(domain: "TweakManager", code: 1, userInfo: [NSLocalizedDescriptionKey: "No data.tar found in deb"])
+            throw NSError(domain: "TweakManager", code: 1)
         }
 
         // Decompress if needed
@@ -38,7 +38,7 @@ class TweakManager {
         
         // Find the dylib file
         guard let dylibEntry = tar.files.first(where: { $0.name.hasSuffix(".dylib") }) else {
-            throw NSError(domain: "TweakManager", code: 2, userInfo: [NSLocalizedDescriptionKey: "No dylib found in tar"])
+            throw NSError(domain: "TweakManager", code: 2)
         }
 
         // Write to temp location
