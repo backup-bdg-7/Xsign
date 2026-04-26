@@ -1,9 +1,7 @@
 import SwiftUI
-import SwiftData
 
 struct ImportCertificateView: View {
     @Environment(\.dismiss) var dismiss
-    @Environment(\.modelContext) var modelContext
 
     @State private var name = ""
     @State private var password = ""
@@ -73,8 +71,7 @@ struct ImportCertificateView: View {
             canSign: true
         )
 
-        modelContext.insert(newCert)
-        try? modelContext.save()
+        PersistenceService.shared.saveCertificate(newCert)
         dismiss()
     }
 }

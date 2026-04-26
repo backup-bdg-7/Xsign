@@ -1,22 +1,14 @@
 import SwiftUI
-import SwiftData
 
 struct GeneralView: View {
-    @Query(sort: \AppLog.timestamp, order: .reverse) private var logs: [AppLog]
-    @Query private var signedApps: [AppFile]
-    
-    init() {
-        let predicate = #Predicate<AppFile> { file in
-            file.isSigned == true
-        }
-        _signedApps = Query(filter: predicate, sort: \AppFile.name)
-    }
+    @State private var signedApps: [AppFile] = []
+    @State private var logs: [AppLog] = []
     
     @State private var selectedSegment = 0
     @State private var searchText = ""
 
     var body: some View {
-        NavigationStack {
+        NavigationView {
             ZStack {
                 XsignTheme.background.ignoresSafeArea()
                 VStack {
@@ -31,16 +23,31 @@ struct GeneralView: View {
                     else if selectedSegment == 1 { CertificateManagementView() }
                     else if selectedSegment == 2 { LogsView(logs: logs, searchText: $searchText) }
                     else { DeviceManagementView() }
-                }
-            }.navigationTitle("General")
+                }.navigationTitle("General")
+            }
+        }.onAppear {
+            loadData()
         }
+    }
+    
+    private func loadData() {
+        signedApps = PersistenceService.shared.fetchSignedApps()
+        logs = PersistenceService.shared.fetchLogs()
     }
 }
 
 struct SignedAppsList: View {
     let apps: [AppFile]
     var body: some View {
-        if apps.isEmpty { ContentUnavailableView("No Apps", systemImage: "checkmark.seal") }
+        if apps.isEmpty { 
+            VStack {
+                Image(systemName: "app.fill")
+                    .font(.largeTitle)
+                    .foregroundColor(.secondary)
+                Text("No Apps")
+                    .foregroundColor(.secondary)
+            }
+        }
         else {
             List(apps) { app in
                 HStack {
@@ -80,6 +87,6 @@ struct DeviceManagementView: View {
                 InfoRow(label: "Model", value: UIDevice.current.model)
                 InfoRow(label: "OS", value: UIDevice.current.systemVersion)
             }
-        }.listStyle(.insetGrouped).scrollContentBackground(.hidden)
+        }.listStyle(.insetGrouped)
     }
 }
