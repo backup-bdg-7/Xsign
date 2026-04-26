@@ -27,12 +27,13 @@ jobs:
 
     - name: Build App
       run: |
-        xcodebuild archive -project Xsign.xcodeproj \
+        xcodebuild build -project Xsign.xcodeproj \
                    -scheme Xsign \
-                   -destination 'generic/platform=iOS' \
-                   -archivePath Xsign.xcarchive \
+                   -sdk iphoneos \
+                   -configuration Release \
                    CODE_SIGNING_ALLOWED=NO \
-                   CODE_SIGNING_REQUIRED=NO
+                   CODE_SIGNING_REQUIRED=NO \
+                   ONLY_ACTIVE_ARCH=NO
 
     - name: Export IPA
       run: |
