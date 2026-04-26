@@ -15,11 +15,15 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Select Xcode
+      - name: Select Xcode 16.2
         run: |
-          # Selecting Xcode 16.2 as per your build requirements
+          # List available Xcode versions
+          ls /Applications/ | grep Xcode
+          # Select Xcode 16.2
           sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
           xcodebuild -version
+          # Show available SDKs (iphoneos should be there)
+          xcodebuild -showsdks
 
       - name: Install XcodeGen
         run: brew install xcodegen
@@ -27,28 +31,33 @@ jobs:
       - name: Generate Project
         run: xcodegen generate
 
-      - name: Build Xsign
+      - name: Show Xcode and SDK Info
         run: |
-          # Build for iOS device without signing
+          xcodebuild -project Xsign.xcodeproj -list
+          xcodebuild -project Xsign.xcodeproj -scheme Xsign -showdestinations
+
+      - name: Build for iOS Device
+        run: |
+          # Build for iOS device (not simulator) as requested
+          # Use the specific SDK version that's installed
           xcodebuild build -project Xsign.xcodeproj \
                      -scheme Xsign \
-                     -sdk iphoneos \
+                     -sdk iphoneos18.2 \
                      -destination 'generic/platform=iOS' \
+                     -destination-timeout 10 \
                      -configuration Release \
                      CODE_SIGNING_ALLOWED=NO \
                      CODE_SIGNING_REQUIRED=NO \
-                     ONLY_ACTIVE_ARCH=YES
+                     ONLY_ACTIVE_ARCH=YES 2>&1 | tee build.log
           
           # Prepare upload directory
           mkdir -p upload
-          # Assuming the build output is in the standard build folder
-          # Adjust this path if your project builds to a custom location
+          # Copying the built product for the release step
           cp -r build/Release-iphoneos/*.app upload/ || cp -r ~/Library/Developer/Xcode/DerivedData/*/Build/Products/Release-iphoneos/*.app upload/
 
       - name: Extract Version
         id: get_version
         run: |
-          # Pull version from the built Info.plist
           VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" upload/*.app/Info.plist)
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
 
