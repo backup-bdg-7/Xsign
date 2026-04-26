@@ -30,7 +30,8 @@ jobs:
     - name: Generate Project
       run: |
         # Generate Xcode project from project.yml
-        xcodegen generate --spec project.yml --project Xsign.xcodeproj
+        # Run from the repo root directory
+        xcodegen generate --spec project.yml
         # Verify project was created
         ls -la Xsign.xcodeproj/
         # Show project structure
