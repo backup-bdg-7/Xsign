@@ -29,12 +29,11 @@ jobs:
 
       - name: Build Xsign
         run: |
-          # Build for simulator - use explicit SDK path
+          # Build for simulator without destination (use default)
           xcodebuild clean build \
             -project Xsign.xcodeproj \
             -scheme Xsign \
             -sdk $(xcrun --show-sdk-path --sdk iphonesimulator) \
-            -destination 'platform=iOS Simulator,name=iPhone 16 Pro' \
             -configuration Release \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
