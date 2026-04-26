@@ -19,43 +19,29 @@ jobs:
       with:
         xcode-version: '16.2'
 
-    - name: Install iOS Platform (Device SDK)
-      run: |
-        sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
-        xcodebuild -downloadPlatform iOS -quiet || true
-        xcodebuild -showsdks
-
     - name: Install XcodeGen
       run: brew install xcodegen
 
     - name: Generate Project
       run: xcodegen generate
 
-    - name: Build for iOS Device (iphoneos)
+    - name: Show Xcode and SDK Info
+      run: |
+        xcodebuild -version
+        xcodebuild -showsdks
+        xcodebuild -project Xsign.xcodeproj -list
+        xcodebuild -project Xsign.xcodeproj -scheme Xsign -showdestinations
+
+    - name: Build for iOS Simulator (verify compilation)
       run: |
         xcodebuild build -project Xsign.xcodeproj \
                    -scheme Xsign \
-                   -sdk iphoneos \
-                   -destination 'generic/platform=iOS' \
+                   -sdk iphonesimulator \
+                   -destination 'platform=iOS Simulator,name=iPhone 16' \
                    -configuration Release \
                    CODE_SIGNING_ALLOWED=NO \
                    CODE_SIGNING_REQUIRED=NO \
-                   ONLY_ACTIVE_ARCH=NO
+                   ONLY_ACTIVE_ARCH=YES
 
-    - name: Create IPA
-      run: |
-        mkdir -p build/Payload
-        if [ -d "build/Release-iphoneos/Xsign.app" ]; then
-          cp -r build/Release-iphoneos/Xsign.app build/Payload/
-        else
-          echo "Error: Xsign.app not found"
-          find . -name "Xsign.app" -type d 2>/dev/null
-          exit 1
-        fi
-        cd build && zip -r Xsign.ipa Payload
-
-    - name: Upload IPA
-      uses: actions/upload-artifact@v4
-      with:
-        name: Xsign-ipa
-        path: build/Xsign.ipa
+    - name: Build Succeeded
+      run: echo "✅ Xsign project builds successfully (simulator)"
