@@ -1,4 +1,4 @@
-.PHONY: help build clean test xcodegen generate-xcodeproj run-simulator
+.PHONY: help build build-device clean test xcodegen generate-xcodeproj run-simulator
 
 # Default target
 help:
@@ -6,19 +6,55 @@ help:
 	@echo "=========================="
 	@echo ""
 	@echo "Available commands:"
-	@echo "  make build          - Build the app for iOS Simulator"
-	@echo "  make build-device   - Build the app for iOS Device"
+	@echo "  make build          - Build the app for iOS Device (IPA)"
+	@echo "  make build-simulator - Build the app for iOS Simulator"
 	@echo "  make clean          - Clean build artifacts"
 	@echo "  make test           - Run tests"
 	@echo "  make xcodegen       - Generate Xcode project (requires xcodegen)"
 	@echo "  make generate-xcodeproj - Alias for xcodegen"
 	@echo "  make run-simulator  - Build and run on simulator"
 	@echo "  make archive        - Create archive for distribution"
+	@echo "  make ipa            - Build IPA for real devices"
 	@echo "  make swift-package  - Update Swift Package dependencies"
 	@echo ""
 
-# Build for iOS Simulator (Release)
-build:
+# Build for iOS Device and create IPA
+build: ipa
+
+# Build IPA for real devices
+ipa:
+	@echo "Building Xsign IPA for iOS devices..."
+	@echo "Step 1: Creating archive..."
+	xcodebuild archive \
+		-scheme Xsign \
+		-sdk iphoneos \
+		-configuration Release \
+		-archivePath ./build/Xsign.xcarchive \
+		CODE_SIGN_IDENTITY="" \
+		CODE_SIGNING_REQUIRED=NO \
+		CODE_SIGNING_ALLOWED=NO \
+		-derivedDataPath ./DerivedData
+	
+	@echo "Step 2: Exporting IPA..."
+	@if [ ! -f "ExportOptions.plist" ]; then \
+		echo "Creating ExportOptions.plist for ad-hoc distribution..."; \
+		plutil -create XML -o ExportOptions.plist; \
+		plutil -insert method -string "ad-hoc" ExportOptions.plist; \
+		plutil -insert compileBitcode -bool false ExportOptions.plist; \
+		plutil -insert stripSwiftSymbols -bool true ExportOptions.plist; \
+	fi
+	
+	xcodebuild -exportArchive \
+		-archivePath ./build/Xsign.xcarchive \
+		-exportPath ./build/IPA \
+		-exportOptionsPlist ExportOptions.plist \
+		-allowProvisioningUpdates
+	
+	@echo "IPA created at: ./build/IPA/Xsign.ipa"
+	@ls -la ./build/IPA/ 2>/dev/null || echo "Export failed - check logs"
+
+# Build for iOS Simulator (for testing)
+build-simulator:
 	@echo "Building Xsign for iOS Simulator..."
 	xcodebuild build \
 		-scheme Xsign \
@@ -28,16 +64,6 @@ build:
 		CODE_SIGN_IDENTITY="" \
 		CODE_SIGNING_REQUIRED=NO \
 		CODE_SIGNING_ALLOWED=NO \
-		-derivedDataPath ./DerivedData
-
-# Build for iOS Device (Release)
-build-device:
-	@echo "Building Xsign for iOS Device..."
-	xcodebuild build \
-		-scheme Xsign \
-		-sdk iphoneos \
-		-configuration Release \
-		-destination 'generic/platform=iOS' \
 		-derivedDataPath ./DerivedData
 
 # Clean build artifacts

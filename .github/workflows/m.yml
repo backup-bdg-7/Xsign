@@ -7,7 +7,7 @@ on:
     branches: [ main ]
     
 jobs:
-  build:
+  build-ipa:
     runs-on: macos-15
 
     steps:
@@ -21,11 +21,24 @@ jobs:
         with:
           xcode-version: '16.1'
 
-      - name: Build with Makefile
+      - name: Build IPA for iOS Devices
         run: |
           make build
 
-      - name: Verify Build
-        run: |
-          ls -la ./DerivedData/Build/Products/Release-iphonesimulator/ 2>/dev/null || echo "Build output directory"
-          find ./DerivedData -name "*.app" -type d | head -5 || echo "No .app found"
+      - name: Upload IPA Artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Xsign-IPA
+          path: ./build/IPA/*.ipa
+          retention-days: 30
+
+      - name: Upload Build Logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: build-logs
+          path: |
+            ./build/Xsign.xcarchive/**/*.log
+            ./DerivedData/**/*.log
+          retention-days: 7
