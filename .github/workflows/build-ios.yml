@@ -25,7 +25,13 @@ jobs:
 
       - name: Compile Xsign
         run: |
-          agvtool new-version -all $(git rev-parse HEAD)
           make
-          mkdir upload
-          mv packages/* upload/
+          mkdir -p upload
+          mv packages/* upload/ || true
+
+      - name: Upload IPA as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Xsign-iOS-Build
+          path: upload/
+          retention-days: 30
