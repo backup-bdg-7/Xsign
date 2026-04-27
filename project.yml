@@ -20,3 +20,44 @@ targets:
         INFOPLIST_FILE: Xsign/Resources/Info.plist
         CODE_SIGNING_ALLOWED: NO
         CODE_SIGNING_REQUIRED: NO
+    dependencies:
+      - package: ZIPFoundation
+      - package: Vapor
+      - package: Lottie
+      - package: BitByteData
+      - package: Zip
+      - package: SWCompression
+      - package: OpenSSL
+      - package: Crypto
+
+schemes:
+  Xsign:
+    build:
+      targets:
+        Xsign: all
+
+packages:
+  ZIPFoundation:
+    url: https://github.com/weichsel/ZIPFoundation.git
+    from: 0.9.19
+  Vapor:
+    url: https://github.com/vapor/vapor.git
+    from: 4.92.0
+  Lottie:
+    url: https://github.com/airbnb/lottie-ios.git
+    from: 4.4.1
+  BitByteData:
+    url: https://github.com/tsolomko/BitByteData
+    from: 2.0.4
+  Zip:
+    url: https://github.com/marmelroy/Zip.git
+    from: 2.1.2
+  SWCompression:
+    url: https://github.com/tsolomko/SWCompression
+    from: 4.8.6
+  OpenSSL:
+    url: https://github.com/krzyzanowskim/OpenSSL
+    from: 3.3.3001
+  Crypto:
+    url: https://github.com/apple/swift-crypto.git
+    from: 3.12.3
