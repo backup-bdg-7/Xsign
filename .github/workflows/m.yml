@@ -27,10 +27,6 @@ jobs:
       - name: Generate Project
         run: xcodegen generate
 
-      - name: Resolve Packages
-        run: |
-          xcodebuild -resolvePackageDependencies -project Xsign.xcodeproj -scheme Xsign
-
       - name: Show Destinations
         run: |
           xcodebuild -list -project Xsign.xcodeproj
