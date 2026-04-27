@@ -5,7 +5,9 @@ targets:
   Xsign:
     type: application
     platform: iOS
+    productType: "com.apple.product-type.application"
     deploymentTarget: "17.0"
+    supportedDestinations: ["iOS"]
     sources:
       - path: Xsign
         excludes:
