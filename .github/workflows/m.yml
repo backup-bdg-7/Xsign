@@ -27,6 +27,10 @@ jobs:
       - name: Generate Project
         run: xcodegen generate
 
+      - name: Resolve Packages
+        run: |
+          xcodebuild -resolvePackageDependencies -project Xsign.xcodeproj -scheme Xsign
+
       - name: Show Destinations
         run: |
           xcodebuild -list -project Xsign.xcodeproj
@@ -41,7 +45,6 @@ jobs:
             -configuration Release \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
-            -derivedDataPath ./DerivedData || true
-          
-          # Check if build succeeded
+            -derivedDataPath ./DerivedData
+
           ls -la ./DerivedData/Build/Products/Release-iphonesimulator/ 2>/dev/null || echo "Build failed"
