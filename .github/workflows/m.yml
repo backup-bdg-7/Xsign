@@ -34,9 +34,10 @@ jobs:
 
       - name: Build Xsign
         run: |
+          # Try building the target directly without scheme
           xcodebuild build \
             -project Xsign.xcodeproj \
-            -scheme Xsign \
+            -target Xsign \
             -sdk iphonesimulator \
             -configuration Release \
             CODE_SIGN_IDENTITY="" \
