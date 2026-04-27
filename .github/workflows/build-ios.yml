@@ -1,0 +1,122 @@
+# GitHub Actions Workflow for Xsign iOS App
+# Builds UNSIGNED IPA for iOS devices only (no simulators)
+
+name: Build iOS IPA (Unsigned)
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  build:
+    name: Build Unsigned iOS IPA
+    runs-on: macos-14  # macOS 14 has Xcode 15+ with iOS 17 support
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive  # Initialize zsign submodule
+      
+      - name: Setup Xcode
+        uses: actions/setup-xcode@v3
+        with:
+          xcode-version: '15.4'  # Xcode 15.4 supports iOS 17+
+      
+      - name: Show Xcode Version
+        run: |
+          xcodebuild -version
+          xcodebuild -showsdks
+      
+      - name: Generate Xcode Project from Package.swift
+        run: |
+          swift package generate-xcodeproj
+          echo "Generated xcodeproj:"
+          ls -la *.xcodeproj || echo "No xcodeproj found"
+      
+      - name: Install Dependencies
+        run: |
+          # Install xcpretty for pretty output
+          gem install xcpretty
+      
+      - name: Build for iOS Device (No Code Signing)
+        run: |
+          set -o pipefail
+          xcodebuild build \
+            -project Xsign.xcodeproj \
+            -scheme Xsign \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath ./build/DerivedData \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGN_IDENTITY="" \
+            PROVISIONING_PROFILE_SPECIFIER="" \
+          | xcpretty
+      
+      - name: Create xcarchive (No Code Signing)
+        run: |
+          set -o pipefail
+          rm -rf ./build/Xsign.xcarchive
+          xcodebuild archive \
+            -project Xsign.xcodeproj \
+            -scheme Xsign \
+            -configuration Release \
+            -sdk iphoneos \
+            -archivePath ./build/Xsign.xcarchive \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGN_IDENTITY="" \
+            PROVISIONING_PROFILE_SPECIFIER="" \
+          | xcpretty
+      
+      - name: Create Unsigned IPA for iOS Devices
+        run: |
+          if [ ! -d "./build/Xsign.xcarchive" ]; then
+            echo "Archive not found. Skipping IPA creation."
+            exit 1
+          fi
+          
+          echo "Creating unsigned IPA..."
+          mkdir -p ./build/ipa-staging/Payload
+          
+          # Copy .app from archive
+          echo "Extracting .app from archive..."
+          find ./build/Xsign.xcarchive/Products -name "*.app" -exec cp -r {} ./build/ipa-staging/Payload/ \;
+          
+          # Check if .app was found
+          if [ ! -d "./build/ipa-staging/Payload" ] || [ -z "$(ls -A ./build/ipa-staging/Payload 2>/dev/null)" ]; then
+            echo "No .app found in archive. Trying alternative path..."
+            find ./build/Xsign.xcarchive -name "*.app" -exec cp -r {} ./build/ipa-staging/Payload/ \;
+          fi
+          
+          # Create unsigned IPA
+          cd ./build/ipa-staging && zip -r ../Xsign.ipa Payload/
+          
+          echo "Unsigned IPA created at ./build/Xsign.ipa"
+          ls -lh ./build/Xsign.ipa
+          
+          echo ""
+          echo "WARNING: This is an UNSIGNED IPA"
+          echo "It will only work on:"
+          echo "  - Jailbroken devices"
+          echo "  - Devices with developer mode enabled"
+          echo "  - If you re-sign it manually with a valid certificate"
+      
+      - name: Upload IPA as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Xsign-iOS-Unsigned-IPA
+          path: build/Xsign.ipa
+          retention-days: 30
+      
+      - name: Upload Build Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs
+          path: |
+            build/DerivedData/Logs/
+          retention-days: 7
+        continue-on-error: true
