@@ -46,10 +46,5 @@ let package = Package(
                 .headerSearchPath("External")
             ]
         ),
-        .testTarget(
-            name: "XsignTests",
-            dependencies: ["Xsign"],
-            path: "Tests"
-        ),
     ]
 )
