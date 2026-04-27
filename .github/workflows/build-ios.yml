@@ -25,9 +25,9 @@ jobs:
 
       - name: Compile Xsign
         run: |
-          make
+          make ipa
           mkdir -p upload
-          mv packages/* upload/ || true
+          cp build/Xsign.ipa upload/ || true
 
       - name: Upload IPA as Artifact
         uses: actions/upload-artifact@v4
