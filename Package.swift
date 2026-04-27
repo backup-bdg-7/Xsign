@@ -29,6 +29,14 @@ let package = Package(
     ],
     targets: [
         .target(
+            name: "XsignBridge",
+            dependencies: [],
+            path: "Xsign/App/Bridge",
+            cSettings: [
+                .headerSearchPath("../../External")
+            ]
+        ),
+        .target(
             name: "Xsign",
             dependencies: [
                 .product(name: "ZIPFoundation", package: "ZIPFoundation"),
@@ -38,9 +46,10 @@ let package = Package(
                 .product(name: "Crypto", package: "swift-crypto"),
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "Zip", package: "Zip"),
+                "XsignBridge",
             ],
             path: "Xsign",
-            exclude: ["Resources", "External"],
+            exclude: ["Resources", "External", "App/Bridge"],
             sources: ["App", "Models", "Services", "Shared", "Views"],
             cSettings: [
                 .headerSearchPath("External")
