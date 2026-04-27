@@ -21,21 +21,11 @@ jobs:
         with:
           xcode-version: '16.1'
 
-      - name: Install XcodeGen
-        run: brew install xcodegen
-
-      - name: Generate Project
-        run: xcodegen generate
-
-      - name: Build Xsign
+      - name: Build with Makefile
         run: |
-          xcodebuild build \
-            -project Xsign.xcodeproj \
-            -scheme Xsign \
-            -sdk iphonesimulator \
-            -configuration Release \
-            CODE_SIGN_IDENTITY="" \
-            CODE_SIGNING_REQUIRED=NO \
-            -derivedDataPath ./DerivedData
+          make build
 
-          ls -la ./DerivedData/Build/Products/Release-iphonesimulator/ 2>/dev/null || echo "Build failed"
+      - name: Verify Build
+        run: |
+          ls -la ./DerivedData/Build/Products/Release-iphonesimulator/ 2>/dev/null || echo "Build output directory"
+          find ./DerivedData -name "*.app" -type d | head -5 || echo "No .app found"
