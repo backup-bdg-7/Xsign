@@ -27,34 +27,23 @@ jobs:
       - name: Generate Project
         run: xcodegen generate
 
-      - name: Debug destinations
+      - name: Build Xsign (Device)
         run: |
-          # Show what xcodebuild thinks are valid destinations
-          xcodebuild -showdestinations -project Xsign.xcodeproj -scheme Xsign 2>&1 | tee destinations.txt
-          cat destinations.txt
-          
-      - name: Boot Simulator
-        run: |
-          # Boot iPhone 16 Pro simulator
-          xcrun simctl boot "iPhone 16 Pro" 2>/dev/null || \
-          xcrun simctl boot "iPhone 16 Pro Max" 2>/dev/null || \
-          echo "Simulator already booted or not found"
-          
-          # Verify simulator is booted
-          xcrun simctl list devices booted
-          
-      - name: Build Xsign
-        run: |
-          # Build for simulator
+          # Build for device (no signing required)
           xcodebuild build \
             -project Xsign.xcodeproj \
             -scheme Xsign \
-            -sdk $(xcrun --show-sdk-path --sdk iphonesimulator) \
-            -destination 'platform=iOS Simulator,name=iPhone 16 Pro' \
+            -sdk iphoneos \
             -configuration Release \
-            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             -derivedDataPath ./DerivedData
 
-          mkdir -p upload
-          cp -r ./DerivedData/Build/Products/Release-iphonesimulator/*.app upload/ || echo "No .app found"
+          # Create IPA
+          mkdir -p upload/Payload
+          cp -r ./DerivedData/Build/Products/Release-iphoneos/*.app upload/Payload/
+          cd upload && zip -r Xsign.ipa Payload/
+          rm -rf Payload
+
+          echo "IPA created at upload/Xsign.ipa"
+          ls -la upload/
