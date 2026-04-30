@@ -6,61 +6,20 @@ options:
     iOS: "17.0"
   createIntermediateGroups: true
 
-packages:
-  ZIPFoundation:
-    url: https://github.com/weichsel/ZIPFoundation.git
-    from: "0.9.19"
-  lottie-ios:
-    url: https://github.com/airbnb/lottie-ios.git
-    from: "4.4.1"
-  BitByteData:
-    url: https://github.com/tsolomko/BitByteData
-    from: "2.0.4"
-  SWCompression:
-    url: https://github.com/tsolomko/SWCompression
-    from: "4.8.6"
-  swift-crypto:
-    url: https://github.com/apple/swift-crypto.git
-    from: "3.12.3"
-  vapor:
-    url: https://github.com/vapor/vapor.git
-    from: "4.92.0"
-  Zip:
-    url: https://github.com/marmelroy/Zip.git
-    from: "2.1.2"
-
-schemes:
-  Xsign:
-    build:
-      targets:
-        Xsign: [test, run, profile, analyze]
-    test:
-      targets:
-        - Xsign
-    run:
-      targets:
-        - Xsign
-
 targets:
   Xsign:
     type: application
     platform: iOS
     sources:
       - path: Xsign
+        includes:
+          - "**/*.swift"
+          - "**/*.h"
+          - "**/*.m"
+          - "**/*.mm"
         excludes:
           - "**/Bridge/**"
           - "Resources/**"
-          - "**/*.cpp"
-          - "**/*.c"
-          - "**/*.lib"
-          - "**/*.vcxproj"
-          - "**/*.sln"
-          - "**/*.filters"
-          - "**/*.dylib"
-          - "**/*.ps1"
-          - "**/*.yml"
-          - "**/test.sh"
-          - "**/README*"
     resources:
       - path: Xsign/Resources
     settings:
@@ -69,11 +28,3 @@ targets:
       SWIFT_VERSION: "5.9"
       IPHONEOS_DEPLOYMENT_TARGET: "17.0"
       SWIFT_OBJC_BRIDGING_HEADER: "$(SRCROOT)/Xsign/App/Bridge/Xsign-Bridging-Header.h"
-    dependencies:
-      - package: ZIPFoundation
-      - package: lottie-ios
-      - package: BitByteData
-      - package: SWCompression
-      - package: swift-crypto
-      - package: vapor
-      - package: Zip
