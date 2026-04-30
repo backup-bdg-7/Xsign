@@ -5,6 +5,7 @@ options:
   deploymentTarget:
     iOS: "17.0"
   createIntermediateGroups: true
+  generateSchemes: true
 
 packages:
   ZIPFoundation:
@@ -28,6 +29,18 @@ packages:
   Zip:
     url: https://github.com/marmelroy/Zip.git
     from: "2.1.2"
+
+schemes:
+  Xsign:
+    build:
+      targets:
+        Xsign: [test, run, profile, analyze]
+    test:
+      targets:
+        - Xsign
+    run:
+      targets:
+        - Xsign
 
 targets:
   Xsign:
