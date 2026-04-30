@@ -1,5 +1,5 @@
 import Foundation
-import CryptoKit
+import Crypto
 
 class SecurityService {
     static let shared = SecurityService()
