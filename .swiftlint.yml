@@ -1,0 +1,36 @@
+# SwiftLint Configuration for Xsign
+# Customize this file based on your project's coding standards
+
+excluded:
+  - Pods
+  - Carthage
+  - Packages
+  - fastlane
+  - Xsign.xcodeproj
+  - .build
+
+# Custom rules
+line_length:
+  warning: 200
+  error: 300
+  ignores_function_declarations: true
+  ignores_comments: true
+
+# Rules that are enabled by default but you might want to customize
+trailing_whitespace:
+  severity: warning
+
+# Rules that are disabled by default but might be useful
+force_cast: warning  # Force casts should be avoided
+force_try: warning   # Force try should be avoided
+
+# SwiftUI specific rules
+swiftui_state: warning
+
+# Disable some rules that might not fit your style
+disabled_rules:
+  - type_name
+  - variable_name
+  - function_body_length
+  - file_length
+  - type_body_length

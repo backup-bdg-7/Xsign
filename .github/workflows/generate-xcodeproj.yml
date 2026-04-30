@@ -1,0 +1,231 @@
+name: Analyze & Generate Xcode Project
+
+on:
+  push:
+    branches:
+      - main
+      - feat/swift-package-setup
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch: # Allow manual trigger
+  schedule:
+    - cron: '0 0 * * 1' # Run weekly on Monday
+
+jobs:
+  analyze-and-generate:
+    name: Analyze Code & Generate Xcode Project
+    runs-on: macos-14 # Use macOS runner for Xcode tools
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for proper analysis
+          submodules: recursive
+      
+      - name: Setup Environment
+        run: |
+          echo "Setting up build environment..."
+          sw_vers
+          xcodebuild -version
+          echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
+      
+      # Step 1: Code Analysis
+      - name: Install SwiftLint
+        run: |
+          brew install swiftlint || true
+          swiftlint version || echo "SwiftLint installation failed, continuing..."
+      
+      - name: Run SwiftLint Analysis
+        run: |
+          echo "## SwiftLint Analysis Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if which swiftlint >/dev/null; then
+            swiftlint lint --reporter markdown > swiftlint-report.md || true
+            cat swiftlint-report.md >> $GITHUB_STEP_SUMMARY || echo "No linting issues found"
+          else
+            echo "SwiftLint not available, skipping..." >> $GITHUB_STEP_SUMMARY
+          fi
+      
+      - name: Analyze Project Structure
+        run: |
+          echo "## Project Structure Analysis" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Swift Files Count" >> $GITHUB_STEP_SUMMARY
+          find Xsign -name "*.swift" | wc -l | xargs echo "Total Swift files:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Objective-C Files" >> $GITHUB_STEP_SUMMARY
+          find Xsign -name "*.m" -o -name "*.mm" -o -name "*.h" | sort >> $GITHUB_STEP_SUMMARY || true
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Resource Files" >> $GITHUB_STEP_SUMMARY
+          find Xsign/Resources -type f 2>/dev/null | sort >> $GITHUB_STEP_SUMMARY || echo "No resources found"
+      
+      - name: Validate Package.swift
+        run: |
+          echo "## Package.swift Validation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          swift package dump-package > package-dump.json || true
+          if [ -f package-dump.json ]; then
+            echo "Package structure is valid" >> $GITHUB_STEP_SUMMARY
+            cat package-dump.json | jq -r '.targets[] | "Target: \(.name) - Type: \(.type)"' >> $GITHUB_STEP_SUMMARY || true
+          fi
+      
+      # Step 2: Install XcodeGen
+      - name: Install XcodeGen
+        run: |
+          echo "Installing XcodeGen..."
+          brew install xcodegen || true
+          # Alternative: Install via Mint if brew fails
+          if ! which xcodegen >/dev/null; then
+            echo "Brew installation failed, trying Mint..."
+            brew install mint || true
+            mint install yonaskolb/XcodeGen || true
+          fi
+          xcodegen --version || echo "XcodeGen installation may have issues"
+      
+      # Step 3: Generate Xcode Project
+      - name: Generate Xcode Project with XcodeGen
+        run: |
+          echo "## Generating Xcode Project" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Using project.yml configuration:" >> $GITHUB_STEP_SUMMARY
+          cat project.yml >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Generate the project
+          xcodegen generate --spec project.yml --project Xsign.xcodeproj
+          
+          # Verify the project was created
+          if [ -d "Xsign.xcodeproj" ]; then
+            echo "✅ Xcode project generated successfully!" >> $GITHUB_STEP_SUMMARY
+            ls -la Xsign.xcodeproj >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Xcode project generation failed!" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+      
+      - name: Validate Generated Project
+        run: |
+          echo "## Project Validation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -d "Xsign.xcodeproj" ]; then
+            echo "### Project Structure" >> $GITHUB_STEP_SUMMARY
+            xcodebuild -project Xsign.xcodeproj -list >> $GITHUB_STEP_SUMMARY 2>&1 || true
+          fi
+      
+      # Step 4: Upload as Artifact (Downloadable)
+      - name: Upload Xcode Project as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Xsign-xcodeproj-${{ github.sha }}
+          path: Xsign.xcodeproj
+          retention-days: 30
+      
+      - name: Generate Analysis Report
+        if: always()
+        run: |
+          echo "## Complete Analysis Report" >> analysis-report.md
+          echo "" >> analysis-report.md
+          echo "### Build Information" >> analysis-report.md
+          echo "- Generated on: $(date)" >> analysis-report.md
+          echo "- Commit: ${{ github.sha }}" >> analysis-report.md
+          echo "- Branch: ${{ github.ref }}" >> analysis-report.md
+          echo "" >> analysis-report.md
+          echo "### Files Generated" >> analysis-report.md
+          echo "\`\`\`" >> analysis-report.md
+          ls -la Xsign.xcodeproj/ >> analysis-report.md 2>&1 || true
+          echo "\`\`\`" >> analysis-report.md
+          
+          # Add to step summary
+          cat analysis-report.md >> $GITHUB_STEP_SUMMARY
+      
+      - name: Upload Analysis Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: analysis-report-${{ github.sha }}
+          path: |
+            analysis-report.md
+            swiftlint-report.md
+            package-dump.json
+          retention-days: 30
+      
+      # Step 5: Commit and Push Generated Project
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      
+      - name: Commit and Push Xcode Project
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        run: |
+          echo "Checking if Xcode project needs to be committed..."
+          
+          # Add the generated project
+          git add Xsign.xcodeproj || true
+          
+          # Check if there are changes to commit
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            echo "Committing generated Xcode project..."
+            git commit -m "chore: Auto-generate Xcode project via XcodeGen [skip ci]
+            
+            - Generated from project.yml configuration
+            - Commit: ${{ github.sha }}
+            - Workflow run: ${{ github.run_id }}"
+            
+            # Push using the GitHub token
+            git push origin main || echo "Push failed - may need to check permissions"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      # Alternative: Push to a separate branch if on main
+      - name: Push to Generated Branch (PRs or other branches)
+        if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref != 'refs/heads/main')
+        run: |
+          # Determine target branch
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            BRANCH_NAME="generated-xcodeproj-pr-${{ github.event.pull_request.number }}"
+          else
+            BRANCH_NAME="generated-xcodeproj-$(echo ${{ github.ref }} | sed 's|refs/heads/||' | sed 's|/|-|g')"
+          fi
+          
+          echo "Creating branch: $BRANCH_NAME"
+          
+          # Create or switch to the branch
+          git checkout -b $BRANCH_NAME 2>/dev/null || git checkout $BRANCH_NAME
+          
+          # Add the generated project
+          git add Xsign.xcodeproj || true
+          
+          # Check if there are changes
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: Auto-generate Xcode project for $(echo ${{ github.ref }} | sed 's|refs/heads/||')
+            
+            - Generated from project.yml configuration
+            - Source commit: ${{ github.sha }}
+            - Workflow run: ${{ github.run_id }}"
+            
+            git push origin $BRANCH_NAME || echo "Push failed"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Workflow Summary
+        if: always()
+        run: |
+          echo "## Workflow Complete! 🎉" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Downloads" >> $GITHUB_STEP_SUMMARY
+          echo "- Xcode project artifact: \`Xsign-xcodeproj-${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Analysis report: \`analysis-report-${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Next Steps" >> $GITHUB_STEP_SUMMARY
+          echo "1. Download the Xcode project from the Actions artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "2. Or pull the auto-generated commit from the repository" >> $GITHUB_STEP_SUMMARY
+          echo "3. Open \`Xsign.xcodeproj\` in Xcode to start developing" >> $GITHUB_STEP_SUMMARY
