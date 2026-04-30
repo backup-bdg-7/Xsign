@@ -67,10 +67,9 @@ jobs:
           git add Xsign.xcodeproj
           if ! git diff --staged --quiet; then
             git commit -m "chore: Auto-generate Xcode project [skip ci]"
-            git push origin ${{ github.ref_name }}
+            git pull --rebase origin ${{ github.ref_name }} || true
+            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git ${{ github.ref_name }}
           fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Summary
         if: always()
