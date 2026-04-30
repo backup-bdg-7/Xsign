@@ -48,16 +48,25 @@ jobs:
         run: |
           echo "## Generating Xcode Project" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          xcodegen generate --spec project.yml
+          xcodegen generate --spec project.yml --project Xsign.xcodeproj
           echo "✅ Project generated!" >> $GITHUB_STEP_SUMMARY
           ls -la Xsign.xcodeproj >> $GITHUB_STEP_SUMMARY
+          # Verify structure
+          if [ -d "Xsign.xcodeproj" ]; then
+            echo "Xsign.xcodeproj directory exists" >> $GITHUB_STEP_SUMMARY
+            ls -la Xsign.xcodeproj/ >> $GITHUB_STEP_SUMMARY
+          else
+            echo "ERROR: Xsign.xcodeproj not created!" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
 
       - name: Upload Xcode Project
         uses: actions/upload-artifact@v4
         with:
           name: Xsign-xcodeproj-${{ github.sha }}
-          path: Xsign.xcodeproj
+          path: Xsign.xcodeproj/
           retention-days: 90
+          if-no-files-found: error
 
       - name: Summary
         if: always()
