@@ -38,6 +38,17 @@ targets:
         excludes:
           - "**/Bridge/**"
           - "Resources/**"
+          - "**/*.cpp"
+          - "**/*.c"
+          - "**/*.lib"
+          - "**/*.vcxproj"
+          - "**/*.sln"
+          - "**/*.filters"
+          - "**/*.dylib"
+          - "**/*.ps1"
+          - "**/*.yml"
+          - "**/test.sh"
+          - "**/README*"
     resources:
       - path: Xsign/Resources
     settings:
