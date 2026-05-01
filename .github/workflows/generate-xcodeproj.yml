@@ -48,16 +48,14 @@ jobs:
           echo "## Generating Xcode Project" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
-          # Thorough cleanup - this is critical for schemes
+          # Clean previous project
           rm -rf Xsign.xcodeproj
-          echo "Cleaned previous project directory"
 
-          echo "Generating project with XcodeGen (forcing shared schemes)..." >> $GITHUB_STEP_SUMMARY
+          echo "Generating Xcode project..." >> $GITHUB_STEP_SUMMARY
           
-          # Main generation command with options for better scheme handling
-          xcodegen generate --spec project.yml --use-cache false
+          # Simple & correct command - no extra flags
+          xcodegen generate --spec project.yml
 
-          echo "" >> $GITHUB_STEP_SUMMARY
           echo "✅ Project generation completed" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
@@ -66,10 +64,10 @@ jobs:
             ls -la Xsign.xcodeproj/ >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
 
-            # Clean user data that can interfere with scheme visibility
-            rm -rf Xsign.xcodeproj/xcuserdata Xsign.xcodeproj/project.xcworkspace/xcuserdata 2>/dev/null || true
+            # Clean xcuserdata that can hide schemes
+            rm -rf Xsign.xcodeproj/xcuserdata 2>/dev/null || true
 
-            echo "### Schemes Check (xcodebuild -list)" >> $GITHUB_STEP_SUMMARY
+            echo "### Schemes Check" >> $GITHUB_STEP_SUMMARY
             echo "```" >> $GITHUB_STEP_SUMMARY
             xcodebuild -list -project Xsign.xcodeproj 2>&1 | cat >> $GITHUB_STEP_SUMMARY
             echo "```" >> $GITHUB_STEP_SUMMARY
@@ -90,6 +88,6 @@ jobs:
         if: always()
         run: |
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Artifact Ready" >> $GITHUB_STEP_SUMMARY
-          echo "- **Name**: \`Xsign-xcodeproj-${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- **Download**: [This workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
+          echo "### Artifact" >> $GITHUB_STEP_SUMMARY
+          echo "- \`Xsign-xcodeproj-${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Download from: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
