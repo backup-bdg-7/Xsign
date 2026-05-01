@@ -7,7 +7,7 @@ on:
     branches: [ main ]
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * 1'   # Every Monday at midnight UTC
+    - cron: '0 0 * * 1'
 
 jobs:
   analyze-and-generate:
@@ -48,23 +48,31 @@ jobs:
           echo "## Generating Xcode Project" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
-          # Clean any previous project to avoid conflicts
+          # Thorough cleanup - this is critical for schemes
           rm -rf Xsign.xcodeproj
+          echo "Cleaned previous project directory"
 
-          # Generate Xcode project with schemes
-          xcodegen generate --spec project.yml
+          echo "Generating project with XcodeGen (forcing shared schemes)..." >> $GITHUB_STEP_SUMMARY
+          
+          # Main generation command with options for better scheme handling
+          xcodegen generate --spec project.yml --use-cache false
 
-          echo "✅ Xcode project successfully generated!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Project generation completed" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
           if [ -d "Xsign.xcodeproj" ]; then
-            echo "Project directory created successfully:" >> $GITHUB_STEP_SUMMARY
+            echo "Project contents:" >> $GITHUB_STEP_SUMMARY
             ls -la Xsign.xcodeproj/ >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            
-            # Show available schemes (very important)
-            echo "Available Schemes:" >> $GITHUB_STEP_SUMMARY
-            xcodebuild -list -project Xsign.xcodeproj | grep -A 100 "Schemes:" >> $GITHUB_STEP_SUMMARY || echo "No schemes found or xcodebuild failed" >> $GITHUB_STEP_SUMMARY
+
+            # Clean user data that can interfere with scheme visibility
+            rm -rf Xsign.xcodeproj/xcuserdata Xsign.xcodeproj/project.xcworkspace/xcuserdata 2>/dev/null || true
+
+            echo "### Schemes Check (xcodebuild -list)" >> $GITHUB_STEP_SUMMARY
+            echo "```" >> $GITHUB_STEP_SUMMARY
+            xcodebuild -list -project Xsign.xcodeproj 2>&1 | cat >> $GITHUB_STEP_SUMMARY
+            echo "```" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ ERROR: Xsign.xcodeproj was not created!" >> $GITHUB_STEP_SUMMARY
             exit 1
@@ -82,6 +90,6 @@ jobs:
         if: always()
         run: |
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### ✅ Downloads" >> $GITHUB_STEP_SUMMARY
-          echo "- **Artifact**: \`Xsign-xcodeproj-${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- **Workflow Run**: [View Logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
+          echo "### Artifact Ready" >> $GITHUB_STEP_SUMMARY
+          echo "- **Name**: \`Xsign-xcodeproj-${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Download**: [This workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
