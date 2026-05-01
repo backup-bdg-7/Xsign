@@ -22,17 +22,14 @@ jobs:
       - name: Setup OpenSSL for iOS
         run: |
           echo "Setting up OpenSSL for iOS..."
+          # Download OpenSSL 1.1.1 source (has headers directly without .in templates)
           cd /tmp
-          curl -sL https://github.com/openssl/openssl/releases/download/openssl-3.2.1/openssl-3.2.1.tar.gz | tar xz
+          curl -sL https://github.com/openssl/openssl/releases/download/OpenSSL_1_1_1/openssl-1.1.1.tar.gz | tar xz
+          # Copy all headers to project
           mkdir -p $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl
-          cp -R /tmp/openssl-3.2.1/include/openssl/* $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl/
-          # Create configuration.h (needed by opensslconf.h)
-          echo "#ifndef OPENSSL_CONFIGURATION_H" > $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl/configuration.h
-          echo "#define OPENSSL_CONFIGURATION_H" >> $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl/configuration.h
-          echo "/* Dummy configuration.h for iOS build */" >> $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl/configuration.h
-          echo "#endif" >> $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl/configuration.h
-          # Verify files exist
-          ls -la $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl/ | head -20
+          cp -R /tmp/openssl-1.1.1/include/openssl/* $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl/
+          # Verify opensslv.h exists
+          ls -la $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl/opensslv.h
           echo "OpenSSL headers installed"
 
       - name: Regenerate Xcode Project
