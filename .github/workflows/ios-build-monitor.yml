@@ -1,4 +1,4 @@
-name: iOS Build with Monitoring & Auto-Fix
+name: iOS Build
 
 on:
   push:
@@ -9,81 +9,42 @@ on:
 
 jobs:
   build:
-    name: Build & Monitor
+    name: Build iOS App
     runs-on: macos-14
-    timeout-minutes: 60
-    outputs:
-      run_id: ${{ steps.start_build.outputs.run_id }}
-      status: ${{ steps.monitor.outputs.status }}
-    
+    timeout-minutes: 45
+
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
           submodules: recursive
-          fetch-depth: 0
 
-      - name: Start Build via gh
-        id: start_build
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build Archive
         run: |
-          # Commit any pending changes first (so build uses latest)
-          git config user.name "Actions"
-          git config user.email "actions@github.com"
-          git add -A
-          git diff --cached --quiet || git commit -m "chore: pre-build snapshot"
-          git push || true
-
-          # Start the build by dispatching a separate build workflow
-          # Or just run xcodebuild directly here
           mkdir -p build_logs
-          
+
+          echo "🚀 Starting Xcode build..."
+
           xcodebuild \
-            -project Xsign.pbxproj/project.pbxproj \
+            -project Xsign.xcodeproj \
             -scheme Xsign \
             -configuration Release \
             -sdk iphoneos \
             -destination 'generic/platform=iOS' \
-            -archivePath Xsign.xcarchive \
             clean archive \
+            -archivePath ./Xsign.xcarchive \
             -allowProvisioningUpdates \
             CODE_SIGNING_ALLOWED=NO \
-            > build_logs/build.log 2>&1 &
-          
-          BUILD_PID=$!
-          echo "build_pid=$BUILD_PID" >> $GITHUB_OUTPUT
-          
-          # Monitor every 30 seconds by checking if process is still running
-          ELAPSED=0
-          while ps -p $BUILD_PID > /dev/null 2>&1; do
-            sleep 30
-            ELAPSED=$((ELAPSED + 30))
-            echo "Build running... ${ELAPSED}s elapsed"
-            
-            # Show recent output every 60 seconds
-            if [ $((ELAPSED % 60)) -eq 0 ]; then
-              echo "--- Last 20 lines ---"
-              tail -20 build_logs/build.log || true
-            fi
-            
-            # Timeout after 30 minutes
-            if [ $ELAPSED -ge 1800 ]; then
-              echo "TIMEOUT after 1800s"
-              kill $BUILD_PID 2>/dev/null || true
-              break
-            fi
-          done
-          
-          # Check result
+            | tee build_logs/build.log
+
           if grep -q "ARCHIVE SUCCEEDED" build_logs/build.log; then
-            echo "status=success" >> $GITHUB_OUTPUT
             echo "✅ Build succeeded"
           else
-            echo "status=failed" >> $GITHUB_OUTPUT
             echo "❌ Build failed"
-            echo "=== LAST 100 LINES ==="
+            echo ""
+            echo "=== Last 100 lines of build log ==="
             tail -100 build_logs/build.log
+            exit 1
           fi
 
       - name: Upload Build Logs
@@ -91,116 +52,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-logs-${{ github.sha }}
-          path: |
-            build_logs/
-            Xsign.pbxproj/project.pbxproj
-          retention-days: 30
-
-  analyze-and-fix:
-    name: Analyze & Fix Errors
-    needs: build
-    if: needs.build.outputs.status == 'failed'
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Download Build Logs
-        uses: actions/download-artifact@v4
-        with:
-          name: build-logs-${{ github.sha }}
-          path: build_artifacts/
-
-      - name: Install gh CLI
-        run: |
-          type gh || (sudo apt-get update && sudo apt-get install -y gh)
-          gh --version
-
-      - name: Analyze Errors & Fix
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RUN_ID: ${{ needs.build.outputs.run_id }}
-        run: |
-          echo "## Analyzing Build Errors"
-          cat build_artifacts/build_logs/build.log
-          
-          # Extract errors
-          ERRORS=$(grep -E "error:|fatal error|undefined symbol|cannot find" build_artifacts/build_logs/build.log | head -50)
-          echo "$ERRORS"
-          
-          FIXES_APPLIED=""
-          
-          # Fix 1: Module not found
-          if echo "$ERRORS" | grep -q "No such module\|cannot find"; then
-            echo "🔧 Fixing module issues..."
-            # Try adding missing imports or resolving packages
-            # This depends on the specific error
-            FIXES_APPLIED="$FIXES_APPLIED modules"
-          fi
-          
-          # Fix 2: Bridging header
-          if echo "$ERRORS" | grep -q "bridging\|Bridging-Header"; then
-            echo "🔧 Fixing bridging header..."
-            # Check if header exists and has correct content
-            FIXES_APPLIED="$FIXES_APPLIED bridging"
-          fi
-          
-          # Fix 3: C++ issues
-          if echo "$ERRORS" | grep -q "\.cpp\|\.mm\|clang.*error"; then
-            echo "🔧 Fixing C++ issues..."
-            FIXES_APPLIED="$FIXES_APPLIED cpp"
-          fi
-          
-          # Fix 4: Swift version
-          if echo "$ERRORS" | grep -q "Swift version\|swiftlang"; then
-            echo "🔧 Fixing Swift version..."
-            FIXES_APPLIED="$FIXES_APPLIED swift"
-          fi
-          
-          echo "FIXES_APPLIED=$FIXES_APPLIED"
-          
-          # If we applied fixes, commit and push
-          if [ -n "$FIXES_APPLIED" ]; then
-            git config user.name "GitHub Actions Bot"
-            git config user.email "actions@github.com"
-            git add -A
-            git diff --cached --quiet || {
-              git commit -m "fix: Auto-fix build issues ($FIXES_APPLIED)
-              
-              Automated fix from workflow run ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-              git push
-            }
-          fi
-
-      - name: Create Issue if Unfixed
-        if: failure()
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
-            let log = 'No log';
-            try {
-              log = fs.readFileSync('build_artifacts/build_logs/build.log', 'utf8').slice(-10000);
-            } catch(e) {}
-            
-            github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: `🚨 Build Failed: ${new Date().toISOString().split('T')[0]}`,
-              body: `## Build Failure
-              
-              **Commit:** \`${context.sha}\`
-              **Run:** [${context.runId}](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})
-              
-              ### Build Log
-              \`\`\`
-              ${log}
-              \`\`\`
-              
-              *Auto-created by workflow*`,
-              labels: ['bug', 'build-failure']
-            });
+          path: build_logs/
+          retention-days: 14
