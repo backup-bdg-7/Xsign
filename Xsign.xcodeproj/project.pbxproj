@@ -10,7 +10,6 @@
 		011B356C2930A5208F967AD6 /* CategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B0A57CB9D6CC363F7F5314 /* CategoriesView.swift */; };
 		077810ABE2724D01920D2411 /* XsignApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047CF1F92C7FD3C0D4AAE46C /* XsignApp.swift */; };
 		0F238DDAB713E760D785A47A /* AppModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331A304AB08F24B674187BB0 /* AppModifier.swift */; };
-		18CFD67206687FA753ED2276 /* XsignBridge.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AC846D3DF06E4F35AF7AE04B /* XsignBridge.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1C21705ED9B47C5085DB7D13 /* CertificateManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486717146114366405A39CD7 /* CertificateManagementView.swift */; };
 		2136D7B36703691BDB6A35CA /* Crypto in Frameworks */ = {isa = PBXBuildFile; productRef = 79062023EA53BD41F69D9181 /* Crypto */; };
 		24D3EF467E7A707CD08998E4 /* Certificate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97F8CBE86E8D19D7E666164F /* Certificate.swift */; };
@@ -22,7 +21,6 @@
 		4A3405A53F28E5C2C096D9D3 /* BitByteData in Frameworks */ = {isa = PBXBuildFile; productRef = BB58180DC547BEBD161EB448 /* BitByteData */; };
 		4DE01B583BFECC4AD3473717 /* Vapor in Frameworks */ = {isa = PBXBuildFile; productRef = 4A77FF2C9E3D895ED101AD35 /* Vapor */; };
 		55D5C04D5E45584848B41D03 /* LottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D589735A9AB3AB8DE9984C80 /* LottieView.swift */; };
-		6D5F95223316211646E364C5 /* XsignBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC846D3DF06E4F35AF7AE04B /* XsignBridge.framework */; };
 		730C1E2FC92347AF5658225F /* ZipService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5917AB144DA85B703FBB4423 /* ZipService.swift */; };
 		7B0D6943DB731749E9A220C0 /* BackdoorTLS.swift in Sources */ = {isa = PBXBuildFile; fileRef = B60C3EDD7AD3FD3EE23D54AA /* BackdoorTLS.swift */; };
 		7E8FC218CB7C4CBBFAB661FF /* DebsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9051D74D2DCEFC4FE1884A /* DebsView.swift */; };
@@ -51,30 +49,6 @@
 		F99C5243079D2DA5E3423781 /* Entitlement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487B89EDC40E05392287B921 /* Entitlement.swift */; };
 		FAA91139D9A8BE522259B8DD /* SWCompression in Frameworks */ = {isa = PBXBuildFile; productRef = 8D69F21E55FC668A00B9FF58 /* SWCompression */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		DC5C5EA56F5DC777F7960DCA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 82FB5A936539C9DBAF146823 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E9B1F0B45E582ADA6DD84060;
-			remoteInfo = XsignBridge;
-		};
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		1BBCD84F6FE8128F65847BE9 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				18CFD67206687FA753ED2276 /* XsignBridge.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		011D3D14A6F465826C5F3E02 /* ProvisioningParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProvisioningParser.swift; sourceTree = "<group>"; };
@@ -120,7 +94,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6D5F95223316211646E364C5 /* XsignBridge.framework in Frameworks */,
 				4A3405A53F28E5C2C096D9D3 /* BitByteData in Frameworks */,
 				FAA91139D9A8BE522259B8DD /* SWCompression in Frameworks */,
 				9104E4E81314B75D9C5AF106 /* ZIPFoundation in Frameworks */,
@@ -313,12 +286,10 @@
 			buildPhases = (
 				901C6D98ADC39DDADB681267 /* Sources */,
 				5F088F44CC201DBE0907F0EB /* Frameworks */,
-				1BBCD84F6FE8128F65847BE9 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				CD77EDB26FD4C01BDC272738 /* PBXTargetDependency */,
 			);
 			name = Xsign;
 			packageProductDependencies = (
@@ -444,14 +415,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		CD77EDB26FD4C01BDC272738 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = E9B1F0B45E582ADA6DD84060 /* XsignBridge */;
-			targetProxy = DC5C5EA56F5DC777F7960DCA /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		02F53B8E63B7C592111FA068 /* Debug */ = {
