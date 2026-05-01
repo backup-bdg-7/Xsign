@@ -22,15 +22,14 @@ jobs:
       - name: Setup OpenSSL for iOS
         run: |
           echo "Setting up OpenSSL for iOS..."
-          # Download OpenSSL headers
-          mkdir -p /tmp/openssl-headers
-          cd /tmp/openssl-headers
+          # Download OpenSSL source to get headers
+          cd /tmp
           curl -sL https://github.com/openssl/openssl/releases/download/openssl-3.2.1/openssl-3.2.1.tar.gz | tar xz
-          # Copy headers to project
+          # Copy all headers to project
           mkdir -p $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl
-          cp -R openssl-3.2.1/include/openssl/* $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl/
+          cp -R /tmp/openssl-3.2.1/include/openssl/* $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl/
           echo "OpenSSL headers installed"
-      
+
       - name: Regenerate Xcode Project
         run: |
           echo "Regenerating Xcode project with XcodeGen..."

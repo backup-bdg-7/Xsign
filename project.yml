@@ -47,6 +47,7 @@ targets:
       - path: Xsign/External/zsign/src
         excludes:
           - "zsign.cpp"  # Exclude main() entry point
+          - "common/util.cpp"  # Exclude util.cpp (has system() call)
           - "third-party/**"
     settings:
       base:
