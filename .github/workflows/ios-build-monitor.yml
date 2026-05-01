@@ -26,7 +26,7 @@ jobs:
           echo "🚀 Starting Xcode build..."
 
           xcodebuild \
-            -project Xsign.xcodeproj \
+            -project Xsign.pbxproj \
             -scheme Xsign \
             -configuration Release \
             -sdk iphoneos \
