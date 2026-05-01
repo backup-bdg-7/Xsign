@@ -11,19 +11,14 @@
 		077810ABE2724D01920D2411 /* XsignApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047CF1F92C7FD3C0D4AAE46C /* XsignApp.swift */; };
 		0F238DDAB713E760D785A47A /* AppModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331A304AB08F24B674187BB0 /* AppModifier.swift */; };
 		1C21705ED9B47C5085DB7D13 /* CertificateManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486717146114366405A39CD7 /* CertificateManagementView.swift */; };
-		2136D7B36703691BDB6A35CA /* swift-crypto in Frameworks */ = {isa = PBXBuildFile; productRef = C08189B5B6B2ADAD10F81E50 /* swift-crypto */; };
 		24D3EF467E7A707CD08998E4 /* Certificate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97F8CBE86E8D19D7E666164F /* Certificate.swift */; };
 		25F639445CA922B940011E3A /* SecurityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA00C3AF8E61D7FDC519105E /* SecurityService.swift */; };
 		374DE514DA7E31DF3BE873B5 /* ProvisioningParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011D3D14A6F465826C5F3E02 /* ProvisioningParser.swift */; };
 		37BCD2CFB0EA54ED01F04FF3 /* DylibsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B816A4284CA76E6B6CF35BF7 /* DylibsView.swift */; };
 		3B1D0B453E59E047F81B358C /* EntitlementManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6582E6831F4D79E0A798891 /* EntitlementManager.swift */; };
 		46E4B27D829D98D424F7614A /* SigningService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A55AE27A20E6C607CB1A29 /* SigningService.swift */; };
-		4A3405A53F28E5C2C096D9D3 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 273144B1DF5EAB1E27E7E240 /* ZIPFoundation */; };
-		4DE01B583BFECC4AD3473717 /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = 19DE7AF3FEB5B1343EF93580 /* Zip */; };
-		51CC0D41D2114AA972C69519 /* __DECC_INCLUDE_EPILOGUE.H in Resources */ = {isa = PBXBuildFile; fileRef = F706A7330751CA8BAE897584 /* __DECC_INCLUDE_EPILOGUE.H */; };
 		55D5C04D5E45584848B41D03 /* LottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D589735A9AB3AB8DE9984C80 /* LottieView.swift */; };
 		670B62221276D8DE35F883DC /* demo.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CB923814D71EF21A88AD267 /* demo.m */; };
-		72C564829035DEA8B3F58664 /* __DECC_INCLUDE_PROLOGUE.H in Resources */ = {isa = PBXBuildFile; fileRef = 231F5940CF230534F7968935 /* __DECC_INCLUDE_PROLOGUE.H */; };
 		730C1E2FC92347AF5658225F /* ZipService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5917AB144DA85B703FBB4423 /* ZipService.swift */; };
 		7B0D6943DB731749E9A220C0 /* BackdoorTLS.swift in Sources */ = {isa = PBXBuildFile; fileRef = B60C3EDD7AD3FD3EE23D54AA /* BackdoorTLS.swift */; };
 		7E8FC218CB7C4CBBFAB661FF /* DebsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9051D74D2DCEFC4FE1884A /* DebsView.swift */; };
@@ -31,13 +26,10 @@
 		7FDF123EABD02B6A9FDBB071 /* AppDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E8BE7B3B05679046427CC9 /* AppDetailView.swift */; };
 		8EB7441903E3E8FD65EC4030 /* AppFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655C4BF5E94F67D61DEFA56D /* AppFile.swift */; };
 		906E4865414B343951A363A0 /* CommonUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DD7AFFF63EFF6E0CFE4CA5 /* CommonUI.swift */; };
-		9104E4E81314B75D9C5AF106 /* BitByteData in Frameworks */ = {isa = PBXBuildFile; productRef = BB58180DC547BEBD161EB448 /* BitByteData */; };
 		9152EFCEED55E99D8ADA78DA /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80816F4D552F2692EAC764B1 /* LibraryView.swift */; };
 		9318439ED2F3FF7767D5C924 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D815C2DAE8DC805E63635E /* Category.swift */; };
 		A098C368A2C5FF062D7F6324 /* GeneralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B59A4DA29C6920C4504DDF /* GeneralView.swift */; };
 		A2D77AAE0A5EB9FB29E4A9C0 /* SignModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6965F14F1F159D77AF31F0F0 /* SignModalView.swift */; };
-		AE16DBF0E1623116127A3CDD /* SWCompression in Frameworks */ = {isa = PBXBuildFile; productRef = 8D69F21E55FC668A00B9FF58 /* SWCompression */; };
-		B24F2D2A26576E3F49F1AB3F /* vapor in Frameworks */ = {isa = PBXBuildFile; productRef = 0E17120F75082CF40D4B6107 /* vapor */; };
 		BE9594B1761BB66CDD005362 /* AppFileCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29AE627B0D17B85C685FB903 /* AppFileCard.swift */; };
 		D97577F26BE87A11BDA97684 /* LocalServerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA629EC58711CA60E47FE40 /* LocalServerService.swift */; };
 		DC68EA776318F6E0F31FB203 /* BinaryInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CF3263DC77749C8BC6A95F /* BinaryInfo.swift */; };
@@ -50,7 +42,6 @@
 		F48F3451823767322A22980A /* PersistenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89709A707B112BBD856AB5CA /* PersistenceService.swift */; };
 		F89D222923E601DA5DB7ACF4 /* FileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E7AE47639383126AAE5A623 /* FileService.swift */; };
 		F99C5243079D2DA5E3423781 /* Entitlement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487B89EDC40E05392287B921 /* Entitlement.swift */; };
-		FAA91139D9A8BE522259B8DD /* lottie-ios in Frameworks */ = {isa = PBXBuildFile; productRef = 4C9074B7F1C87D47A8B4B53E /* lottie-ios */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,8 +51,6 @@
 		017F5FB6BC7BBADDC5DD00AC /* store.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = store.h; sourceTree = "<group>"; };
 		01A79F4D11AE8B934E0375F5 /* x509v3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = x509v3.h; sourceTree = "<group>"; };
 		0319F4F177138716F058C2DB /* uierr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = uierr.h; sourceTree = "<group>"; };
-		03BA055D63086C153586258C /* .git */ = {isa = PBXFileReference; path = .git; sourceTree = "<group>"; };
-		04550F3DC05E422A5FCE952C /* Makefile */ = {isa = PBXFileReference; path = Makefile; sourceTree = "<group>"; };
 		047CF1F92C7FD3C0D4AAE46C /* XsignApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XsignApp.swift; sourceTree = "<group>"; };
 		0586E7CF9F7F0AF4A0E5F466 /* zlib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = zlib.h; sourceTree = "<group>"; };
 		08CF315C04E958B9FF46CA29 /* asn1_mac.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = asn1_mac.h; sourceTree = "<group>"; };
@@ -81,7 +70,6 @@
 		196A2F2FA28EA455FE6C96B6 /* core_object.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = core_object.h; sourceTree = "<group>"; };
 		1D0994975260AF35723AAE98 /* cryptoerr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cryptoerr.h; sourceTree = "<group>"; };
 		211EEC9483F499C5FCEFE6A8 /* rsa.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rsa.h; sourceTree = "<group>"; };
-		231F5940CF230534F7968935 /* __DECC_INCLUDE_PROLOGUE.H */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = __DECC_INCLUDE_PROLOGUE.H; sourceTree = "<group>"; };
 		23282516571B2AAF8F71965D /* objects.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = objects.h; sourceTree = "<group>"; };
 		240A3418B5E095AF8829A491 /* fs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = fs.h; sourceTree = "<group>"; };
 		25963E5E1F7EE7CF2DCE8197 /* ecerr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ecerr.h; sourceTree = "<group>"; };
@@ -104,7 +92,6 @@
 		3976009197670B9FAA8B4A22 /* zutil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = zutil.h; sourceTree = "<group>"; };
 		3982B247E299BBA9D8BC4B6D /* bn.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bn.h; sourceTree = "<group>"; };
 		3B60B21F782BA56E020FEDB4 /* opensslconf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = opensslconf.h; sourceTree = "<group>"; };
-		3D2E3BF7D6E1EB4F829ABECB /* Makefile */ = {isa = PBXFileReference; path = Makefile; sourceTree = "<group>"; };
 		3F0C6C13BAD0FD76CB9114B5 /* types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
 		40923CE38089845FACBD4F66 /* sha.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sha.h; sourceTree = "<group>"; };
 		412FE1E5A78AA3471ABE2144 /* async.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = async.h; sourceTree = "<group>"; };
@@ -158,8 +145,6 @@
 		715092F47F997753C26901B7 /* ess.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ess.h; sourceTree = "<group>"; };
 		73EC9FB23911480E890B4315 /* engine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = engine.h; sourceTree = "<group>"; };
 		76543546D7AFB173D178EE91 /* opensslv.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = opensslv.h; sourceTree = "<group>"; };
-		778B202C1C6FAD6D0A851515 /* .gitattributes */ = {isa = PBXFileReference; path = .gitattributes; sourceTree = "<group>"; };
-		78063107E460D4BEC79EE78A /* LICENSE */ = {isa = PBXFileReference; path = LICENSE; sourceTree = "<group>"; };
 		7D4CB6C59C1CCE709BB4A3B9 /* pkcs7err.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pkcs7err.h; sourceTree = "<group>"; };
 		7DA629EC58711CA60E47FE40 /* LocalServerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalServerService.swift; sourceTree = "<group>"; };
 		80816F4D552F2692EAC764B1 /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
@@ -170,11 +155,9 @@
 		84991460EED9C5AEFE8B38F7 /* crypto.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto.h; sourceTree = "<group>"; };
 		86D59DBD6AB77F21B16A1EFE /* sslerr_legacy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sslerr_legacy.h; sourceTree = "<group>"; };
 		874FD127977A0E7E7357774F /* randerr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = randerr.h; sourceTree = "<group>"; };
-		882ADE76374F43930B04B216 /* control */ = {isa = PBXFileReference; path = control; sourceTree = "<group>"; };
 		882CD661AC0AD70E31ECC0D8 /* zip.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
 		889B000DE8672787C800648E /* thread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = thread.h; sourceTree = "<group>"; };
 		89709A707B112BBD856AB5CA /* PersistenceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceService.swift; sourceTree = "<group>"; };
-		8B6BEF98EDA7BB3B90D90FE7 /* Makefile */ = {isa = PBXFileReference; path = Makefile; sourceTree = "<group>"; };
 		8B929625FFA27AAC47A65DEA /* x509_vfy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = x509_vfy.h; sourceTree = "<group>"; };
 		8C47512365DB3E3303D1E59C /* iowin32.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iowin32.h; sourceTree = "<group>"; };
 		8C9051D74D2DCEFC4FE1884A /* DebsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebsView.swift; sourceTree = "<group>"; };
@@ -260,7 +243,6 @@
 		E9D85AD17E561772E3C28DC7 /* prov_ssl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = prov_ssl.h; sourceTree = "<group>"; };
 		EBAFA2CD06B78B26F0206851 /* macros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = macros.h; sourceTree = "<group>"; };
 		EBD4AA5D5C6E26D2CCEA5EF7 /* ssl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ssl.h; sourceTree = "<group>"; };
-		EC733F67476C2F9104FD554C /* .gitignore */ = {isa = PBXFileReference; path = .gitignore; sourceTree = "<group>"; };
 		ED6C4F73C33BB70ECA8FF3A4 /* cmac.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cmac.h; sourceTree = "<group>"; };
 		ED88E4066220ACBFF2A5B39A /* fips_names.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = fips_names.h; sourceTree = "<group>"; };
 		EDC1200BA69520BBFA21F0F0 /* ocsp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ocsp.h; sourceTree = "<group>"; };
@@ -268,7 +250,6 @@
 		F134D43ECBB8F6298BEF3333 /* engineerr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = engineerr.h; sourceTree = "<group>"; };
 		F315DADA63ACD23C93D59B82 /* ts.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ts.h; sourceTree = "<group>"; };
 		F405B0870C62AC7FF6A83220 /* conftypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = conftypes.h; sourceTree = "<group>"; };
-		F706A7330751CA8BAE897584 /* __DECC_INCLUDE_EPILOGUE.H */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = __DECC_INCLUDE_EPILOGUE.H; sourceTree = "<group>"; };
 		F724F4B9AF544B073573B572 /* indicator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = indicator.h; sourceTree = "<group>"; };
 		F7F0C38BB624C71E035637D4 /* dherr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = dherr.h; sourceTree = "<group>"; };
 		F885110EA9D709C1D6254ED1 /* trace.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = trace.h; sourceTree = "<group>"; };
@@ -280,40 +261,7 @@
 		FE36BF320CAB222A7AED185F /* conferr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = conferr.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFrameworksBuildPhase section */
-		5F088F44CC201DBE0907F0EB /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4A3405A53F28E5C2C096D9D3 /* ZIPFoundation in Frameworks */,
-				FAA91139D9A8BE522259B8DD /* lottie-ios in Frameworks */,
-				9104E4E81314B75D9C5AF106 /* BitByteData in Frameworks */,
-				AE16DBF0E1623116127A3CDD /* SWCompression in Frameworks */,
-				2136D7B36703691BDB6A35CA /* swift-crypto in Frameworks */,
-				B24F2D2A26576E3F49F1AB3F /* vapor in Frameworks */,
-				4DE01B583BFECC4AD3473717 /* Zip in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXFrameworksBuildPhase section */
-
 /* Begin PBXGroup section */
-		02BA17640B2024EF3A4D4942 /* openssl */ = {
-			isa = PBXGroup;
-			children = (
-				19B0692BB36C71ABE429B8F6 /* x64 */,
-			);
-			path = openssl;
-			sourceTree = "<group>";
-		};
-		04325CEA94D79E8DA6FE2269 /* linux */ = {
-			isa = PBXGroup;
-			children = (
-				04550F3DC05E422A5FCE952C /* Makefile */,
-			);
-			path = linux;
-			sourceTree = "<group>";
-		};
 		110EB1D10553180CCC5D5AEF /* Library */ = {
 			isa = PBXGroup;
 			children = (
@@ -340,13 +288,6 @@
 				3039FF47049B52C2B42800D6 /* Xsign */,
 				20B2EC04ADCCF1E318C5C4E0 /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		19B0692BB36C71ABE429B8F6 /* x64 */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = x64;
 			sourceTree = "<group>";
 		};
 		1A460E7CDB2FF5619BDB258F /* src */ = {
@@ -431,7 +372,8 @@
 				44DC8F4DE109C8B55EC4C006 /* Shared */,
 				22B3291727CBCBB88A293402 /* Views */,
 			);
-			path = Xsign;
+			name = Xsign;
+			path = ../Xsign;
 			sourceTree = "<group>";
 		};
 		33CD7A9FE7BF1CAEB5CC7C3F /* common */ = {
@@ -481,11 +423,6 @@
 		4DE57EBA3A4DDB01E5F7BCAC /* zsign */ = {
 			isa = PBXGroup;
 			children = (
-				03BA055D63086C153586258C /* .git */,
-				778B202C1C6FAD6D0A851515 /* .gitattributes */,
-				EC733F67476C2F9104FD554C /* .gitignore */,
-				78063107E460D4BEC79EE78A /* LICENSE */,
-				5D32F4C712488ED5E35B61CE /* .github */,
 				A5B27FDE11B3E091919A4274 /* build */,
 				1A460E7CDB2FF5619BDB258F /* src */,
 				6EA0C7308F74B625384D89D7 /* test */,
@@ -519,19 +456,10 @@
 			path = Debs;
 			sourceTree = "<group>";
 		};
-		5D32F4C712488ED5E35B61CE /* .github */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = .github;
-			sourceTree = "<group>";
-		};
 		6E79A966EE8F30EC947D8D70 /* demo */ = {
 			isa = PBXGroup;
 			children = (
-				882ADE76374F43930B04B216 /* control */,
 				0CB923814D71EF21A88AD267 /* demo.m */,
-				8B6BEF98EDA7BB3B90D90FE7 /* Makefile */,
 			);
 			path = demo;
 			sourceTree = "<group>";
@@ -564,8 +492,6 @@
 		A5B27FDE11B3E091919A4274 /* build */ = {
 			isa = PBXGroup;
 			children = (
-				04325CEA94D79E8DA6FE2269 /* linux */,
-				BE7CF7EE47C688283476E249 /* macos */,
 				15088C946A7F33123EFE39A3 /* windows */,
 			);
 			path = build;
@@ -588,14 +514,6 @@
 			path = "third-party";
 			sourceTree = "<group>";
 		};
-		B886A3331B4B94AD53DA95A1 /* lib */ = {
-			isa = PBXGroup;
-			children = (
-				02BA17640B2024EF3A4D4942 /* openssl */,
-			);
-			path = lib;
-			sourceTree = "<group>";
-		};
 		B95B62BC3B1F11023071EA0A /* zlib */ = {
 			isa = PBXGroup;
 			children = (
@@ -612,14 +530,6 @@
 				3976009197670B9FAA8B4A22 /* zutil.h */,
 			);
 			path = zlib;
-			sourceTree = "<group>";
-		};
-		BE7CF7EE47C688283476E249 /* macos */ = {
-			isa = PBXGroup;
-			children = (
-				3D2E3BF7D6E1EB4F829ABECB /* Makefile */,
-			);
-			path = macos;
 			sourceTree = "<group>";
 		};
 		C45754EB340F10F46ECCAFBF /* App */ = {
@@ -660,7 +570,6 @@
 			isa = PBXGroup;
 			children = (
 				DA6BE98A30C97B6EB08DDF1F /* include */,
-				B886A3331B4B94AD53DA95A1 /* lib */,
 				A5BE38CDAE4CB115695AB204 /* zsign */,
 			);
 			path = vs2022;
@@ -669,8 +578,6 @@
 		F487DFEFFE5FD7DEA21599B1 /* openssl */ = {
 			isa = PBXGroup;
 			children = (
-				F706A7330751CA8BAE897584 /* __DECC_INCLUDE_EPILOGUE.H */,
-				231F5940CF230534F7968935 /* __DECC_INCLUDE_PROLOGUE.H */,
 				32F03A29292C6AF34F7916CE /* aes.h */,
 				08CF315C04E958B9FF46CA29 /* asn1_mac.h */,
 				3804CC2FEF937DDE213D4346 /* asn1.h */,
@@ -824,8 +731,6 @@
 			buildConfigurationList = CF798818C0814D2BE27BD3CE /* Build configuration list for PBXNativeTarget "Xsign" */;
 			buildPhases = (
 				901C6D98ADC39DDADB681267 /* Sources */,
-				4B791FC455A0DA5118B6F113 /* Resources */,
-				5F088F44CC201DBE0907F0EB /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -833,13 +738,6 @@
 			);
 			name = Xsign;
 			packageProductDependencies = (
-				273144B1DF5EAB1E27E7E240 /* ZIPFoundation */,
-				4C9074B7F1C87D47A8B4B53E /* lottie-ios */,
-				BB58180DC547BEBD161EB448 /* BitByteData */,
-				8D69F21E55FC668A00B9FF58 /* SWCompression */,
-				C08189B5B6B2ADAD10F81E50 /* swift-crypto */,
-				0E17120F75082CF40D4B6107 /* vapor */,
-				19DE7AF3FEB5B1343EF93580 /* Zip */,
 			);
 			productName = Xsign;
 			productReference = AF5E384B3639B4F607D1F370 /* Xsign.app */;
@@ -865,15 +763,6 @@
 			);
 			mainGroup = 18B43EEF5DF34CF61520DDF4;
 			minimizedProjectReferenceProxies = 1;
-			packageReferences = (
-				2CA0C86F4ED4A0424878A752 /* XCRemoteSwiftPackageReference "BitByteData" */,
-				637BE3CFEBD68C13D94E9DAB /* XCRemoteSwiftPackageReference "SWCompression" */,
-				7278F9FC1667DC738CE973C4 /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
-				82976D4FC4DAE3EF7C76E154 /* XCRemoteSwiftPackageReference "Zip" */,
-				3E18C217748AAE5BDBB2A441 /* XCRemoteSwiftPackageReference "lottie-ios" */,
-				01DF4D279CBFA7099943C780 /* XCRemoteSwiftPackageReference "swift-crypto" */,
-				C44A5A3825680DFC7510B8EB /* XCRemoteSwiftPackageReference "vapor" */,
-			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 20B2EC04ADCCF1E318C5C4E0 /* Products */;
 			projectDirPath = "";
@@ -883,18 +772,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXResourcesBuildPhase section */
-		4B791FC455A0DA5118B6F113 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				51CC0D41D2114AA972C69519 /* __DECC_INCLUDE_EPILOGUE.H in Resources */,
-				72C564829035DEA8B3F58664 /* __DECC_INCLUDE_PROLOGUE.H in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		901C6D98ADC39DDADB681267 /* Sources */ = {
@@ -1121,103 +998,6 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		01DF4D279CBFA7099943C780 /* XCRemoteSwiftPackageReference "swift-crypto" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/apple/swift-crypto.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.12.3;
-			};
-		};
-		2CA0C86F4ED4A0424878A752 /* XCRemoteSwiftPackageReference "BitByteData" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/tsolomko/BitByteData";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.4;
-			};
-		};
-		3E18C217748AAE5BDBB2A441 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 4.4.1;
-			};
-		};
-		637BE3CFEBD68C13D94E9DAB /* XCRemoteSwiftPackageReference "SWCompression" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/tsolomko/SWCompression";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 4.8.6;
-			};
-		};
-		7278F9FC1667DC738CE973C4 /* XCRemoteSwiftPackageReference "ZIPFoundation" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/weichsel/ZIPFoundation.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.9.19;
-			};
-		};
-		82976D4FC4DAE3EF7C76E154 /* XCRemoteSwiftPackageReference "Zip" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/marmelroy/Zip.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.1.2;
-			};
-		};
-		C44A5A3825680DFC7510B8EB /* XCRemoteSwiftPackageReference "vapor" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/vapor/vapor.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 4.92.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		0E17120F75082CF40D4B6107 /* vapor */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C44A5A3825680DFC7510B8EB /* XCRemoteSwiftPackageReference "vapor" */;
-			productName = vapor;
-		};
-		19DE7AF3FEB5B1343EF93580 /* Zip */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 82976D4FC4DAE3EF7C76E154 /* XCRemoteSwiftPackageReference "Zip" */;
-			productName = Zip;
-		};
-		273144B1DF5EAB1E27E7E240 /* ZIPFoundation */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7278F9FC1667DC738CE973C4 /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
-			productName = ZIPFoundation;
-		};
-		4C9074B7F1C87D47A8B4B53E /* lottie-ios */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 3E18C217748AAE5BDBB2A441 /* XCRemoteSwiftPackageReference "lottie-ios" */;
-			productName = "lottie-ios";
-		};
-		8D69F21E55FC668A00B9FF58 /* SWCompression */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 637BE3CFEBD68C13D94E9DAB /* XCRemoteSwiftPackageReference "SWCompression" */;
-			productName = SWCompression;
-		};
-		BB58180DC547BEBD161EB448 /* BitByteData */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 2CA0C86F4ED4A0424878A752 /* XCRemoteSwiftPackageReference "BitByteData" */;
-			productName = BitByteData;
-		};
-		C08189B5B6B2ADAD10F81E50 /* swift-crypto */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 01DF4D279CBFA7099943C780 /* XCRemoteSwiftPackageReference "swift-crypto" */;
-			productName = "swift-crypto";
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 82FB5A936539C9DBAF146823 /* Project object */;
 }
