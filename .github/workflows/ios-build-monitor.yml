@@ -9,9 +9,9 @@ on:
 
 jobs:
   build:
-    name: Build iOS App
+    name: Build iOS App (Release)
     runs-on: macos-14
-    timeout-minutes: 45
+    timeout-minutes: 50
 
     steps:
       - name: Checkout code
@@ -19,14 +19,22 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Build Archive
+      - name: Debug Project Structure
+        run: |
+          echo "📁 Root directory contents:"
+          ls -la
+          echo ""
+          echo "📁 Inside Xsign.xcodeproj:"
+          ls -la Xsign.xcodeproj/
+
+      - name: Build Archive (Release)
         run: |
           mkdir -p build_logs
 
-          echo "🚀 Starting Xcode build..."
+          echo "🚀 Starting Xcode archive (Release)..."
 
           xcodebuild \
-            -project Xsign.pbxproj/project.pbxproj \
+            -project Xsign.xcodeproj \
             -scheme Xsign \
             -configuration Release \
             -sdk iphoneos \
@@ -38,12 +46,12 @@ jobs:
             | tee build_logs/build.log
 
           if grep -q "ARCHIVE SUCCEEDED" build_logs/build.log; then
-            echo "✅ Build succeeded"
+            echo "✅ Archive succeeded"
           else
-            echo "❌ Build failed"
+            echo "❌ Archive failed"
             echo ""
-            echo "=== Last 100 lines of build log ==="
-            tail -100 build_logs/build.log
+            echo "=== Last 150 lines of build log ==="
+            tail -150 build_logs/build.log
             exit 1
           fi
 
