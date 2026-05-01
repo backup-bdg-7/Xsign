@@ -19,33 +19,35 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Patch zsign for iOS compatibility
+      - name: Setup OpenSSL for iOS
         run: |
-          echo "Patching zsign source for iOS compatibility..."
-          python3 << 'EOF'
-          import re
-          
-          filepath = "Xsign/External/zsign/src/common/util.cpp"
-          with open(filepath, 'r') as f:
-              content = f.read()
-          
-          # Wrap system() call with iOS availability check
-          # Find the SystemExecV function and wrap the system() call
-          pattern = r'(int status = system\(szRealCmd\);)'
-          replacement = '''#if !TARGET_IPHONE_SIMULATOR && !TARGET_OS_IPHONE
-          \1
-          #else
-          int status = 0; // system() not available on iOS
-          #endif'''
-          
-          content = re.sub(pattern, replacement, content)
-          
-          with open(filepath, 'w') as f:
-              f.write(content)
-          
-          print("Patch applied successfully")
-          EOF
-          echo "Patch completed"
+          echo "Setting up OpenSSL for iOS..."
+          # Download pre-built OpenSSL headers for iOS
+          mkdir -p /tmp/openssl-headers
+          cd /tmp/openssl-headers
+          # Download OpenSSL source to get headers
+          curl -sL https://github.com/openssl/openssl/releases/download/openssl-3.2.1/openssl-3.2.1.tar.gz | tar xz
+          # Copy headers to project
+          mkdir -p $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl
+          cp -R openssl-3.2.1/include/openssl/* $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl/
+          echo "OpenSSL headers installed"
+
+      - name: Update Header Search Paths in project.yml
+        run: |
+          echo "Updating project.yml to include OpenSSL headers..."
+          cd $GITHUB_WORKSPACE
+          # Add OpenSSL include path to XsignBridge target
+          sed -i '' '/HEADER_SEARCH_PATHS:/a\
+            - "$(SRCROOT)/Xsign/External/openssl/include"' project.yml || true
+          # Show the change
+          grep -A10 "XsignBridge:" project.yml | head -20
+
+      - name: Regenerate Xcode Project
+        run: |
+          echo "Regenerating Xcode project with XcodeGen..."
+          brew install xcodegen 2>/dev/null || true
+          xcodegen generate --spec project.yml
+          echo "Xcode project regenerated"
 
       - name: Resolve Swift Packages
         run: |
@@ -55,9 +57,7 @@ jobs:
       - name: Build Archive
         run: |
           mkdir -p build_logs
-
           echo "🚀 Starting Xcode archive build..."
-
           xcodebuild \
             -project Xsign.xcodeproj \
             -scheme Xsign \
@@ -69,39 +69,24 @@ jobs:
             -allowProvisioningUpdates \
             CODE_SIGNING_ALLOWED=NO \
             | tee build_logs/build.log
-
           if ! grep -q "ARCHIVE SUCCEEDED" build_logs/build.log; then
             echo "❌ Archive failed"
             echo "=== Last 200 lines of log ==="
             tail -200 build_logs/build.log
             exit 1
           fi
-
           echo "✅ Archive built successfully"
 
       - name: Create IPA Manually
         run: |
           echo "📦 Creating Xsign.ipa manually..."
-
-          # Create Payload structure
           mkdir -p _build/Payload
-
-          # Copy the app from the archive
           cp -R Xsign.xcarchive/Products/Applications/*.app _build/Payload/Xsign.app
-
-          # Set proper permissions
           chmod -R 0755 _build/Payload/Xsign.app
-
-          # Re-sign the app with ad-hoc signing
           codesign --force --sign - --timestamp=none _build/Payload/Xsign.app
-
-          # Copy any additional dependencies if they exist
           cp deps/* _build/Payload/Xsign.app/ 2>/dev/null || true
-
-          # Create the IPA file
           mkdir -p packages
           ditto -c -k --sequesterRsrc --keepParent _build/Payload "packages/Xsign.ipa"
-
           echo "✅ IPA created successfully:"
           ls -lh packages/
 
