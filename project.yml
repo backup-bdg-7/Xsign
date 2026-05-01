@@ -43,7 +43,6 @@ targets:
     type: framework
     platform: iOS
     sources:
-      - path: Xsign/App/Bridge
       - path: Xsign/External/zsign/src
         excludes:
           - "**/*.cpp"  # Exclude all C++ files for now
