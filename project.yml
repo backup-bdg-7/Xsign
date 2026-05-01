@@ -7,7 +7,47 @@ options:
   createIntermediateGroups: true
   disableShowEnvironmentVarsInScriptPhases: true
 
+# ====================== PACKAGES ======================
+packages:
+  BitByteData:
+    url: https://github.com/tsolomko/BitByteData
+    from: 2.0.4
+
+  SWCompression:
+    url: https://github.com/tsolomko/SWCompression
+    from: 4.8.6
+
+  ZIPFoundation:
+    url: https://github.com/weichsel/ZIPFoundation
+    from: 0.9.19
+
+  lottie-ios:
+    url: https://github.com/airbnb/lottie-ios
+    from: 4.4.1
+
+  swift-crypto:
+    url: https://github.com/apple/swift-crypto
+    from: 3.12.3
+
+  Zip:
+    url: https://github.com/marmelroy/Zip
+    from: 2.1.2
+
+  vapor:
+    url: https://github.com/vapor/vapor
+    from: 4.92.0
+
+# ====================== TARGETS ======================
 targets:
+  XsignBridge:
+    type: framework
+    platform: iOS
+    sources:
+      - path: Xsign/App/Bridge
+    settings:
+      base:
+        HEADER_SEARCH_PATHS: ["$(SRCROOT)/Xsign/External"]
+
   Xsign:
     type: application
     platform: iOS
@@ -21,11 +61,12 @@ targets:
           - "**/*.m"
           - "**/*.mm"
         excludes:
-          - "**/Bridge/**"                    # ← Kept as you originally had it
+          - "**/Bridge/**"
           - "**/Resources/**"
           - "Xsign.xcodeproj/**"
           - ".build/**"
           - "DerivedData/**"
+          - "**/External/**"
 
     resources:
       - path: Xsign/Resources
@@ -42,6 +83,24 @@ targets:
         ENABLE_BITCODE: NO
         ONLY_ACTIVE_ARCH: YES
         CODE_SIGN_STYLE: Automatic
+        CODE_SIGNING_ALLOWED: NO
+
+    dependencies:
+      - target: XsignBridge
+      
+      # All Swift Package Dependencies
+      - package: BitByteData
+      - package: SWCompression
+      - package: ZIPFoundation
+        product: ZIPFoundation
+      - package: lottie-ios
+        product: lottie-ios
+      - package: swift-crypto
+        product: Crypto
+      - package: Zip
+        product: Zip
+      - package: vapor
+        product: Vapor
 
 # ====================== SCHEMES ======================
 schemes:
