@@ -2,9 +2,12 @@ name: Analyze & Generate Xcode Project
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+      - feat/swift-package-setup
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
   workflow_dispatch:
   schedule:
     - cron: '0 0 * * 1'
@@ -21,7 +24,7 @@ jobs:
           fetch-depth: 0
           submodules: recursive
 
-      - name: Show Environment
+      - name: Show Xcode Version
         run: |
           xcodebuild -version
           sw_vers
@@ -29,50 +32,31 @@ jobs:
       - name: Install XcodeGen
         run: |
           brew install xcodegen
-          echo "XcodeGen version: $(xcodegen --version)"
+          xcodegen --version
 
       - name: Analyze Project Structure
         run: |
           echo "## Project Analysis" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
           echo "### Swift Files" >> $GITHUB_STEP_SUMMARY
-          echo "Count: $(find Xsign -name "*.swift" | wc -l | tr -d ' ')" >> $GITHUB_STEP_SUMMARY
+          find Xsign -name "*.swift" | wc -l | xargs echo "Count:" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
-          echo "### Relevant File List" >> $GITHUB_STEP_SUMMARY
+          echo "### File List" >> $GITHUB_STEP_SUMMARY
           find Xsign -type f \( -name "*.swift" -o -name "*.h" -o -name "*.m" -o -name "*.mm" \) | sort >> $GITHUB_STEP_SUMMARY
 
       - name: Generate Xcode Project
         run: |
           echo "## Generating Xcode Project" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-
-          # Clean previous project
-          rm -rf Xsign.xcodeproj
-
-          echo "Generating Xcode project..." >> $GITHUB_STEP_SUMMARY
-          
-          # Simple & correct command - no extra flags
-          xcodegen generate --spec project.yml
-
-          echo "✅ Project generation completed" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-
+          xcodegen generate --spec project.yml --project Xsign.xcodeproj
+          echo "✅ Project generated!" >> $GITHUB_STEP_SUMMARY
+          ls -la Xsign.xcodeproj >> $GITHUB_STEP_SUMMARY
+          # Verify structure
           if [ -d "Xsign.xcodeproj" ]; then
-            echo "Project contents:" >> $GITHUB_STEP_SUMMARY
+            echo "Xsign.xcodeproj directory exists" >> $GITHUB_STEP_SUMMARY
             ls -la Xsign.xcodeproj/ >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-
-            # Clean xcuserdata that can hide schemes
-            rm -rf Xsign.xcodeproj/xcuserdata 2>/dev/null || true
-
-            echo "### Schemes Check" >> $GITHUB_STEP_SUMMARY
-            echo "```" >> $GITHUB_STEP_SUMMARY
-            xcodebuild -list -project Xsign.xcodeproj 2>&1 | cat >> $GITHUB_STEP_SUMMARY
-            echo "```" >> $GITHUB_STEP_SUMMARY
           else
-            echo "❌ ERROR: Xsign.xcodeproj was not created!" >> $GITHUB_STEP_SUMMARY
+            echo "ERROR: Xsign.xcodeproj not created!" >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
 
@@ -84,10 +68,10 @@ jobs:
           retention-days: 90
           if-no-files-found: error
 
-      - name: Final Summary
+      - name: Summary
         if: always()
         run: |
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Artifact" >> $GITHUB_STEP_SUMMARY
-          echo "- \`Xsign-xcodeproj-${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "### Downloads" >> $GITHUB_STEP_SUMMARY
+          echo "- Artifact: Xsign-xcodeproj-${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
           echo "- Download from: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
