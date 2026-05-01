@@ -22,26 +22,15 @@ jobs:
       - name: Setup OpenSSL for iOS
         run: |
           echo "Setting up OpenSSL for iOS..."
-          # Download pre-built OpenSSL headers for iOS
+          # Download OpenSSL headers
           mkdir -p /tmp/openssl-headers
           cd /tmp/openssl-headers
-          # Download OpenSSL source to get headers
           curl -sL https://github.com/openssl/openssl/releases/download/openssl-3.2.1/openssl-3.2.1.tar.gz | tar xz
           # Copy headers to project
           mkdir -p $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl
           cp -R openssl-3.2.1/include/openssl/* $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl/
           echo "OpenSSL headers installed"
-
-      - name: Update Header Search Paths in project.yml
-        run: |
-          echo "Updating project.yml to include OpenSSL headers..."
-          cd $GITHUB_WORKSPACE
-          # Add OpenSSL include path to XsignBridge target
-          sed -i '' '/HEADER_SEARCH_PATHS:/a\
-            - "$(SRCROOT)/Xsign/External/openssl/include"' project.yml || true
-          # Show the change
-          grep -A10 "XsignBridge:" project.yml | head -20
-
+      
       - name: Regenerate Xcode Project
         run: |
           echo "Regenerating Xcode project with XcodeGen..."
