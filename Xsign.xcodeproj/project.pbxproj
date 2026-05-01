@@ -11,7 +11,6 @@
 		077810ABE2724D01920D2411 /* XsignApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047CF1F92C7FD3C0D4AAE46C /* XsignApp.swift */; };
 		0F238DDAB713E760D785A47A /* AppModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331A304AB08F24B674187BB0 /* AppModifier.swift */; };
 		18CFD67206687FA753ED2276 /* XsignBridge.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AC846D3DF06E4F35AF7AE04B /* XsignBridge.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		1BF82D68C857EB3013839A93 /* ZSignWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4A29AEB50F95CA8A0593BAC5 /* ZSignWrapper.mm */; };
 		1C21705ED9B47C5085DB7D13 /* CertificateManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486717146114366405A39CD7 /* CertificateManagementView.swift */; };
 		2136D7B36703691BDB6A35CA /* Crypto in Frameworks */ = {isa = PBXBuildFile; productRef = 79062023EA53BD41F69D9181 /* Crypto */; };
 		24D3EF467E7A707CD08998E4 /* Certificate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97F8CBE86E8D19D7E666164F /* Certificate.swift */; };
@@ -33,7 +32,6 @@
 		906E4865414B343951A363A0 /* CommonUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DD7AFFF63EFF6E0CFE4CA5 /* CommonUI.swift */; };
 		9104E4E81314B75D9C5AF106 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 273144B1DF5EAB1E27E7E240 /* ZIPFoundation */; };
 		9152EFCEED55E99D8ADA78DA /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80816F4D552F2692EAC764B1 /* LibraryView.swift */; };
-		92DC70F1EB24B63DF9C09250 /* ZSignWrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 20670E375FB7A547B4E0A14E /* ZSignWrapper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9318439ED2F3FF7767D5C924 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D815C2DAE8DC805E63635E /* Category.swift */; };
 		A098C368A2C5FF062D7F6324 /* GeneralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B59A4DA29C6920C4504DDF /* GeneralView.swift */; };
 		A2D77AAE0A5EB9FB29E4A9C0 /* SignModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6965F14F1F159D77AF31F0F0 /* SignModalView.swift */; };
@@ -49,7 +47,6 @@
 		EA74DE8EA687F1DB7072BA91 /* StatusBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF70CA9C264020E52D4F770 /* StatusBadge.swift */; };
 		EB1FF551425D73216F091B7C /* TweakManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A772C721A5FE10E49D81DDF /* TweakManager.swift */; };
 		F48F3451823767322A22980A /* PersistenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89709A707B112BBD856AB5CA /* PersistenceService.swift */; };
-		F64B1D540E101F4DBC80EE21 /* Xsign-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = B6D33887A2E5CE7D00912185 /* Xsign-Bridging-Header.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F89D222923E601DA5DB7ACF4 /* FileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E7AE47639383126AAE5A623 /* FileService.swift */; };
 		F99C5243079D2DA5E3423781 /* Entitlement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487B89EDC40E05392287B921 /* Entitlement.swift */; };
 		FAA91139D9A8BE522259B8DD /* SWCompression in Frameworks */ = {isa = PBXBuildFile; productRef = 8D69F21E55FC668A00B9FF58 /* SWCompression */; };
@@ -84,14 +81,12 @@
 		047CF1F92C7FD3C0D4AAE46C /* XsignApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XsignApp.swift; sourceTree = "<group>"; };
 		0E7AE47639383126AAE5A623 /* FileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileService.swift; sourceTree = "<group>"; };
 		0F60E1BAE39877BABEBB3D63 /* ImportCertificateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportCertificateView.swift; sourceTree = "<group>"; };
-		20670E375FB7A547B4E0A14E /* ZSignWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZSignWrapper.h; sourceTree = "<group>"; };
 		28CF3263DC77749C8BC6A95F /* BinaryInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryInfo.swift; sourceTree = "<group>"; };
 		29AE627B0D17B85C685FB903 /* AppFileCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFileCard.swift; sourceTree = "<group>"; };
 		331A304AB08F24B674187BB0 /* AppModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModifier.swift; sourceTree = "<group>"; };
 		45D815C2DAE8DC805E63635E /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		486717146114366405A39CD7 /* CertificateManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificateManagementView.swift; sourceTree = "<group>"; };
 		487B89EDC40E05392287B921 /* Entitlement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entitlement.swift; sourceTree = "<group>"; };
-		4A29AEB50F95CA8A0593BAC5 /* ZSignWrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ZSignWrapper.mm; sourceTree = "<group>"; };
 		51B59A4DA29C6920C4504DDF /* GeneralView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralView.swift; sourceTree = "<group>"; };
 		5917AB144DA85B703FBB4423 /* ZipService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZipService.swift; sourceTree = "<group>"; };
 		655C4BF5E94F67D61DEFA56D /* AppFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFile.swift; sourceTree = "<group>"; };
@@ -110,7 +105,6 @@
 		AC846D3DF06E4F35AF7AE04B /* XsignBridge.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = XsignBridge.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF5E384B3639B4F607D1F370 /* Xsign.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Xsign.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B60C3EDD7AD3FD3EE23D54AA /* BackdoorTLS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackdoorTLS.swift; sourceTree = "<group>"; };
-		B6D33887A2E5CE7D00912185 /* Xsign-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Xsign-Bridging-Header.h"; sourceTree = "<group>"; };
 		B816A4284CA76E6B6CF35BF7 /* DylibsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DylibsView.swift; sourceTree = "<group>"; };
 		BE7C00F7818A12B94D439691 /* AppLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLog.swift; sourceTree = "<group>"; };
 		C6582E6831F4D79E0A798891 /* EntitlementManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntitlementManager.swift; sourceTree = "<group>"; };
@@ -298,7 +292,6 @@
 			isa = PBXGroup;
 			children = (
 				047CF1F92C7FD3C0D4AAE46C /* XsignApp.swift */,
-				D5FEC82102F012D601DE63F7 /* Bridge */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -311,29 +304,7 @@
 			path = Dylibs;
 			sourceTree = "<group>";
 		};
-		D5FEC82102F012D601DE63F7 /* Bridge */ = {
-			isa = PBXGroup;
-			children = (
-				B6D33887A2E5CE7D00912185 /* Xsign-Bridging-Header.h */,
-				20670E375FB7A547B4E0A14E /* ZSignWrapper.h */,
-				4A29AEB50F95CA8A0593BAC5 /* ZSignWrapper.mm */,
-			);
-			path = Bridge;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
-
-/* Begin PBXHeadersBuildPhase section */
-		F3D25254C1157640E1A84E51 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F64B1D540E101F4DBC80EE21 /* Xsign-Bridging-Header.h in Headers */,
-				92DC70F1EB24B63DF9C09250 /* ZSignWrapper.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
 		9C4493667807C2C5B3260715 /* Xsign */ = {
@@ -367,7 +338,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 827532BA2088AC2431EEA4D6 /* Build configuration list for PBXNativeTarget "XsignBridge" */;
 			buildPhases = (
-				F3D25254C1157640E1A84E51 /* Headers */,
 				01036C1A9A9E013BA0FDD3D6 /* Sources */,
 			);
 			buildRules = (
@@ -429,7 +399,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1BF82D68C857EB3013839A93 /* ZSignWrapper.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
