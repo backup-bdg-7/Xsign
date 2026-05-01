@@ -37,7 +37,7 @@
 		9318439ED2F3FF7767D5C924 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D815C2DAE8DC805E63635E /* Category.swift */; };
 		A098C368A2C5FF062D7F6324 /* GeneralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B59A4DA29C6920C4504DDF /* GeneralView.swift */; };
 		A2D77AAE0A5EB9FB29E4A9C0 /* SignModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6965F14F1F159D77AF31F0F0 /* SignModalView.swift */; };
-		AE16DBF0E1623116127A3CDD /* lottie-ios in Frameworks */ = {isa = PBXBuildFile; productRef = 4C9074B7F1C87D47A8B4B53E /* lottie-ios */; };
+		AE16DBF0E1623116127A3CDD /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = F545D861AB51586D2854E00B /* Lottie */; };
 		B24F2D2A26576E3F49F1AB3F /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = 19DE7AF3FEB5B1343EF93580 /* Zip */; };
 		BE9594B1761BB66CDD005362 /* AppFileCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29AE627B0D17B85C685FB903 /* AppFileCard.swift */; };
 		D97577F26BE87A11BDA97684 /* LocalServerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA629EC58711CA60E47FE40 /* LocalServerService.swift */; };
@@ -130,7 +130,7 @@
 				4A3405A53F28E5C2C096D9D3 /* BitByteData in Frameworks */,
 				FAA91139D9A8BE522259B8DD /* SWCompression in Frameworks */,
 				9104E4E81314B75D9C5AF106 /* ZIPFoundation in Frameworks */,
-				AE16DBF0E1623116127A3CDD /* lottie-ios in Frameworks */,
+				AE16DBF0E1623116127A3CDD /* Lottie in Frameworks */,
 				2136D7B36703691BDB6A35CA /* Crypto in Frameworks */,
 				B24F2D2A26576E3F49F1AB3F /* Zip in Frameworks */,
 				4DE01B583BFECC4AD3473717 /* Vapor in Frameworks */,
@@ -330,7 +330,7 @@
 				BB58180DC547BEBD161EB448 /* BitByteData */,
 				8D69F21E55FC668A00B9FF58 /* SWCompression */,
 				273144B1DF5EAB1E27E7E240 /* ZIPFoundation */,
-				4C9074B7F1C87D47A8B4B53E /* lottie-ios */,
+				F545D861AB51586D2854E00B /* Lottie */,
 				79062023EA53BD41F69D9181 /* Crypto */,
 				19DE7AF3FEB5B1343EF93580 /* Zip */,
 				4A77FF2C9E3D895ED101AD35 /* Vapor */,
@@ -783,11 +783,6 @@
 			package = 6DFF623DB0B33039DA2C2463 /* XCRemoteSwiftPackageReference "vapor" */;
 			productName = Vapor;
 		};
-		4C9074B7F1C87D47A8B4B53E /* lottie-ios */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 716BD8CF36708E42FCDFE5D9 /* XCRemoteSwiftPackageReference "lottie-ios" */;
-			productName = "lottie-ios";
-		};
 		79062023EA53BD41F69D9181 /* Crypto */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 24A1D38EAB8BD77212846F50 /* XCRemoteSwiftPackageReference "swift-crypto" */;
@@ -802,6 +797,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2CA0C86F4ED4A0424878A752 /* XCRemoteSwiftPackageReference "BitByteData" */;
 			productName = BitByteData;
+		};
+		F545D861AB51586D2854E00B /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 716BD8CF36708E42FCDFE5D9 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
