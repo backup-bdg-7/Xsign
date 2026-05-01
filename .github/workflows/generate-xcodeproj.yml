@@ -7,7 +7,7 @@ on:
     branches: [ main ]
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * 1'   # Runs every Monday at midnight UTC
+    - cron: '0 0 * * 1'   # Every Monday at midnight UTC
 
 jobs:
   analyze-and-generate:
@@ -48,10 +48,10 @@ jobs:
           echo "## Generating Xcode Project" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
-          # Clean any existing project to prevent conflicts
+          # Clean any previous project to avoid conflicts
           rm -rf Xsign.xcodeproj
 
-          # Generate the project (recommended way)
+          # Generate the Xcode project
           xcodegen generate --spec project.yml
 
           echo "✅ Xcode project successfully generated!" >> $GITHUB_STEP_SUMMARY
