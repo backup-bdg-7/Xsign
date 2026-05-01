@@ -1,15 +1,18 @@
-# XcodeGen project configuration for Xsign
 name: Xsign
+
 options:
   bundleIdPrefix: com.xsign
   deploymentTarget:
     iOS: "17.0"
   createIntermediateGroups: true
+  disableShowEnvironmentVarsInScriptPhases: true
 
 targets:
   Xsign:
     type: application
     platform: iOS
+    deploymentTarget: "17.0"
+    
     sources:
       - path: Xsign
         includes:
@@ -18,13 +21,55 @@ targets:
           - "**/*.m"
           - "**/*.mm"
         excludes:
-          - "**/Bridge/**"
-          - "Resources/**"
+          - "**/Bridge/**"                    # ← Kept as you originally had it
+          - "**/Resources/**"
+          - "Xsign.xcodeproj/**"
+          - ".build/**"
+          - "DerivedData/**"
+
     resources:
       - path: Xsign/Resources
+        includes:
+          - "**/*"
+
     settings:
-      PRODUCT_BUNDLE_IDENTIFIER: com.xsign.Xsign
-      INFOPLIST_FILE: Xsign/Resources/Info.plist
-      SWIFT_VERSION: "5.9"
-      IPHONEOS_DEPLOYMENT_TARGET: "17.0"
-      SWIFT_OBJC_BRIDGING_HEADER: "$(SRCROOT)/Xsign/App/Bridge/Xsign-Bridging-Header.h"
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.xsign.Xsign
+        INFOPLIST_FILE: Xsign/Resources/Info.plist
+        SWIFT_VERSION: "5.9"
+        IPHONEOS_DEPLOYMENT_TARGET: "17.0"
+        SWIFT_OBJC_BRIDGING_HEADER: Xsign/App/Bridge/Xsign-Bridging-Header.h
+        ENABLE_BITCODE: NO
+        ONLY_ACTIVE_ARCH: YES
+        CODE_SIGN_STYLE: Automatic
+
+# ====================== SCHEMES ======================
+schemes:
+  Xsign:
+    build:
+      targets:
+        Xsign: all
+    test:
+      targets: []
+      gatherCoverageData: true
+    run:
+      configuration: Debug
+    archive:
+      configuration: Release
+      revealArchiveInOrganizer: true
+    profile:
+      configuration: Release
+    analyze:
+      configuration: Debug
+
+  Xsign-Release:
+    build:
+      targets:
+        Xsign: all
+    run:
+      configuration: Release
+    archive:
+      configuration: Release
+      revealArchiveInOrganizer: true
+    profile:
+      configuration: Release
