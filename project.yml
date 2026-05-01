@@ -46,8 +46,8 @@ targets:
       - path: Xsign/App/Bridge
       - path: Xsign/External/zsign/src
         excludes:
-          - "zsign.cpp"  # Exclude main() entry point
-          - "common/util.cpp"  # Exclude util.cpp (has system() call)
+          - "**/*.cpp"  # Exclude all C++ files for now
+          - "**/*.h"    # Exclude all headers for now
           - "third-party/**"
     settings:
       base:
