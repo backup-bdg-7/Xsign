@@ -44,9 +44,15 @@ targets:
     platform: iOS
     sources:
       - path: Xsign/App/Bridge
+      - path: Xsign/External/zsign/src
+        excludes:
+          - "zsign.cpp"  # Exclude main() entry point
+          - "third-party/**"
     settings:
       base:
-        HEADER_SEARCH_PATHS: ["$(SRCROOT)/Xsign/External"]
+        HEADER_SEARCH_PATHS: ["$(SRCROOT)/Xsign/External/zsign/src"]
+        CLANG_CXX_LANGUAGE_STANDARD: "c++17"
+        GCC_C_LANGUAGE_STANDARD: "c11"
 
   Xsign:
     type: application
