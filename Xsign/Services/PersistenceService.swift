@@ -16,4 +16,14 @@ class PersistenceService {
         context.insert(log)
         save()
     }
+    
+    func fetchSignedApps() -> [AppFile] {
+        let descriptor = FetchDescriptor<AppFile>(sortBy: [SortDescriptor(\.dateModified, order: .reverse)])
+        return (try? context.fetch(descriptor)) ?? []
+    }
+    
+    func fetchLogs() -> [AppLog] {
+        let descriptor = FetchDescriptor<AppLog>(sortBy: [SortDescriptor(\.timestamp, order: .reverse)])
+        return (try? context.fetch(descriptor)) ?? []
+    }
 }
