@@ -21,14 +21,20 @@ struct ImportCertificateView: View {
                 HStack {
                     Text(".p12 File")
                     Spacer()
-                    if p12Data != nil { Image(systemName: "checkmark.circle.fill").foregroundColor(.green) }
+                    if p12Data != nil { 
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundColor(.green) 
+                    }
                     Button("Select") { showingP12Picker = true }
                 }
 
                 HStack {
                     Text(".mobileprovision")
                     Spacer()
-                    if profileData != nil { Image(systemName: "checkmark.circle.fill").foregroundColor(.green) }
+                    if profileData != nil { 
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundColor(.green) 
+                    }
                     Button("Select") { showingProfilePicker = true }
                 }
             }
@@ -49,7 +55,8 @@ struct ImportCertificateView: View {
         .fileImporter(isPresented: $showingProfilePicker, allowedContentTypes: [.item]) { result in
             if let url = try? result.get().first {
                 profileData = try? Data(contentsOf: url)
-                if let data = profileData, let profile = ProvisioningParser.shared.parse(data: data) {
+                if let data = profileData, 
+                   let profile = ProvisioningParser.shared.parse(data: data) {
                     if name.isEmpty { name = profile.name }
                 }
             }
