@@ -88,13 +88,13 @@ targets:
     dependencies:
       - target: XsignBridge
       
-      # All Swift Package Dependencies
+      # Swift Packages
       - package: BitByteData
       - package: SWCompression
       - package: ZIPFoundation
         product: ZIPFoundation
       - package: lottie-ios
-        product: lottie-ios
+        product: Lottie           # ← This was the bug (was lottie-ios)
       - package: swift-crypto
         product: Crypto
       - package: Zip
@@ -108,27 +108,14 @@ schemes:
     build:
       targets:
         Xsign: all
-    test:
-      targets: []
-      gatherCoverageData: true
-    run:
-      configuration: Debug
     archive:
       configuration: Release
       revealArchiveInOrganizer: true
-    profile:
-      configuration: Release
-    analyze:
-      configuration: Debug
 
   Xsign-Release:
     build:
       targets:
         Xsign: all
-    run:
-      configuration: Release
     archive:
       configuration: Release
       revealArchiveInOrganizer: true
-    profile:
-      configuration: Release
