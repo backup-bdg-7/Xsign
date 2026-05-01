@@ -1,4 +1,5 @@
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct ImportCertificateView: View {
     @Environment(\.dismiss) var dismiss
