@@ -11,7 +11,7 @@ jobs:
   build:
     name: Build iOS App (Release)
     runs-on: macos-15
-    timeout-minutes: 50
+    timeout-minutes: 60
 
     steps:
       - name: Checkout code
@@ -19,19 +19,19 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Debug Project Structure
+      - name: Resolve Swift Package Dependencies
         run: |
-          echo "📁 Root directory contents:"
-          ls -la
-          echo ""
-          echo "📁 Inside Xsign.xcodeproj:"
-          ls -la Xsign.xcodeproj/
+          echo "🔄 Resolving Swift Package Manager dependencies..."
+          xcodebuild \
+            -project Xsign.xcodeproj \
+            -scheme Xsign \
+            -resolvePackageDependencies
 
-      - name: Build Archive (Release)
+      - name: Build Archive
         run: |
           mkdir -p build_logs
 
-          echo "🚀 Starting Xcode archive (Release)..."
+          echo "🚀 Starting Xcode archive..."
 
           xcodebuild \
             -project Xsign.xcodeproj \
@@ -50,10 +50,52 @@ jobs:
           else
             echo "❌ Archive failed"
             echo ""
-            echo "=== Last 150 lines of build log ==="
-            tail -150 build_logs/build.log
+            echo "=== Last 200 lines ==="
+            tail -200 build_logs/build.log
             exit 1
           fi
+
+      - name: Export Archive to IPA
+        run: |
+          echo "📦 Exporting archive to IPA..."
+
+          # Create export options plist for ad-hoc / development export
+          cat > exportOptions.plist << EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>method</key>
+    <string>ad-hoc</string>
+    <key>provisioningProfiles</key>
+    <dict/>
+    <key>signingStyle</key>
+    <string>automatic</string>
+    <key>destination</key>
+    <string>export</string>
+    <key>teamID</key>
+    <string></string>
+</dict>
+</plist>
+EOF
+
+          xcodebuild \
+            -exportArchive \
+            -archivePath ./Xsign.xcarchive \
+            -exportPath ./exported \
+            -exportOptionsPlist exportOptions.plist \
+            | tee -a build_logs/build.log
+
+          echo "✅ Export completed. Available files:"
+          ls -la exported/
+
+      - name: Upload IPA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Xsign-IPA
+          path: exported/Xsign.ipa
+          retention-days: 7
 
       - name: Upload Build Logs
         if: always()
