@@ -19,6 +19,34 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Patch zsign for iOS compatibility
+        run: |
+          echo "Patching zsign source for iOS compatibility..."
+          python3 << 'EOF'
+          import re
+          
+          filepath = "Xsign/External/zsign/src/common/util.cpp"
+          with open(filepath, 'r') as f:
+              content = f.read()
+          
+          # Wrap system() call with iOS availability check
+          # Find the SystemExecV function and wrap the system() call
+          pattern = r'(int status = system\(szRealCmd\);)'
+          replacement = '''#if !TARGET_IPHONE_SIMULATOR && !TARGET_OS_IPHONE
+          \1
+          #else
+          int status = 0; // system() not available on iOS
+          #endif'''
+          
+          content = re.sub(pattern, replacement, content)
+          
+          with open(filepath, 'w') as f:
+              f.write(content)
+          
+          print("Patch applied successfully")
+          EOF
+          echo "Patch completed"
+
       - name: Resolve Swift Packages
         run: |
           echo "🔄 Resolving Swift Package dependencies..."
