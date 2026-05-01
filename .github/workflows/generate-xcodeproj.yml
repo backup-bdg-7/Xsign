@@ -34,6 +34,10 @@ jobs:
           brew install xcodegen
           xcodegen --version
 
+      - name: Clean Previous Xcode Project (Important!)
+        run: |
+          rm -rf Xsign.xcodeproj
+
       - name: Analyze Project Structure
         run: |
           echo "## Project Analysis" >> $GITHUB_STEP_SUMMARY
@@ -48,15 +52,18 @@ jobs:
         run: |
           echo "## Generating Xcode Project" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          xcodegen generate --spec project.yml --project Xsign.xcodeproj
-          echo "✅ Project generated!" >> $GITHUB_STEP_SUMMARY
-          ls -la Xsign.xcodeproj >> $GITHUB_STEP_SUMMARY
+          
+          # Generate the project (this creates Xsign.xcodeproj)
+          xcodegen generate --spec project.yml
+          
+          echo "✅ Project generated successfully!" >> $GITHUB_STEP_SUMMARY
+          ls -la Xsign.xcodeproj/ >> $GITHUB_STEP_SUMMARY
+
           # Verify structure
           if [ -d "Xsign.xcodeproj" ]; then
-            echo "Xsign.xcodeproj directory exists" >> $GITHUB_STEP_SUMMARY
-            ls -la Xsign.xcodeproj/ >> $GITHUB_STEP_SUMMARY
+            echo "✅ Xsign.xcodeproj directory exists" >> $GITHUB_STEP_SUMMARY
           else
-            echo "ERROR: Xsign.xcodeproj not created!" >> $GITHUB_STEP_SUMMARY
+            echo "❌ ERROR: Xsign.xcodeproj was not created!" >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
 
