@@ -1,0 +1,30 @@
+# XcodeGen project configuration for Xsign
+name: Xsign
+options:
+  bundleIdPrefix: com.xsign
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+
+targets:
+  Xsign:
+    type: application
+    platform: iOS
+    sources:
+      - path: Xsign
+        includes:
+          - "**/*.swift"
+          - "**/*.h"
+          - "**/*.m"
+          - "**/*.mm"
+        excludes:
+          - "**/Bridge/**"
+          - "Resources/**"
+    resources:
+      - path: Xsign/Resources
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.xsign.Xsign
+      INFOPLIST_FILE: Xsign/Resources/Info.plist
+      SWIFT_VERSION: "5.9"
+      IPHONEOS_DEPLOYMENT_TARGET: "17.0"
+      SWIFT_OBJC_BRIDGING_HEADER: "$(SRCROOT)/Xsign/App/Bridge/Xsign-Bridging-Header.h"
