@@ -19,6 +19,20 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Setup OpenSSL for iOS
+        run: |
+          echo "Setting up OpenSSL for iOS..."
+          # Download OpenSSL 1.1.1 source
+          cd /tmp
+          curl -sL https://github.com/openssl/openssl/releases/download/OpenSSL_1_1_1/openssl-1.1.1.tar.gz | tar xz
+          # Copy all headers to project (including .in files)
+          mkdir -p $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl
+          cp -R openssl-1.1.1/include/openssl/* $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl/
+          # Rename .in files to remove .in extension (they're template files)
+          # For now, just copy them as-is
+          echo "OpenSSL headers installed"
+          ls -la $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl/ | head -20
+
       - name: Regenerate Xcode Project
         run: |
           echo "Regenerating Xcode project with XcodeGen..."
