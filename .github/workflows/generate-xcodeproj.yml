@@ -7,7 +7,7 @@ on:
     branches: [ main ]
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * 1'  # Every Monday at midnight UTC
+    - cron: '0 0 * * 1'   # Runs every Monday at midnight UTC
 
 jobs:
   analyze-and-generate:
@@ -37,22 +37,26 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           
           echo "### Swift Files" >> $GITHUB_STEP_SUMMARY
-          echo "Count: $(find Xsign -name "*.swift" | wc -l | xargs)" >> $GITHUB_STEP_SUMMARY
+          echo "Count: $(find Xsign -name "*.swift" | wc -l | tr -d ' ')" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           
-          echo "### File List" >> $GITHUB_STEP_SUMMARY
+          echo "### Relevant File List" >> $GITHUB_STEP_SUMMARY
           find Xsign -type f \( -name "*.swift" -o -name "*.h" -o -name "*.m" -o -name "*.mm" \) | sort >> $GITHUB_STEP_SUMMARY
 
       - name: Generate Xcode Project
         run: |
           echo "## Generating Xcode Project" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
-          xcodegen generate --spec project.yml --project Xsign.xcodeproj
-          
+
+          # Clean any existing project to prevent conflicts
+          rm -rf Xsign.xcodeproj
+
+          # Generate the project (recommended way)
+          xcodegen generate --spec project.yml
+
           echo "✅ Xcode project successfully generated!" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           if [ -d "Xsign.xcodeproj" ]; then
             echo "Project directory created successfully:" >> $GITHUB_STEP_SUMMARY
             ls -la Xsign.xcodeproj/ >> $GITHUB_STEP_SUMMARY
@@ -69,10 +73,10 @@ jobs:
           retention-days: 90
           if-no-files-found: error
 
-      - name: Summary
+      - name: Final Summary
         if: always()
         run: |
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Downloads" >> $GITHUB_STEP_SUMMARY
+          echo "### ✅ Downloads" >> $GITHUB_STEP_SUMMARY
           echo "- **Artifact**: \`Xsign-xcodeproj-${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- **Run URL**: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Workflow Run**: [View Logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
