@@ -28,12 +28,11 @@ jobs:
           # Copy all headers to project
           mkdir -p $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl
           cp -R /tmp/openssl-3.2.1/include/openssl/* $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl/
-          # Create configuration.h (needed by opensslconf.h)
-          echo "Creating configuration.h..."
-          echo "#ifndef OPENSSL_CONFIGURATION_H" > $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl/configuration.h
-          echo "#define OPENSSL_CONFIGURATION_H" >> $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl/configuration.h
-          echo "/* Dummy configuration.h for iOS build */" >> $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl/configuration.h
-          echo "#endif /* OPENSSL_CONFIGURATION_H */" >> $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl/configuration.h
+          # Verify opensslv.h exists
+          if [ ! -f $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl/opensslv.h ]; then
+            echo "ERROR: opensslv.h not found!"
+            exit 1
+          fi
           echo "OpenSSL headers installed"
 
       - name: Regenerate Xcode Project
