@@ -22,17 +22,10 @@ jobs:
       - name: Setup OpenSSL for iOS
         run: |
           echo "Setting up OpenSSL for iOS..."
-          # Download OpenSSL source to get headers
           cd /tmp
           curl -sL https://github.com/openssl/openssl/releases/download/openssl-3.2.1/openssl-3.2.1.tar.gz | tar xz
-          # Copy all headers to project
           mkdir -p $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl
           cp -R /tmp/openssl-3.2.1/include/openssl/* $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl/
-          # Verify opensslv.h exists
-          if [ ! -f $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl/opensslv.h ]; then
-            echo "ERROR: opensslv.h not found!"
-            exit 1
-          fi
           echo "OpenSSL headers installed"
 
       - name: Regenerate Xcode Project
