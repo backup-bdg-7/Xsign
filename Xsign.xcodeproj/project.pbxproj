@@ -73,7 +73,6 @@
 		E0CBD5C8D1F4F342CB4EAF01 /* AppLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7C00F7818A12B94D439691 /* AppLog.swift */; };
 		E273DFB969FD298429D70005 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E312B1F48D6995A2E70D140 /* Theme.swift */; };
 		E3312836E613907A2620E40C /* BinaryParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67CBC595E06126783D981AAB /* BinaryParser.swift */; };
-		E80F9E55B2F0517594621ADE /* util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3377172E98B493232832063 /* util.cpp */; };
 		E898D9EC8665DFC2EF52BC54 /* ImportCertificateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F60E1BAE39877BABEBB3D63 /* ImportCertificateView.swift */; };
 		EA3C52E08A02C9503CC9351D /* macho.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0E0D773D6D9FAC3451C6D658 /* macho.cpp */; };
 		EA74DE8EA687F1DB7072BA91 /* StatusBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF70CA9C264020E52D4F770 /* StatusBadge.swift */; };
@@ -169,7 +168,6 @@
 		BC6C82DEED8D09347E13357D /* certcheck.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = certcheck.cpp; sourceTree = "<group>"; };
 		BE7C00F7818A12B94D439691 /* AppLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLog.swift; sourceTree = "<group>"; };
 		BFBD808525CFCDC50B82B485 /* archo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = archo.h; sourceTree = "<group>"; };
-		C3377172E98B493232832063 /* util.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = util.cpp; sourceTree = "<group>"; };
 		C6582E6831F4D79E0A798891 /* EntitlementManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntitlementManager.swift; sourceTree = "<group>"; };
 		CA00C3AF8E61D7FDC519105E /* SecurityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityService.swift; sourceTree = "<group>"; };
 		CC3CC46BC6F5C5ED7DF6CB48 /* signing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = signing.h; sourceTree = "<group>"; };
@@ -322,7 +320,6 @@
 				93A97B22237EADA673A84145 /* sha.h */,
 				845F8805C6812C389A660081 /* timer.cpp */,
 				6B8D61EDD9E261CE00B2227B /* timer.h */,
-				C3377172E98B493232832063 /* util.cpp */,
 				FAFA9CC1DFD0E525A49CEEE2 /* util.h */,
 			);
 			path = common;
@@ -565,7 +562,6 @@
 				91F1ED3EE5E5C9500F358412 /* sha.cpp in Sources */,
 				190AAB090E2ACE1675EDA8BA /* signing.cpp in Sources */,
 				08A74DF32E9886A003CC579C /* timer.cpp in Sources */,
-				E80F9E55B2F0517594621ADE /* util.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
