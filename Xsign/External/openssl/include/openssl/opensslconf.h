@@ -38,6 +38,13 @@ extern "C" {
 /* Define if we want to use _DEFAULT_SOURCE */
 /* #undef OPENSSL_USE_DEFAULT_SOURCE */
 
+/* BN_ULONG type */
+#ifdef __LP64__
+#define BN_ULONG unsigned long long
+#else
+#define BN_ULONG unsigned int
+#endif
+
 #ifdef __cplusplus
 }
 #endif
