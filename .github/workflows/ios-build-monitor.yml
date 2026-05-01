@@ -22,15 +22,16 @@ jobs:
       - name: Setup OpenSSL for iOS
         run: |
           echo "Setting up OpenSSL for iOS..."
-          # Download OpenSSL 1.1.1 source (has headers directly without .in templates)
+          # Clone OpenSSL for iOS
           cd /tmp
-          curl -sL https://github.com/openssl/openssl/releases/download/OpenSSL_1_1_1/openssl-1.1.1.tar.gz | tar xz
-          # Copy all headers to project
+          git clone --depth 1 https://github.com/x2on/OpenSSL-for-iPhone.git
+          cd OpenSSL-for-iPhone
+          # Build for iOS
+          ./build-libssl.sh
+          # Copy headers and libraries to project
           mkdir -p $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl
-          cp -R /tmp/openssl-1.1.1/include/openssl/* $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl/
-          # Verify opensslv.h exists
-          ls -la $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl/opensslv.h
-          echo "OpenSSL headers installed"
+          cp include/openssl/* $GITHUB_WORKSPACE/Xsign/External/openssl/include/openssl/
+          echo "OpenSSL for iOS installed"
 
       - name: Regenerate Xcode Project
         run: |
