@@ -51,7 +51,7 @@ jobs:
           # Clean any previous project to avoid conflicts
           rm -rf Xsign.xcodeproj
 
-          # Generate the Xcode project
+          # Generate Xcode project with schemes
           xcodegen generate --spec project.yml
 
           echo "✅ Xcode project successfully generated!" >> $GITHUB_STEP_SUMMARY
@@ -60,6 +60,11 @@ jobs:
           if [ -d "Xsign.xcodeproj" ]; then
             echo "Project directory created successfully:" >> $GITHUB_STEP_SUMMARY
             ls -la Xsign.xcodeproj/ >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            
+            # Show available schemes (very important)
+            echo "Available Schemes:" >> $GITHUB_STEP_SUMMARY
+            xcodebuild -list -project Xsign.xcodeproj | grep -A 100 "Schemes:" >> $GITHUB_STEP_SUMMARY || echo "No schemes found or xcodebuild failed" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ ERROR: Xsign.xcodeproj was not created!" >> $GITHUB_STEP_SUMMARY
             exit 1
