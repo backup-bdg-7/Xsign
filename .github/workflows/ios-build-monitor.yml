@@ -36,24 +36,36 @@ jobs:
         run: |
           mkdir -p build_logs
           echo "🚀 Starting Xcode archive build..."
-          xcodebuild \
-            -project Xsign.xcodeproj \
-            -scheme Xsign \
-            -configuration Release \
-            -sdk iphoneos \
-            -destination 'generic/platform=iOS' \
-            clean archive \
-            -archivePath ./Xsign.xcarchive \
-            -allowProvisioningUpdates \
-            CODE_SIGNING_ALLOWED=NO \
-            | tee build_logs/build.log
-          if ! grep -q "ARCHIVE SUCCEEDED" build_logs/build.log; then
-            echo "❌ Archive failed"
-            echo "=== Last 200 lines of log ==="
-            tail -200 build_logs/build.log
-            exit 1
-          fi
-          echo "✅ Archive built successfully"
+          for i in 1 2 3; do
+            echo "Attempt $i of 3..."
+            rm -rf ~/Library/Developer/Xcode/DerivedData
+            xcodebuild \
+              -project Xsign.xcodeproj \
+              -scheme Xsign \
+              -configuration Release \
+              -sdk iphoneos \
+              -destination 'generic/platform=iOS' \
+              clean archive \
+              -archivePath ./Xsign.xcarchive \
+              -allowProvisioningUpdates \
+              CODE_SIGNING_ALLOWED=NO \
+              | tee build_logs/build.log
+            if grep -q "ARCHIVE SUCCEEDED" build_logs/build.log; then
+              echo "✅ Archive built successfully"
+              exit 0
+            else
+              echo "❌ Archive failed"
+              if [ $i -lt 3 ]; then
+                echo "Retrying in 30 seconds..."
+                sleep 30
+                xcodebuild -project Xsign.xcodeproj -scheme Xsign -resolvePackageDependencies
+              fi
+            fi
+          done
+          echo "❌ Archive failed after 3 attempts"
+          echo "=== Last 200 lines of log ==="
+          tail -200 build_logs/build.log
+          exit 1
 
       - name: Create IPA Manually
         run: |
