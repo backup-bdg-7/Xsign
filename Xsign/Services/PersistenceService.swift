@@ -18,7 +18,7 @@ class PersistenceService {
     }
     
     func fetchSignedApps() -> [AppFile] {
-        let descriptor = FetchDescriptor<AppFile>(sortBy: [SortDescriptor(\.dateModified, order: .reverse)])
+        let descriptor = FetchDescriptor<AppFile>(sortBy: [SortDescriptor(\.creationDate, order: .reverse)])
         return (try? context.fetch(descriptor)) ?? []
     }
     
