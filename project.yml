@@ -38,8 +38,7 @@ packages:
     from: 4.92.0
 
   Zsign:
-    url: https://github.com/khcrysalis/Zsign-Package
-    from: "6ffe703"
+    path: Xsign/External/zsign
 
 # ====================== TARGETS ======================
 targets:
