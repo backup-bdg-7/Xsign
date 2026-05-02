@@ -44,10 +44,17 @@ targets:
     platform: iOS
     sources:
       - path: Xsign/External/zsign/src
+        includes:
+          - "**/*.h"
+          - "**/*.m"
+          - "**/*.mm"
         excludes:
-          - "**/*.cpp"  # Exclude all C++ files for now
-          - "**/*.h"    # Exclude all headers for now
           - "third-party/**"
+      - path: Xsign/App/Bridge
+        includes:
+          - "**/*.h"
+          - "**/*.m"
+          - "**/*.mm"
     settings:
       base:
         HEADER_SEARCH_PATHS: ["$(SRCROOT)/Xsign/External/zsign/src", "$(SRCROOT)/Xsign/External/openssl/include"]
@@ -92,7 +99,7 @@ targets:
         CODE_SIGNING_ALLOWED: NO
 
     dependencies:
-      #- target: XsignBridge
+      - target: XsignBridge
       
       # Swift Packages
       - package: BitByteData
