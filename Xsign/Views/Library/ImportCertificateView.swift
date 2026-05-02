@@ -12,54 +12,66 @@ struct ImportCertificateView: View {
     @State private var showingProfilePicker = false
 
     var body: some View {
-        Form {
-            Section("Certificate Details") {
-                TextField("Name", text: $name)
-                SecureField("P12 Password", text: $password)
-            }
-
-            Section("Files") {
-                HStack {
-                    Text(".p12 File")
-                    Spacer()
-                    if p12Data != nil { 
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundColor(.green) 
-                    }
-                    Button("Select") { showingP12Picker = true }
+        NavigationStack {
+            Form {
+                Section("Certificate Details") {
+                    TextField("Name", text: $name)
+                    SecureField("P12 Password", text: $password)
                 }
 
-                HStack {
-                    Text(".mobileprovision")
-                    Spacer()
-                    if profileData != nil { 
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundColor(.green) 
+                Section("Files") {
+                    HStack {
+                        Text(".p12 File")
+                        Spacer()
+                        if p12Data != nil { 
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundColor(.green) 
+                        }
+                        Button("Select") { showingP12Picker = true }
                     }
-                    Button("Select") { showingProfilePicker = true }
+
+                    HStack {
+                        Text(".mobileprovision")
+                        Spacer()
+                        if profileData != nil { 
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundColor(.green) 
+                        }
+                        Button("Select") { showingProfilePicker = true }
+                    }
                 }
             }
-        }
-        .navigationTitle("Import Certificate")
-        .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                Button("Save") { saveCertificate() }
-                    .disabled(name.isEmpty || p12Data == nil)
-            }
-            ToolbarItem(placement: .cancellationAction) {
-                Button("Cancel") { dismiss() }
+            .navigationTitle("Import Certificate")
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") { saveCertificate() }
+                        .disabled(name.isEmpty || p12Data == nil)
+                }
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { dismiss() }
+                }
             }
         }
         .fileImporter(isPresented: $showingP12Picker, allowedContentTypes: [.item]) { result in
-            if let url = try? result.get().first { p12Data = try? Data(contentsOf: url) }
+            handleP12Import(result)
         }
         .fileImporter(isPresented: $showingProfilePicker, allowedContentTypes: [.item]) { result in
-            if let url = try? result.get().first {
-                profileData = try? Data(contentsOf: url)
-                if let data = profileData, 
-                   let profile = ProvisioningParser.shared.parse(data: data) {
-                    if name.isEmpty { name = profile.name }
-                }
+            handleProfileImport(result)
+        }
+    }
+    
+    private func handleP12Import(_ result: Result<[URL], Error>) {
+        if let url = try? result.get().first {
+            p12Data = try? Data(contentsOf: url)
+        }
+    }
+    
+    private func handleProfileImport(_ result: Result<[URL], Error>) {
+        if let url = try? result.get().first {
+            profileData = try? Data(contentsOf: url)
+            if let data = profileData, 
+               let profile = ProvisioningParser.shared.parse(data: data) {
+                if name.isEmpty { name = profile.name }
             }
         }
     }
