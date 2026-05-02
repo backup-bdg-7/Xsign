@@ -46,9 +46,8 @@ targets:
       - path: Xsign/External/zsign/src
         includes:
           - "**/*.h"
-          - "**/*.m"
-          - "**/*.mm"
         excludes:
+          - "**/*.cpp"
           - "third-party/**"
       - path: Xsign/App/Bridge
         includes:
@@ -70,16 +69,13 @@ targets:
       - path: Xsign
         includes:
           - "**/*.swift"
-          - "**/*.h"
-          - "**/*.m"
-          - "**/*.mm"
         excludes:
-          - "**/Bridge/**"
           - "**/Resources/**"
+          - "**/External/**"
           - "Xsign.xcodeproj/**"
           - ".build/**"
           - "DerivedData/**"
-          - "**/External/**"
+          - "**/Bridge/**"
 
     resources:
       - path: Xsign/Resources
@@ -107,7 +103,7 @@ targets:
       - package: ZIPFoundation
         product: ZIPFoundation
       - package: lottie-ios
-        product: Lottie           # ← This was the bug (was lottie-ios)
+        product: Lottie
       - package: swift-crypto
         product: Crypto
       - package: Zip
