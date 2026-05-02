@@ -46,6 +46,7 @@ targets:
       - path: Xsign/External/zsign/src
         includes:
           - "**/*.h"
+          - "common/**/*.h"
         excludes:
           - "**/*.cpp"
           - "third-party/**"
@@ -56,7 +57,7 @@ targets:
           - "**/*.mm"
     settings:
       base:
-        HEADER_SEARCH_PATHS: ["$(SRCROOT)/Xsign/External/zsign/src", "$(SRCROOT)/Xsign/External/openssl/include"]
+        HEADER_SEARCH_PATHS: ["$(SRCROOT)/Xsign/External/zsign/src", "$(SRCROOT)/Xsign/External/zsign/src/common", "$(SRCROOT)/Xsign/External/openssl/include"]
         CLANG_CXX_LANGUAGE_STANDARD: "c++17"
         GCC_C_LANGUAGE_STANDARD: "c11"
 
