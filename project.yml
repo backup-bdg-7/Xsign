@@ -39,7 +39,7 @@ packages:
 
   Zsign:
     url: https://github.com/khcrysalis/Zsign-Package
-    from: "1.0.0"
+    from: "6ffe703"
 
 # ====================== TARGETS ======================
 targets:
