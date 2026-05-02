@@ -37,6 +37,10 @@ packages:
     url: https://github.com/vapor/vapor
     from: 4.92.0
 
+  Zsign:
+    url: https://github.com/khcrysalis/Zsign-Package
+    from: "1.0.0"
+
 # ====================== TARGETS ======================
 targets:
   Xsign:
@@ -69,7 +73,6 @@ targets:
         INFOPLIST_FILE: Xsign/Resources/Info.plist
         SWIFT_VERSION: "5.9"
         IPHONEOS_DEPLOYMENT_TARGET: "17.0"
-        SWIFT_OBJC_BRIDGING_HEADER: Xsign/App/Bridge/Xsign-Bridging-Header.h
         ENABLE_BITCODE: NO
         ONLY_ACTIVE_ARCH: YES
         CODE_SIGN_STYLE: Automatic
@@ -89,6 +92,8 @@ targets:
         product: Zip
       - package: vapor
         product: Vapor
+      - package: Zsign
+        product: Zsign
 
 # ====================== SCHEMES ======================
 schemes:

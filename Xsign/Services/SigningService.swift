@@ -1,4 +1,5 @@
 import Foundation
+import Zsign
 
 class SigningService {
     static let shared = SigningService()
@@ -40,29 +41,38 @@ class SigningService {
         let unzipDir = workspace.appendingPathComponent("AppPayload")
         try ZipService.shared.unzip(at: appFile.filePath, to: unzipDir)
 
+        // Find the .app folder
+        let appPath = unzipDir.appendingPathComponent("Payload").appendingPathComponent("\(appFile.fileName).app")
+
         let outputPath = workspace.appendingPathComponent("signed_\(appFile.fileName)")
 
-        // 4. Execution
-        let success = ZSignWrapper.signIPA(
-            unzipDir.path,
-            p12: p12Path.path,
-            password: password,
-            provision: provisionPath.path,
-            bundleID: options.bundleID,
-            bundleName: options.bundleName,
-            bundleVersion: options.bundleVersion,
-            dylibs: options.dylibPaths ?? [],
-            entitlements: entitlementsPath,
-            output: outputPath.path
-        )
+        // 4. Sign using Zsign Swift package
+        let signSuccess = Zsign.sign(
+            appPath: appPath.path,
+            provisionPath: provisionPath.path,
+            p12Path: p12Path.path,
+            p12Password: password,
+            entitlementsPath: entitlementsPath ?? "",
+            customIdentifier: options.bundleID ?? "",
+            customName: options.bundleName ?? "",
+            customVersion: options.bundleVersion ?? "",
+            adhoc: false,
+            removeProvision: false
+        ) { success in
+            print("[ZSign] Signing completion: \(success)")
+        }
 
-        guard success else { throw NSError(domain: "Signing", code: 1) }
+        guard signSuccess else { throw NSError(domain: "Signing", code: 1) }
+
+        // 5. Repackage signed folder into IPA
+        let ipaOutputPath = outputPath.appendingPathExtension("ipa")
+        // TODO: Implement IPA creation from signed .app folder
 
         appFile.isSigned = true
         appFile.signatureStatus = .signed
         appFile.lastSignedDate = Date()
         await PersistenceService.shared.save()
 
-        return outputPath
+        return ipaOutputPath as URL
     }
 }
