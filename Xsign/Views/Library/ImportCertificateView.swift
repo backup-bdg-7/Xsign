@@ -51,23 +51,23 @@ struct ImportCertificateView: View {
                     Button("Cancel") { dismiss() }
                 }
             }
-        }
-        .fileImporter(isPresented: $showingP12Picker, allowedContentTypes: [.item]) { result in
-            handleP12Import(result)
-        }
-        .fileImporter(isPresented: $showingProfilePicker, allowedContentTypes: [.item]) { result in
-            handleProfileImport(result)
+            .fileImporter(isPresented: $showingP12Picker, allowedContentTypes: [.item]) { result in
+                handleP12Import(result)
+            }
+            .fileImporter(isPresented: $showingProfilePicker, allowedContentTypes: [.item]) { result in
+                handleProfileImport(result)
+            }
         }
     }
     
-    private func handleP12Import(_ result: Result<[URL], Error>) {
-        if let url = try? result.get().first {
+    private func handleP12Import(_ result: Result<URL, Error>) {
+        if let url = try? result.get() {
             p12Data = try? Data(contentsOf: url)
         }
     }
     
-    private func handleProfileImport(_ result: Result<[URL], Error>) {
-        if let url = try? result.get().first {
+    private func handleProfileImport(_ result: Result<URL, Error>) {
+        if let url = try? result.get() {
             profileData = try? Data(contentsOf: url)
             if let data = profileData, 
                let profile = ProvisioningParser.shared.parse(data: data) {
@@ -78,7 +78,7 @@ struct ImportCertificateView: View {
 
     private func saveCertificate() {
         guard let p12 = p12Data else { return }
-
+        
         let newCert = Certificate(
             name: name,
             p12Data: p12,
@@ -90,8 +90,9 @@ struct ImportCertificateView: View {
             fingerprint: UUID().uuidString,
             canSign: true
         )
-
-        PersistenceService.shared.saveCertificate(newCert)
+        
+        PersistenceService.shared.context.insert(newCert)
+        PersistenceService.shared.save()
         dismiss()
     }
 }

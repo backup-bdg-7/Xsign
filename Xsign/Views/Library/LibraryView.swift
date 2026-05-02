@@ -5,6 +5,7 @@ struct LibraryView: View {
     @Query(sort: \AppFile.creationDate, order: .reverse) private var appFiles: [AppFile]
     @Query private var categories: [Category]
     @State private var showingImportPicker = false
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -18,10 +19,20 @@ struct LibraryView: View {
                 }
             }
             .navigationTitle("Library")
-            .toolbar { Button(action: { showingImportPicker = true }) { Image(systemName: "plus") } }
-            .fileImporter(isPresented: $showingImportPicker, allowedContentTypes: [.item]) { result in
-                if let url = try? result.get().first { Task { try? await FileService.shared.importFile(at: url) } }
+            .toolbar { 
+                Button(action: { showingImportPicker = true }) { 
+                    Image(systemName: "plus") 
+                } 
             }
+            .fileImporter(isPresented: $showingImportPicker, allowedContentTypes: [.item]) { result in
+                handleFileImport(result)
+            }
+        }
+    }
+    
+    private func handleFileImport(_ result: Result<URL, Error>) {
+        if let url = try? result.get() {
+            Task { try? await FileService.shared.importFile(at: url) }
         }
     }
 }
