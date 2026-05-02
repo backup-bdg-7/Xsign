@@ -10,31 +10,20 @@
 		011B356C2930A5208F967AD6 /* CategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B0A57CB9D6CC363F7F5314 /* CategoriesView.swift */; };
 		077810ABE2724D01920D2411 /* XsignApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047CF1F92C7FD3C0D4AAE46C /* XsignApp.swift */; };
 		0F238DDAB713E760D785A47A /* AppModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331A304AB08F24B674187BB0 /* AppModifier.swift */; };
-		111F0D16CF9B1FCE2C63ECB1 /* certcheck.h in Headers */ = {isa = PBXBuildFile; fileRef = DD8B1040A98829A66B745F47 /* certcheck.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		18CFD67206687FA753ED2276 /* XsignBridge.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AC846D3DF06E4F35AF7AE04B /* XsignBridge.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		1BF82D68C857EB3013839A93 /* ZSignWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4A29AEB50F95CA8A0593BAC5 /* ZSignWrapper.mm */; };
+		142CE51A96F2BB83467EA6EA /* ZSignWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4A29AEB50F95CA8A0593BAC5 /* ZSignWrapper.mm */; };
 		1C21705ED9B47C5085DB7D13 /* CertificateManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486717146114366405A39CD7 /* CertificateManagementView.swift */; };
 		2136D7B36703691BDB6A35CA /* Crypto in Frameworks */ = {isa = PBXBuildFile; productRef = 79062023EA53BD41F69D9181 /* Crypto */; };
 		24D3EF467E7A707CD08998E4 /* Certificate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97F8CBE86E8D19D7E666164F /* Certificate.swift */; };
 		25F639445CA922B940011E3A /* SecurityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA00C3AF8E61D7FDC519105E /* SecurityService.swift */; };
-		2A3D9DC23FE264E701240FD1 /* json.h in Headers */ = {isa = PBXBuildFile; fileRef = 5748824E5D1A7769990B46EE /* json.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		374DE514DA7E31DF3BE873B5 /* ProvisioningParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011D3D14A6F465826C5F3E02 /* ProvisioningParser.swift */; };
 		37BCD2CFB0EA54ED01F04FF3 /* DylibsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B816A4284CA76E6B6CF35BF7 /* DylibsView.swift */; };
 		3B1D0B453E59E047F81B358C /* EntitlementManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6582E6831F4D79E0A798891 /* EntitlementManager.swift */; };
 		46E4B27D829D98D424F7614A /* SigningService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A55AE27A20E6C607CB1A29 /* SigningService.swift */; };
 		4A3405A53F28E5C2C096D9D3 /* BitByteData in Frameworks */ = {isa = PBXBuildFile; productRef = BB58180DC547BEBD161EB448 /* BitByteData */; };
 		4DE01B583BFECC4AD3473717 /* Vapor in Frameworks */ = {isa = PBXBuildFile; productRef = 4A77FF2C9E3D895ED101AD35 /* Vapor */; };
-		504B02BA4A0D85C0DC539189 /* fs.h in Headers */ = {isa = PBXBuildFile; fileRef = 240A3418B5E095AF8829A491 /* fs.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		54341D6637D68B33C43D4C89 /* macho.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB2125C2A5B946B1DC5B47C /* macho.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		55B5CAC09EF8186C7EB60B06 /* common.h in Headers */ = {isa = PBXBuildFile; fileRef = 0F36AE763858D794B5455433 /* common.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		55D5C04D5E45584848B41D03 /* LottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D589735A9AB3AB8DE9984C80 /* LottieView.swift */; };
-		6D5F95223316211646E364C5 /* XsignBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC846D3DF06E4F35AF7AE04B /* XsignBridge.framework */; };
 		730C1E2FC92347AF5658225F /* ZipService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5917AB144DA85B703FBB4423 /* ZipService.swift */; };
-		743C9F296CAE7E1D18F11B91 /* archo.h in Headers */ = {isa = PBXBuildFile; fileRef = BFBD808525CFCDC50B82B485 /* archo.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		74F62D17CA0D385D406E1916 /* log.h in Headers */ = {isa = PBXBuildFile; fileRef = FE071F99A443D3A540BB27B9 /* log.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7A12827AED88FFB9938DD73C /* bundle.h in Headers */ = {isa = PBXBuildFile; fileRef = 7000C3526496BD20BB4D82EB /* bundle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7B0D6943DB731749E9A220C0 /* BackdoorTLS.swift in Sources */ = {isa = PBXBuildFile; fileRef = B60C3EDD7AD3FD3EE23D54AA /* BackdoorTLS.swift */; };
-		7BDF49DE2BA1E70816C480C1 /* util.h in Headers */ = {isa = PBXBuildFile; fileRef = FAFA9CC1DFD0E525A49CEEE2 /* util.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E8FC218CB7C4CBBFAB661FF /* DebsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9051D74D2DCEFC4FE1884A /* DebsView.swift */; };
 		7EE40819B5D471D9FCF0C157 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97F6C47994DE4070977F2224 /* MainTabView.swift */; };
 		7FDF123EABD02B6A9FDBB071 /* AppDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E8BE7B3B05679046427CC9 /* AppDetailView.swift */; };
@@ -42,22 +31,14 @@
 		906E4865414B343951A363A0 /* CommonUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DD7AFFF63EFF6E0CFE4CA5 /* CommonUI.swift */; };
 		9104E4E81314B75D9C5AF106 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 273144B1DF5EAB1E27E7E240 /* ZIPFoundation */; };
 		9152EFCEED55E99D8ADA78DA /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80816F4D552F2692EAC764B1 /* LibraryView.swift */; };
-		92DC70F1EB24B63DF9C09250 /* ZSignWrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 20670E375FB7A547B4E0A14E /* ZSignWrapper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9318439ED2F3FF7767D5C924 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D815C2DAE8DC805E63635E /* Category.swift */; };
-		99CAF93603686B22D2EB04B2 /* signing.h in Headers */ = {isa = PBXBuildFile; fileRef = CC3CC46BC6F5C5ED7DF6CB48 /* signing.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		9CC7DBF30A6A2932C347F4C4 /* archive.h in Headers */ = {isa = PBXBuildFile; fileRef = 1430B7A8C3DC0CEB8DCBCD6D /* archive.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A098C368A2C5FF062D7F6324 /* GeneralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B59A4DA29C6920C4504DDF /* GeneralView.swift */; };
 		A2D77AAE0A5EB9FB29E4A9C0 /* SignModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6965F14F1F159D77AF31F0F0 /* SignModalView.swift */; };
 		AE16DBF0E1623116127A3CDD /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = F545D861AB51586D2854E00B /* Lottie */; };
-		B0429DFE41D82478955919E7 /* base64.h in Headers */ = {isa = PBXBuildFile; fileRef = 38F50AA4234D378595BA82B6 /* base64.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B24F2D2A26576E3F49F1AB3F /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = 19DE7AF3FEB5B1343EF93580 /* Zip */; };
-		B2E44E02BF55AF1D5B50C9B1 /* sha.h in Headers */ = {isa = PBXBuildFile; fileRef = 93A97B22237EADA673A84145 /* sha.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BE9594B1761BB66CDD005362 /* AppFileCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29AE627B0D17B85C685FB903 /* AppFileCard.swift */; };
-		C32F10BD55F3F9F800AB80FF /* mach-o.h in Headers */ = {isa = PBXBuildFile; fileRef = A4D3098952FD0B0D6828BF6A /* mach-o.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D97577F26BE87A11BDA97684 /* LocalServerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA629EC58711CA60E47FE40 /* LocalServerService.swift */; };
-		DC663C107AA44D3348A1F682 /* openssl.h in Headers */ = {isa = PBXBuildFile; fileRef = 10DE84059AA2A4B1D8F035B1 /* openssl.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DC68EA776318F6E0F31FB203 /* BinaryInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CF3263DC77749C8BC6A95F /* BinaryInfo.swift */; };
-		DD08D8D2FBDA8225F6711D13 /* metadata.h in Headers */ = {isa = PBXBuildFile; fileRef = D96F0B1A1F2EE4636032EA46 /* metadata.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E0CBD5C8D1F4F342CB4EAF01 /* AppLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7C00F7818A12B94D439691 /* AppLog.swift */; };
 		E273DFB969FD298429D70005 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E312B1F48D6995A2E70D140 /* Theme.swift */; };
 		E3312836E613907A2620E40C /* BinaryParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67CBC595E06126783D981AAB /* BinaryParser.swift */; };
@@ -65,94 +46,50 @@
 		EA74DE8EA687F1DB7072BA91 /* StatusBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF70CA9C264020E52D4F770 /* StatusBadge.swift */; };
 		EB1FF551425D73216F091B7C /* TweakManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A772C721A5FE10E49D81DDF /* TweakManager.swift */; };
 		F48F3451823767322A22980A /* PersistenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89709A707B112BBD856AB5CA /* PersistenceService.swift */; };
-		F64B1D540E101F4DBC80EE21 /* Xsign-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = B6D33887A2E5CE7D00912185 /* Xsign-Bridging-Header.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F8920E5C84B29CAEB36C6F61 /* timer.h in Headers */ = {isa = PBXBuildFile; fileRef = 6B8D61EDD9E261CE00B2227B /* timer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F89D222923E601DA5DB7ACF4 /* FileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E7AE47639383126AAE5A623 /* FileService.swift */; };
 		F99C5243079D2DA5E3423781 /* Entitlement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487B89EDC40E05392287B921 /* Entitlement.swift */; };
 		FAA91139D9A8BE522259B8DD /* SWCompression in Frameworks */ = {isa = PBXBuildFile; productRef = 8D69F21E55FC668A00B9FF58 /* SWCompression */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		DC5C5EA56F5DC777F7960DCA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 82FB5A936539C9DBAF146823 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E9B1F0B45E582ADA6DD84060;
-			remoteInfo = XsignBridge;
-		};
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		1BBCD84F6FE8128F65847BE9 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				18CFD67206687FA753ED2276 /* XsignBridge.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
 		011D3D14A6F465826C5F3E02 /* ProvisioningParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProvisioningParser.swift; sourceTree = "<group>"; };
 		047CF1F92C7FD3C0D4AAE46C /* XsignApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XsignApp.swift; sourceTree = "<group>"; };
 		0E7AE47639383126AAE5A623 /* FileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileService.swift; sourceTree = "<group>"; };
-		0F36AE763858D794B5455433 /* common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
 		0F60E1BAE39877BABEBB3D63 /* ImportCertificateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportCertificateView.swift; sourceTree = "<group>"; };
-		10DE84059AA2A4B1D8F035B1 /* openssl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = openssl.h; sourceTree = "<group>"; };
-		1430B7A8C3DC0CEB8DCBCD6D /* archive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = archive.h; sourceTree = "<group>"; };
 		20670E375FB7A547B4E0A14E /* ZSignWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZSignWrapper.h; sourceTree = "<group>"; };
-		240A3418B5E095AF8829A491 /* fs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = fs.h; sourceTree = "<group>"; };
 		28CF3263DC77749C8BC6A95F /* BinaryInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryInfo.swift; sourceTree = "<group>"; };
 		29AE627B0D17B85C685FB903 /* AppFileCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFileCard.swift; sourceTree = "<group>"; };
 		331A304AB08F24B674187BB0 /* AppModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModifier.swift; sourceTree = "<group>"; };
-		38F50AA4234D378595BA82B6 /* base64.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = base64.h; sourceTree = "<group>"; };
 		45D815C2DAE8DC805E63635E /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		486717146114366405A39CD7 /* CertificateManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificateManagementView.swift; sourceTree = "<group>"; };
 		487B89EDC40E05392287B921 /* Entitlement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entitlement.swift; sourceTree = "<group>"; };
 		4A29AEB50F95CA8A0593BAC5 /* ZSignWrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ZSignWrapper.mm; sourceTree = "<group>"; };
 		51B59A4DA29C6920C4504DDF /* GeneralView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralView.swift; sourceTree = "<group>"; };
-		5748824E5D1A7769990B46EE /* json.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = json.h; sourceTree = "<group>"; };
 		5917AB144DA85B703FBB4423 /* ZipService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZipService.swift; sourceTree = "<group>"; };
 		655C4BF5E94F67D61DEFA56D /* AppFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFile.swift; sourceTree = "<group>"; };
 		67CBC595E06126783D981AAB /* BinaryParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryParser.swift; sourceTree = "<group>"; };
 		6965F14F1F159D77AF31F0F0 /* SignModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignModalView.swift; sourceTree = "<group>"; };
-		6B8D61EDD9E261CE00B2227B /* timer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = timer.h; sourceTree = "<group>"; };
-		7000C3526496BD20BB4D82EB /* bundle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bundle.h; sourceTree = "<group>"; };
 		70B0A57CB9D6CC363F7F5314 /* CategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesView.swift; sourceTree = "<group>"; };
 		7DA629EC58711CA60E47FE40 /* LocalServerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalServerService.swift; sourceTree = "<group>"; };
 		80816F4D552F2692EAC764B1 /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
 		89709A707B112BBD856AB5CA /* PersistenceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceService.swift; sourceTree = "<group>"; };
 		8C9051D74D2DCEFC4FE1884A /* DebsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebsView.swift; sourceTree = "<group>"; };
 		8E312B1F48D6995A2E70D140 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
-		93A97B22237EADA673A84145 /* sha.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sha.h; sourceTree = "<group>"; };
 		97F6C47994DE4070977F2224 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		97F8CBE86E8D19D7E666164F /* Certificate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Certificate.swift; sourceTree = "<group>"; };
 		9A772C721A5FE10E49D81DDF /* TweakManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweakManager.swift; sourceTree = "<group>"; };
 		9EF70CA9C264020E52D4F770 /* StatusBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBadge.swift; sourceTree = "<group>"; };
-		A4D3098952FD0B0D6828BF6A /* mach-o.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "mach-o.h"; sourceTree = "<group>"; };
-		AC846D3DF06E4F35AF7AE04B /* XsignBridge.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = XsignBridge.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF5E384B3639B4F607D1F370 /* Xsign.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Xsign.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B60C3EDD7AD3FD3EE23D54AA /* BackdoorTLS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackdoorTLS.swift; sourceTree = "<group>"; };
 		B6D33887A2E5CE7D00912185 /* Xsign-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Xsign-Bridging-Header.h"; sourceTree = "<group>"; };
 		B816A4284CA76E6B6CF35BF7 /* DylibsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DylibsView.swift; sourceTree = "<group>"; };
 		BE7C00F7818A12B94D439691 /* AppLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLog.swift; sourceTree = "<group>"; };
-		BFBD808525CFCDC50B82B485 /* archo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = archo.h; sourceTree = "<group>"; };
 		C6582E6831F4D79E0A798891 /* EntitlementManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntitlementManager.swift; sourceTree = "<group>"; };
 		CA00C3AF8E61D7FDC519105E /* SecurityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityService.swift; sourceTree = "<group>"; };
-		CC3CC46BC6F5C5ED7DF6CB48 /* signing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = signing.h; sourceTree = "<group>"; };
 		D589735A9AB3AB8DE9984C80 /* LottieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieView.swift; sourceTree = "<group>"; };
 		D6DD7AFFF63EFF6E0CFE4CA5 /* CommonUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonUI.swift; sourceTree = "<group>"; };
 		D8A55AE27A20E6C607CB1A29 /* SigningService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigningService.swift; sourceTree = "<group>"; };
-		D96F0B1A1F2EE4636032EA46 /* metadata.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = metadata.h; sourceTree = "<group>"; };
-		DAB2125C2A5B946B1DC5B47C /* macho.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = macho.h; sourceTree = "<group>"; };
-		DD8B1040A98829A66B745F47 /* certcheck.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = certcheck.h; sourceTree = "<group>"; };
 		E2E8BE7B3B05679046427CC9 /* AppDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDetailView.swift; sourceTree = "<group>"; };
-		FAFA9CC1DFD0E525A49CEEE2 /* util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
-		FE071F99A443D3A540BB27B9 /* log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = log.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,7 +97,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6D5F95223316211646E364C5 /* XsignBridge.framework in Frameworks */,
 				4A3405A53F28E5C2C096D9D3 /* BitByteData in Frameworks */,
 				FAA91139D9A8BE522259B8DD /* SWCompression in Frameworks */,
 				9104E4E81314B75D9C5AF106 /* ZIPFoundation in Frameworks */,
@@ -194,21 +130,6 @@
 			);
 			sourceTree = "<group>";
 		};
-		1A460E7CDB2FF5619BDB258F /* src */ = {
-			isa = PBXGroup;
-			children = (
-				BFBD808525CFCDC50B82B485 /* archo.h */,
-				7000C3526496BD20BB4D82EB /* bundle.h */,
-				DD8B1040A98829A66B745F47 /* certcheck.h */,
-				DAB2125C2A5B946B1DC5B47C /* macho.h */,
-				D96F0B1A1F2EE4636032EA46 /* metadata.h */,
-				10DE84059AA2A4B1D8F035B1 /* openssl.h */,
-				CC3CC46BC6F5C5ED7DF6CB48 /* signing.h */,
-				33CD7A9FE7BF1CAEB5CC7C3F /* common */,
-			);
-			path = src;
-			sourceTree = "<group>";
-		};
 		1E19557514BE6644832FA0C5 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -226,7 +147,6 @@
 			isa = PBXGroup;
 			children = (
 				AF5E384B3639B4F607D1F370 /* Xsign.app */,
-				AC846D3DF06E4F35AF7AE04B /* XsignBridge.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -245,42 +165,16 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		2646408B29381FD0E75F95D2 /* External */ = {
-			isa = PBXGroup;
-			children = (
-				4DE57EBA3A4DDB01E5F7BCAC /* zsign */,
-			);
-			path = External;
-			sourceTree = "<group>";
-		};
 		3039FF47049B52C2B42800D6 /* Xsign */ = {
 			isa = PBXGroup;
 			children = (
 				C45754EB340F10F46ECCAFBF /* App */,
-				2646408B29381FD0E75F95D2 /* External */,
 				1E19557514BE6644832FA0C5 /* Models */,
 				3ECD898E17010D70D44C5656 /* Services */,
 				44DC8F4DE109C8B55EC4C006 /* Shared */,
 				22B3291727CBCBB88A293402 /* Views */,
 			);
 			path = Xsign;
-			sourceTree = "<group>";
-		};
-		33CD7A9FE7BF1CAEB5CC7C3F /* common */ = {
-			isa = PBXGroup;
-			children = (
-				1430B7A8C3DC0CEB8DCBCD6D /* archive.h */,
-				38F50AA4234D378595BA82B6 /* base64.h */,
-				0F36AE763858D794B5455433 /* common.h */,
-				240A3418B5E095AF8829A491 /* fs.h */,
-				5748824E5D1A7769990B46EE /* json.h */,
-				FE071F99A443D3A540BB27B9 /* log.h */,
-				A4D3098952FD0B0D6828BF6A /* mach-o.h */,
-				93A97B22237EADA673A84145 /* sha.h */,
-				6B8D61EDD9E261CE00B2227B /* timer.h */,
-				FAFA9CC1DFD0E525A49CEEE2 /* util.h */,
-			);
-			path = common;
 			sourceTree = "<group>";
 		};
 		3ECD898E17010D70D44C5656 /* Services */ = {
@@ -308,14 +202,6 @@
 				8E312B1F48D6995A2E70D140 /* Theme.swift */,
 			);
 			path = Shared;
-			sourceTree = "<group>";
-		};
-		4DE57EBA3A4DDB01E5F7BCAC /* zsign */ = {
-			isa = PBXGroup;
-			children = (
-				1A460E7CDB2FF5619BDB258F /* src */,
-			);
-			path = zsign;
 			sourceTree = "<group>";
 		};
 		4E47BAD5E0371DBDBDE97E9F /* Categories */ = {
@@ -382,35 +268,6 @@
 		};
 /* End PBXGroup section */
 
-/* Begin PBXHeadersBuildPhase section */
-		F3D25254C1157640E1A84E51 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F64B1D540E101F4DBC80EE21 /* Xsign-Bridging-Header.h in Headers */,
-				92DC70F1EB24B63DF9C09250 /* ZSignWrapper.h in Headers */,
-				9CC7DBF30A6A2932C347F4C4 /* archive.h in Headers */,
-				743C9F296CAE7E1D18F11B91 /* archo.h in Headers */,
-				B0429DFE41D82478955919E7 /* base64.h in Headers */,
-				7A12827AED88FFB9938DD73C /* bundle.h in Headers */,
-				111F0D16CF9B1FCE2C63ECB1 /* certcheck.h in Headers */,
-				55B5CAC09EF8186C7EB60B06 /* common.h in Headers */,
-				504B02BA4A0D85C0DC539189 /* fs.h in Headers */,
-				2A3D9DC23FE264E701240FD1 /* json.h in Headers */,
-				74F62D17CA0D385D406E1916 /* log.h in Headers */,
-				C32F10BD55F3F9F800AB80FF /* mach-o.h in Headers */,
-				54341D6637D68B33C43D4C89 /* macho.h in Headers */,
-				DD08D8D2FBDA8225F6711D13 /* metadata.h in Headers */,
-				DC663C107AA44D3348A1F682 /* openssl.h in Headers */,
-				B2E44E02BF55AF1D5B50C9B1 /* sha.h in Headers */,
-				99CAF93603686B22D2EB04B2 /* signing.h in Headers */,
-				F8920E5C84B29CAEB36C6F61 /* timer.h in Headers */,
-				7BDF49DE2BA1E70816C480C1 /* util.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXHeadersBuildPhase section */
-
 /* Begin PBXNativeTarget section */
 		9C4493667807C2C5B3260715 /* Xsign */ = {
 			isa = PBXNativeTarget;
@@ -418,12 +275,10 @@
 			buildPhases = (
 				901C6D98ADC39DDADB681267 /* Sources */,
 				5F088F44CC201DBE0907F0EB /* Frameworks */,
-				1BBCD84F6FE8128F65847BE9 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				CD77EDB26FD4C01BDC272738 /* PBXTargetDependency */,
 			);
 			name = Xsign;
 			packageProductDependencies = (
@@ -438,24 +293,6 @@
 			productName = Xsign;
 			productReference = AF5E384B3639B4F607D1F370 /* Xsign.app */;
 			productType = "com.apple.product-type.application";
-		};
-		E9B1F0B45E582ADA6DD84060 /* XsignBridge */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 827532BA2088AC2431EEA4D6 /* Build configuration list for PBXNativeTarget "XsignBridge" */;
-			buildPhases = (
-				F3D25254C1157640E1A84E51 /* Headers */,
-				01036C1A9A9E013BA0FDD3D6 /* Sources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = XsignBridge;
-			packageProductDependencies = (
-			);
-			productName = XsignBridge;
-			productReference = AC846D3DF06E4F35AF7AE04B /* XsignBridge.framework */;
-			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
@@ -495,20 +332,11 @@
 			projectRoot = "";
 			targets = (
 				9C4493667807C2C5B3260715 /* Xsign */,
-				E9B1F0B45E582ADA6DD84060 /* XsignBridge */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		01036C1A9A9E013BA0FDD3D6 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				1BF82D68C857EB3013839A93 /* ZSignWrapper.mm in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		901C6D98ADC39DDADB681267 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -546,50 +374,14 @@
 				E273DFB969FD298429D70005 /* Theme.swift in Sources */,
 				EB1FF551425D73216F091B7C /* TweakManager.swift in Sources */,
 				077810ABE2724D01920D2411 /* XsignApp.swift in Sources */,
+				142CE51A96F2BB83467EA6EA /* ZSignWrapper.mm in Sources */,
 				730C1E2FC92347AF5658225F /* ZipService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		CD77EDB26FD4C01BDC272738 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = E9B1F0B45E582ADA6DD84060 /* XsignBridge */;
-			targetProxy = DC5C5EA56F5DC777F7960DCA /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin XCBuildConfiguration section */
-		02F53B8E63B7C592111FA068 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
-				CODE_SIGN_IDENTITY = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_C_LANGUAGE_STANDARD = c11;
-				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/Xsign/External/zsign/src",
-					"$(SRCROOT)/Xsign/External/zsign/src/common",
-					"$(SRCROOT)/Xsign/External/openssl/include",
-				);
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.xsign.XsignBridge;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-			};
-			name = Debug;
-		};
 		1403A361F8F13FA13F916F36 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -666,35 +458,6 @@
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
-			};
-			name = Release;
-		};
-		A2DB8CFC9224241499F02312 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
-				CODE_SIGN_IDENTITY = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_C_LANGUAGE_STANDARD = c11;
-				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/Xsign/External/zsign/src",
-					"$(SRCROOT)/Xsign/External/zsign/src/common",
-					"$(SRCROOT)/Xsign/External/openssl/include",
-				);
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.xsign.XsignBridge;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
 		};
@@ -787,15 +550,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		827532BA2088AC2431EEA4D6 /* Build configuration list for PBXNativeTarget "XsignBridge" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				02F53B8E63B7C592111FA068 /* Debug */,
-				A2DB8CFC9224241499F02312 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
 		9685325800D6A3CF956AC32E /* Build configuration list for PBXProject "Xsign" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
