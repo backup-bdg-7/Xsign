@@ -61,7 +61,9 @@ class SigningService {
         ) { success in
             print("[ZSign] Signing completion: \(success)")
         }
-
+        
+        // Note: Zsign.sign() appears to be synchronous based on Feather's usage
+        // The completion handler is called before the function returns
         guard signSuccess else { throw NSError(domain: "Signing", code: 1) }
 
         // 5. Repackage signed folder into IPA
