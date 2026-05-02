@@ -10,7 +10,6 @@
 		011B356C2930A5208F967AD6 /* CategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B0A57CB9D6CC363F7F5314 /* CategoriesView.swift */; };
 		077810ABE2724D01920D2411 /* XsignApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047CF1F92C7FD3C0D4AAE46C /* XsignApp.swift */; };
 		0F238DDAB713E760D785A47A /* AppModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331A304AB08F24B674187BB0 /* AppModifier.swift */; };
-		142CE51A96F2BB83467EA6EA /* ZSignWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4A29AEB50F95CA8A0593BAC5 /* ZSignWrapper.mm */; };
 		1C21705ED9B47C5085DB7D13 /* CertificateManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486717146114366405A39CD7 /* CertificateManagementView.swift */; };
 		2136D7B36703691BDB6A35CA /* Crypto in Frameworks */ = {isa = PBXBuildFile; productRef = 79062023EA53BD41F69D9181 /* Crypto */; };
 		24D3EF467E7A707CD08998E4 /* Certificate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97F8CBE86E8D19D7E666164F /* Certificate.swift */; };
@@ -37,6 +36,7 @@
 		AE16DBF0E1623116127A3CDD /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = F545D861AB51586D2854E00B /* Lottie */; };
 		B24F2D2A26576E3F49F1AB3F /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = 19DE7AF3FEB5B1343EF93580 /* Zip */; };
 		BE9594B1761BB66CDD005362 /* AppFileCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29AE627B0D17B85C685FB903 /* AppFileCard.swift */; };
+		D62F5F5193E3AED28FA57988 /* Zsign in Frameworks */ = {isa = PBXBuildFile; productRef = 88D2C9C10DAF578467661FE4 /* Zsign */; };
 		D97577F26BE87A11BDA97684 /* LocalServerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA629EC58711CA60E47FE40 /* LocalServerService.swift */; };
 		DC68EA776318F6E0F31FB203 /* BinaryInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CF3263DC77749C8BC6A95F /* BinaryInfo.swift */; };
 		E0CBD5C8D1F4F342CB4EAF01 /* AppLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7C00F7818A12B94D439691 /* AppLog.swift */; };
@@ -56,14 +56,12 @@
 		047CF1F92C7FD3C0D4AAE46C /* XsignApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XsignApp.swift; sourceTree = "<group>"; };
 		0E7AE47639383126AAE5A623 /* FileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileService.swift; sourceTree = "<group>"; };
 		0F60E1BAE39877BABEBB3D63 /* ImportCertificateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportCertificateView.swift; sourceTree = "<group>"; };
-		20670E375FB7A547B4E0A14E /* ZSignWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZSignWrapper.h; sourceTree = "<group>"; };
 		28CF3263DC77749C8BC6A95F /* BinaryInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryInfo.swift; sourceTree = "<group>"; };
 		29AE627B0D17B85C685FB903 /* AppFileCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFileCard.swift; sourceTree = "<group>"; };
 		331A304AB08F24B674187BB0 /* AppModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModifier.swift; sourceTree = "<group>"; };
 		45D815C2DAE8DC805E63635E /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		486717146114366405A39CD7 /* CertificateManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificateManagementView.swift; sourceTree = "<group>"; };
 		487B89EDC40E05392287B921 /* Entitlement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entitlement.swift; sourceTree = "<group>"; };
-		4A29AEB50F95CA8A0593BAC5 /* ZSignWrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ZSignWrapper.mm; sourceTree = "<group>"; };
 		51B59A4DA29C6920C4504DDF /* GeneralView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralView.swift; sourceTree = "<group>"; };
 		5917AB144DA85B703FBB4423 /* ZipService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZipService.swift; sourceTree = "<group>"; };
 		655C4BF5E94F67D61DEFA56D /* AppFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFile.swift; sourceTree = "<group>"; };
@@ -104,6 +102,7 @@
 				2136D7B36703691BDB6A35CA /* Crypto in Frameworks */,
 				B24F2D2A26576E3F49F1AB3F /* Zip in Frameworks */,
 				4DE01B583BFECC4AD3473717 /* Vapor in Frameworks */,
+				D62F5F5193E3AED28FA57988 /* Zsign in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -260,8 +259,6 @@
 			isa = PBXGroup;
 			children = (
 				B6D33887A2E5CE7D00912185 /* Xsign-Bridging-Header.h */,
-				20670E375FB7A547B4E0A14E /* ZSignWrapper.h */,
-				4A29AEB50F95CA8A0593BAC5 /* ZSignWrapper.mm */,
 			);
 			path = Bridge;
 			sourceTree = "<group>";
@@ -289,6 +286,7 @@
 				79062023EA53BD41F69D9181 /* Crypto */,
 				19DE7AF3FEB5B1343EF93580 /* Zip */,
 				4A77FF2C9E3D895ED101AD35 /* Vapor */,
+				88D2C9C10DAF578467661FE4 /* Zsign */,
 			);
 			productName = Xsign;
 			productReference = AF5E384B3639B4F607D1F370 /* Xsign.app */;
@@ -322,6 +320,7 @@
 				637BE3CFEBD68C13D94E9DAB /* XCRemoteSwiftPackageReference "SWCompression" */,
 				866618CABAC75E1F4DBA1B7F /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
 				28CEA09F8A52F972FF1F504C /* XCRemoteSwiftPackageReference "Zip" */,
+				F12739774598B9D3B57C39B0 /* XCRemoteSwiftPackageReference "Zsign-Package" */,
 				716BD8CF36708E42FCDFE5D9 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				24A1D38EAB8BD77212846F50 /* XCRemoteSwiftPackageReference "swift-crypto" */,
 				6DFF623DB0B33039DA2C2463 /* XCRemoteSwiftPackageReference "vapor" */,
@@ -374,7 +373,6 @@
 				E273DFB969FD298429D70005 /* Theme.swift in Sources */,
 				EB1FF551425D73216F091B7C /* TweakManager.swift in Sources */,
 				077810ABE2724D01920D2411 /* XsignApp.swift in Sources */,
-				142CE51A96F2BB83467EA6EA /* ZSignWrapper.mm in Sources */,
 				730C1E2FC92347AF5658225F /* ZipService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -399,7 +397,6 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xsign.Xsign;
 				SDKROOT = iphoneos;
-				SWIFT_OBJC_BRIDGING_HEADER = "Xsign/App/Bridge/Xsign-Bridging-Header.h";
 				SWIFT_VERSION = 5.9;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -541,7 +538,6 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xsign.Xsign;
 				SDKROOT = iphoneos;
-				SWIFT_OBJC_BRIDGING_HEADER = "Xsign/App/Bridge/Xsign-Bridging-Header.h";
 				SWIFT_VERSION = 5.9;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -627,6 +623,14 @@
 				minimumVersion = 0.9.19;
 			};
 		};
+		F12739774598B9D3B57C39B0 /* XCRemoteSwiftPackageReference "Zsign-Package" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/khcrysalis/Zsign-Package";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -649,6 +653,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 24A1D38EAB8BD77212846F50 /* XCRemoteSwiftPackageReference "swift-crypto" */;
 			productName = Crypto;
+		};
+		88D2C9C10DAF578467661FE4 /* Zsign */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F12739774598B9D3B57C39B0 /* XCRemoteSwiftPackageReference "Zsign-Package" */;
+			productName = Zsign;
 		};
 		8D69F21E55FC668A00B9FF58 /* SWCompression */ = {
 			isa = XCSwiftPackageProductDependency;
