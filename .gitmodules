@@ -1,4 +1,4 @@
-[submodule "Xsign/External/zsign"]
-	path = Xsign/External/zsign
-	url = https://github.com/khcrysalis/Zsign-Package.git
-	branch = package
+[submodule "Zsign"]
+        path = Zsign
+        url = https://github.com/khcrysalis/Zsign-Package.git
+        branch = package
