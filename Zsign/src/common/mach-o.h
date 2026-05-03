@@ -1,4 +1,5 @@
 #pragma once
+#include <stdint.h>
 
 typedef int cpu_type_t;
 typedef int cpu_subtype_t;
