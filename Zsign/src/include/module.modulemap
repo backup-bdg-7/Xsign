@@ -1,4 +1,4 @@
-module Zsign {
+module ZsignC {
     header "zsign_c.h"
     export *
 }

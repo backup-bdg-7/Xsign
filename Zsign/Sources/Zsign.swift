@@ -1,6 +1,7 @@
 // Zsign.swift - Swift wrapper for Zsign C library
 
 import Foundation
+import ZsignC
 
 public class Zsign {
     public static func sign(
