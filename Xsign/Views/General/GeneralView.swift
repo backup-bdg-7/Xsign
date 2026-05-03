@@ -21,7 +21,7 @@ struct GeneralView: View {
 
                     if selectedSegment == 0 { SignedAppsList(apps: signedApps) }
                     else if selectedSegment == 1 { CertificateManagementView() }
-                    else if selectedSegment == 2 { LogsView(logs: logs, searchText: $searchText) }
+                    else if selectedSegment == 2 { LogsView(logs: logs) }
                     else { DeviceManagementView() }
                 }.navigationTitle("General")
             }
@@ -66,16 +66,119 @@ struct SignedAppsList: View {
 
 struct LogsView: View {
     let logs: [AppLog]
-    @Binding var searchText: String
+    @State private var searchText = ""
+    @State private var selectedLevel: LogLevel?
+    
+    var filteredLogs: [AppLog] {
+        logs.filter { log in
+            let matchesSearch = searchText.isEmpty || log.message.contains(searchText) || log.category.contains(searchText)
+            let matchesLevel = selectedLevel == nil || log.level == selectedLevel
+            return matchesSearch && matchesLevel
+        }
+    }
+    
     var body: some View {
         VStack {
-            TextField("Search...", text: $searchText).padding(8).background(XsignTheme.surface).cornerRadius(8).padding(.horizontal)
-            List(logs.filter { searchText.isEmpty || $0.message.contains(searchText) }) { log in
-                VStack(alignment: .leading) {
-                    Text(log.category).font(.system(size: 8, weight: .bold)).foregroundColor(XsignTheme.textSecondary)
-                    Text(log.message).font(.subheadline).foregroundColor(XsignTheme.textPrimary)
-                }.listRowBackground(XsignTheme.surface)
-            }.listStyle(.plain)
+            // Search and filter
+            HStack {
+                TextField("Search logs...", text: $searchText)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding(.horizontal)
+                
+                Menu {
+                    Button("All") { selectedLevel = nil }
+                    Divider()
+                    ForEach([LogLevel.info, .success, .warning, .error], id: \.self) { level in
+                        Button(level.rawValue.capitalized) { selectedLevel = level }
+                    }
+                } label: {
+                    Image(systemName: "line.3.horizontal.decrease.circle")
+                        .foregroundColor(selectedLevel == nil ? .secondary : XsignTheme.primary)
+                }
+            }.padding(.horizontal)
+            
+            if filteredLogs.isEmpty {
+                VStack(spacing: 16) {
+                    LottieView(name: "empty", loopMode: .loop)
+                        .frame(width: 150, height: 150)
+                    Text("No Logs")
+                        .font(.headline)
+                        .foregroundColor(XsignTheme.textSecondary)
+                    if !searchText.isEmpty || selectedLevel != nil {
+                        Text("Try adjusting your filters")
+                            .font(.caption)
+                            .foregroundColor(XsignTheme.textSecondary)
+                    }
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else {
+                List {
+                    ForEach(filteredLogs) { log in
+                        LogRow(log: log)
+                            .listRowBackground(XsignTheme.surface)
+                    }
+                }
+                .listStyle(.plain)
+            }
+        }
+    }
+}
+
+struct LogRow: View {
+    let log: AppLog
+    
+    var body: some View {
+        HStack(alignment: .top, spacing: 8) {
+            // Level icon
+            Image(systemName: iconForLevel(log.level))
+                .foregroundColor(colorForLevel(log.level))
+                .frame(width: 20)
+            
+            VStack(alignment: .leading, spacing: 4) {
+                HStack {
+                    Text(log.category)
+                        .font(.caption)
+                        .fontWeight(.bold)
+                        .foregroundColor(XsignTheme.textSecondary)
+                    
+                    Spacer()
+                    
+                    Text(log.timestamp, style: .time)
+                        .font(.caption2)
+                        .foregroundColor(XsignTheme.textSecondary)
+                }
+                
+                Text(log.message)
+                    .font(.subheadline)
+                    .foregroundColor(XsignTheme.textPrimary)
+                    .lineLimit(3)
+                
+                if let details = log.details {
+                    Text(details)
+                        .font(.caption)
+                        .foregroundColor(XsignTheme.textSecondary)
+                        .lineLimit(2)
+                }
+            }
+        }
+        .padding(.vertical, 4)
+    }
+    
+    private func iconForLevel(_ level: LogLevel) -> String {
+        switch level {
+            case .info: return "info.circle.fill"
+            case .success: return "checkmark.circle.fill"
+            case .warning: return "exclamationmark.triangle.fill"
+            case .error: return "xmark.circle.fill"
+        }
+    }
+    
+    private func colorForLevel(_ level: LogLevel) -> Color {
+        switch level {
+            case .info: return .blue
+            case .success: return .green
+            case .warning: return .orange
+            case .error: return .red
         }
     }
 }

@@ -1,6 +1,15 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
+// Define custom UTTypes for our file types
+extension UTType {
+    static let p12 = UTType(filenameExtension: "p12") ?? .data
+    static let mobileprovision = UTType(filenameExtension: "mobileprovision") ?? .data
+    static let ipa = UTType(filenameExtension: "ipa") ?? .data
+    static let dylib = UTType(filenameExtension: "dylib") ?? .unixExecutable
+    static let deb = UTType(filenameExtension: "deb") ?? .data
+}
+
 struct ImportCertificateView: View {
     @Environment(\.dismiss) var dismiss
 
@@ -16,12 +25,12 @@ struct ImportCertificateView: View {
             Form {
                 Section("Certificate Details") {
                     TextField("Name", text: $name)
-                    SecureField("P12 Password", text: $password)
+                    SecureField("P12 Password (optional)", text: $password)
                 }
 
                 Section("Files") {
                     HStack {
-                        Text(".p12 File")
+                        Text(".p12 Certificate")
                         Spacer()
                         if p12Data != nil { 
                             Image(systemName: "checkmark.circle.fill")
@@ -31,7 +40,7 @@ struct ImportCertificateView: View {
                     }
 
                     HStack {
-                        Text(".mobileprovision")
+                        Text("Provisioning Profile")
                         Spacer()
                         if profileData != nil { 
                             Image(systemName: "checkmark.circle.fill")
@@ -51,10 +60,10 @@ struct ImportCertificateView: View {
                     Button("Cancel") { dismiss() }
                 }
             }
-            .fileImporter(isPresented: $showingP12Picker, allowedContentTypes: [.item]) { result in
+            .fileImporter(isPresented: $showingP12Picker, allowedContentTypes: [.p12]) { result in
                 handleP12Import(result)
             }
-            .fileImporter(isPresented: $showingProfilePicker, allowedContentTypes: [.item]) { result in
+            .fileImporter(isPresented: $showingProfilePicker, allowedContentTypes: [.mobileprovision]) { result in
                 handleProfileImport(result)
             }
         }
