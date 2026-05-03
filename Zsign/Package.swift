@@ -51,11 +51,6 @@ let package = Package(
                 .headerSearchPath("."),
                 .headerSearchPath("common"),
                 .unsafeFlags(["-std=c++17"])
-            ],
-            linkerSettings: [
-                .linkedLibrary("ssl"),
-                .linkedLibrary("crypto"),
-                .linkedLibrary("z"),
             ]
         ),
         .target(
