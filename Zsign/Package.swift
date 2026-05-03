@@ -6,13 +6,11 @@ let package = Package(
     platforms: [
         .iOS(.v12),
         .macOS(.v10_15),
-        .tvOS(.v12),
-        .watchOS(.v8),
     ],
     products: [
         .library(
             name: "Zsign",
-            targets: ["ZsignC"]
+            targets: ["Zsign"]
         ),
     ],
     dependencies: [
@@ -59,6 +57,11 @@ let package = Package(
                 .linkedLibrary("crypto"),
                 .linkedLibrary("z"),
             ]
+        ),
+        .target(
+            name: "Zsign",
+            dependencies: ["ZsignC"],
+            path: "Sources"
         ),
     ]
 )
