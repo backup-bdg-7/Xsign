@@ -23,7 +23,7 @@ bool c_zsign_sign_app(
     const char* display_name,
     const char* version,
     const char* short_version,
-    const char* dylib_paths,  // Comma-separated list of dylib paths
+    const char* dylib_paths,
     bool adhoc
 );
 
