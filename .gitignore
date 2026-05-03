@@ -1,0 +1,8 @@
+Xsign.xcodeproj/
+DerivedData/
+.build/
+*.ipa
+*.p12
+*.mobileprovision
+ios-build-logs*.zip
+ios-build-logs/

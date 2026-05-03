@@ -1,0 +1,90 @@
+﻿2026-05-03T20:43:12.6340790Z ##[group]Run actions/checkout@v4
+2026-05-03T20:43:12.6341490Z with:
+2026-05-03T20:43:12.6341810Z   submodules: recursive
+2026-05-03T20:43:12.6343440Z   repository: backup-bdg-7/Xsign
+2026-05-03T20:43:12.6345120Z   token: ***
+2026-05-03T20:43:12.6345440Z   ssh-strict: true
+2026-05-03T20:43:12.6345740Z   ssh-user: git
+2026-05-03T20:43:12.6346060Z   persist-credentials: true
+2026-05-03T20:43:12.6346430Z   clean: true
+2026-05-03T20:43:12.6346770Z   sparse-checkout-cone-mode: true
+2026-05-03T20:43:12.6348640Z   fetch-depth: 1
+2026-05-03T20:43:12.6350780Z   fetch-tags: false
+2026-05-03T20:43:12.6351220Z   show-progress: true
+2026-05-03T20:43:12.6351530Z   lfs: false
+2026-05-03T20:43:12.6351860Z   set-safe-directory: true
+2026-05-03T20:43:12.6352830Z ##[endgroup]
+2026-05-03T20:43:13.1609280Z Syncing repository: backup-bdg-7/Xsign
+2026-05-03T20:43:13.1618970Z ##[group]Getting Git version info
+2026-05-03T20:43:13.1623700Z Working directory is '/Users/runner/work/Xsign/Xsign'
+2026-05-03T20:43:13.1627490Z [command]/opt/homebrew/bin/git version
+2026-05-03T20:43:13.2333820Z git version 2.54.0
+2026-05-03T20:43:13.2376920Z ##[endgroup]
+2026-05-03T20:43:13.2391240Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/ba6a7c0b-7df2-4e31-9e11-c0600fbfe668/.gitconfig'
+2026-05-03T20:43:13.2401900Z Temporarily overriding HOME='/Users/runner/work/_temp/ba6a7c0b-7df2-4e31-9e11-c0600fbfe668' before making global git config changes
+2026-05-03T20:43:13.2405180Z Adding repository directory to the temporary git global config as a safe directory
+2026-05-03T20:43:13.2408830Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/Xsign/Xsign
+2026-05-03T20:43:13.2543070Z Deleting the contents of '/Users/runner/work/Xsign/Xsign'
+2026-05-03T20:43:13.2545360Z ##[group]Initializing the repository
+2026-05-03T20:43:13.2550020Z [command]/opt/homebrew/bin/git init /Users/runner/work/Xsign/Xsign
+2026-05-03T20:43:13.2796820Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-05-03T20:43:13.2803570Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-05-03T20:43:13.2805970Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-05-03T20:43:13.2806860Z hint: call:
+2026-05-03T20:43:13.2807410Z hint:
+2026-05-03T20:43:13.2808100Z hint: 	git config --global init.defaultBranch <name>
+2026-05-03T20:43:13.2808750Z hint:
+2026-05-03T20:43:13.2809460Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-05-03T20:43:13.2810350Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-05-03T20:43:13.2810950Z hint:
+2026-05-03T20:43:13.2811320Z hint: 	git branch -m <name>
+2026-05-03T20:43:13.2811720Z hint:
+2026-05-03T20:43:13.2812140Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-05-03T20:43:13.2812790Z Initialized empty Git repository in /Users/runner/work/Xsign/Xsign/.git/
+2026-05-03T20:43:13.2814070Z [command]/opt/homebrew/bin/git remote add origin https://github.com/backup-bdg-7/Xsign
+2026-05-03T20:43:13.2906620Z ##[endgroup]
+2026-05-03T20:43:13.2907250Z ##[group]Disabling automatic garbage collection
+2026-05-03T20:43:13.2907880Z [command]/opt/homebrew/bin/git config --local gc.auto 0
+2026-05-03T20:43:13.2982840Z ##[endgroup]
+2026-05-03T20:43:13.2983490Z ##[group]Setting up auth
+2026-05-03T20:43:13.2990700Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-05-03T20:43:13.3097010Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-05-03T20:43:13.4709150Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-05-03T20:43:13.4786250Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-05-03T20:43:13.6229770Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-05-03T20:43:13.6272420Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-05-03T20:43:13.7380090Z [command]/opt/homebrew/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-05-03T20:43:13.7470100Z ##[endgroup]
+2026-05-03T20:43:13.7471800Z ##[group]Fetching the repository
+2026-05-03T20:43:13.7484810Z [command]/opt/homebrew/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +793ae9714d3e19e3e271e5e204ba5e55efdc38be:refs/remotes/origin/main
+2026-05-03T20:43:14.3650610Z From https://github.com/backup-bdg-7/Xsign
+2026-05-03T20:43:14.3652000Z  * [new ref]         793ae9714d3e19e3e271e5e204ba5e55efdc38be -> origin/main
+2026-05-03T20:43:14.3763930Z ##[endgroup]
+2026-05-03T20:43:14.3766270Z ##[group]Determining the checkout info
+2026-05-03T20:43:14.3768480Z ##[endgroup]
+2026-05-03T20:43:14.3770200Z [command]/opt/homebrew/bin/git sparse-checkout disable
+2026-05-03T20:43:14.3876920Z [command]/opt/homebrew/bin/git config --local --unset-all extensions.worktreeConfig
+2026-05-03T20:43:14.3989970Z ##[group]Checking out the ref
+2026-05-03T20:43:14.4060820Z [command]/opt/homebrew/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-05-03T20:43:14.4929770Z Switched to a new branch 'main'
+2026-05-03T20:43:14.5030740Z branch 'main' set up to track 'origin/main'.
+2026-05-03T20:43:14.5306130Z ##[endgroup]
+2026-05-03T20:43:14.5307670Z ##[group]Setting up auth for fetching submodules
+2026-05-03T20:43:14.5309220Z [command]/opt/homebrew/bin/git config --global http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-05-03T20:43:14.5513650Z [command]/opt/homebrew/bin/git config --global --unset-all url.https://github.com/.insteadOf
+2026-05-03T20:43:14.5819550Z [command]/opt/homebrew/bin/git config --global --add url.https://github.com/.insteadOf git@github.com:
+2026-05-03T20:43:14.6128450Z [command]/opt/homebrew/bin/git config --global --add url.https://github.com/.insteadOf org-209987543@github.com:
+2026-05-03T20:43:14.6244380Z ##[endgroup]
+2026-05-03T20:43:14.6248090Z ##[group]Fetching submodules
+2026-05-03T20:43:14.6271060Z [command]/opt/homebrew/bin/git submodule sync --recursive
+2026-05-03T20:43:14.7297400Z [command]/opt/homebrew/bin/git -c protocol.version=2 submodule update --init --force --depth=1 --recursive
+2026-05-03T20:43:14.8787700Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local gc.auto 0
+2026-05-03T20:43:14.9856650Z ##[endgroup]
+2026-05-03T20:43:14.9860170Z ##[group]Persisting credentials for submodules
+2026-05-03T20:43:14.9866000Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'url\.https\:\/\/github\.com\/\.insteadOf' && git config --local --unset-all 'url.https://github.com/.insteadOf' || :"
+2026-05-03T20:43:15.2140330Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local 'http.https://github.com/.extraheader' 'AUTHORIZATION: basic ***' && git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-05-03T20:43:15.3441550Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --add 'url.https://github.com/.insteadOf' 'git@github.com:'
+2026-05-03T20:43:15.5947850Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --add 'url.https://github.com/.insteadOf' 'org-209987543@github.com:'
+2026-05-03T20:43:15.7576630Z ##[endgroup]
+2026-05-03T20:43:15.7731790Z [command]/opt/homebrew/bin/git log -1 --format=%H
+2026-05-03T20:43:15.7855410Z 793ae9714d3e19e3e271e5e204ba5e55efdc38be
