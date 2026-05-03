@@ -101,13 +101,13 @@ bool ZLog::PrintResultV(bool bSuccess, const char* szFormat, ...)
 	return bSuccess ? Success(szLog) : Error(szLog);
 }
 
-bool ZLog::Warning(const char* szLog)
+bool ZLog::Warn(const char* szLog)
 {
 	_Print(szLog, 6);
 	return false;
 }
 
-bool ZLog::WarningV(const char* szFormat, ...)
+bool ZLog::WarnV(const char* szFormat, ...)
 {
 	FORMAT_V(szFormat, szLog);
 	_Print(szLog, 6);
