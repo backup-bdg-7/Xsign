@@ -67,7 +67,7 @@ bool  ZUtil::SystemExecV(const char* szCmd, ...)
 		return false;
 	}
 #else
-	ZLog::WarningV("SystemExec not available on iOS, skipping: \"%s\"\n", szRealCmd);
+	ZLog::WarnV("SystemExec not available on iOS, skipping: \"%s\"\n", szRealCmd);
 #endif
 
 
