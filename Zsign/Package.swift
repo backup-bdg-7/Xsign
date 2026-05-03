@@ -27,7 +27,8 @@ let package = Package(
             path: "src",
             exclude: [
                 "common/archive.cpp",
-                "zsign.cpp"
+                "zsign.cpp",
+                "zsign_c_wrapper.cpp"
             ],
             sources: [
                 "archo.cpp",
@@ -41,8 +42,7 @@ let package = Package(
                 "common/log.cpp",
                 "common/sha.cpp",
                 "common/timer.cpp",
-                "common/util.cpp",
-                "zsign_c_wrapper.cpp"
+                "common/util.cpp"
             ],
             publicHeadersPath: "include",
             cSettings: [
