@@ -14,10 +14,6 @@ let package = Package(
             name: "ZsignC",
             targets: ["ZsignC"]
         ),
-        .library(
-            name: "Zsign",
-            targets: ["Zsign"]
-        ),
     ],
     dependencies: [
         .package(url: "https://github.com/krzyzanowskim/OpenSSL", from: "3.3.3001")
@@ -64,15 +60,5 @@ let package = Package(
                 .linkedLibrary("z"),
             ]
         ),
-        .target(
-            name: "Zsign",
-            dependencies: [
-                "ZsignC"
-            ],
-            path: "swift",
-            sources: [
-                "zsign.swift"
-            ]
-        )
     ]
 )

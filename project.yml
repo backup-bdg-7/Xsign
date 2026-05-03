@@ -92,7 +92,7 @@ targets:
       - package: vapor
         product: Vapor
       - package: Zsign
-        product: Zsign
+        product: ZsignC
 
 # ====================== SCHEMES ======================
 schemes:
