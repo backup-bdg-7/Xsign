@@ -49,6 +49,10 @@ let package = Package(
                 "zsign_c_wrapper.cpp"
             ],
             publicHeadersPath: "include",
+            cSettings: [
+                .headerSearchPath("."),
+                .headerSearchPath("common"),
+            ],
             cxxSettings: [
                 .headerSearchPath("."),
                 .headerSearchPath("common"),
