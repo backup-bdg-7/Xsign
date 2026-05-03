@@ -1,0 +1,11 @@
+﻿2026-05-03T20:54:03.1825490Z ##[group]Run actions/upload-artifact@v4
+2026-05-03T20:54:03.1825730Z with:
+2026-05-03T20:54:03.1825850Z   name: Xsign.ipa
+2026-05-03T20:54:03.1826010Z   path: packages/Xsign.ipa
+2026-05-03T20:54:03.1826170Z   retention-days: 7
+2026-05-03T20:54:03.1826340Z   if-no-files-found: warn
+2026-05-03T20:54:03.1826510Z   compression-level: 6
+2026-05-03T20:54:03.1826660Z   overwrite: false
+2026-05-03T20:54:03.1826830Z   include-hidden-files: false
+2026-05-03T20:54:03.1827010Z ##[endgroup]
+2026-05-03T20:54:03.3291120Z ##[warning]No files were found with the provided path: packages/Xsign.ipa. No artifacts will be uploaded.
