@@ -23,6 +23,7 @@ bool c_zsign_sign_app(
     const char* display_name,
     const char* version,
     const char* short_version,
+    const char* dylib_paths,  // Comma-separated list of dylib paths
     bool adhoc
 );
 
@@ -38,6 +39,18 @@ bool c_zsign_check_certificate(
 const char* c_zsign_get_certificate_info(
     const char* certificate_path,
     const char* password
+);
+
+// Set entitlements for signing
+// Returns true on success
+bool c_zsign_set_entitlements(
+    const char* entitlements_json
+);
+
+// Enable/disable specific signing options
+void c_zsign_set_option(
+    const char* option_name,
+    bool enabled
 );
 
 #ifdef __cplusplus
