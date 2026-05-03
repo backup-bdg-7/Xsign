@@ -10,26 +10,37 @@ class SigningService {
         var bundleName: String?
         var bundleVersion: String?
         var bundleBuildVersion: String?
+        var dylibPaths: [String]?
     }
 
     func sign(appFile: AppFile, certificate: Certificate, options: SigningOptions) async throws -> URL {
-        // 1. Prepare file paths
+        // 1. Prepare file paths - need to write certificate data to temp files
         let fileManager = FileManager.default
-        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let appPath = documentsURL.appendingPathComponent(appFile.fileName)
-        let p12Path = documentsURL.appendingPathComponent(certificate.fileName)
-        let provisionPath = documentsURL.appendingPathComponent(certificate.provisionFileName ?? "")
-        let entitlementsPath = documentsURL.appendingPathComponent("entitlements.plist")
+        let tempURL = fileManager.temporaryDirectory
+        let appPath = appFile.fileURL.path
+        
+        // Write P12 data to temp file
+        let p12Data = try certificate.decryptedP12Data()
+        let p12Path = tempURL.appendingPathComponent("cert.p12")
+        try p12Data.write(to: p12Path)
+        
+        // Write provisioning profile to temp file if available
+        var provisionPath = ""
+        if let provData = certificate.provisioningProfileData {
+            let provURL = tempURL.appendingPathComponent("profile.mobileprovision")
+            try provData.write(to: provURL)
+            provisionPath = provURL.path
+        }
+        
+        // Get password
+        let password = certificate.decryptedPassword() ?? ""
 
-        // 2. Extract certificate password
-        let password = certificate.password ?? ""
-
-        // 3. Call C function from ZsignC module
+        // 2. Call C function from ZsignC module
         let signSuccess = c_zsign_sign_app(
-            appPath.path,
+            appPath,
             p12Path.path,
             password,
-            provisionPath.path,
+            provisionPath.isEmpty ? nil : provisionPath,
             nil, // output_path - use default
             options.bundleID ?? "",
             options.bundleName ?? "",
@@ -40,8 +51,8 @@ class SigningService {
 
         guard signSuccess else { throw NSError(domain: "Signing", code: 1) }
 
-        // 4. Return signed app path (simplified - need to handle IPA creation)
-        let signedPath = appPath.deletingLastPathComponent().appendingPathComponent("signed_\(appFile.fileName)")
+        // 3. Return signed app path
+        let signedPath = URL(fileURLWithPath: appPath).deletingLastPathComponent().appendingPathComponent("signed_\(appFile.fileName)")
         return signedPath
     }
 }
