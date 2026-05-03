@@ -12,6 +12,7 @@ using namespace std;
 
 static ZSignAsset g_zsa;
 static vector<string> g_arrDylibFiles;
+static vector<string> g_arrRemoveDylibNames;
 
 static vector<string> splitDylibPaths(const string& str) {
     vector<string> result;
@@ -37,7 +38,7 @@ extern "C" bool c_zsign_sign_app(
     bool adhoc
 ) {
     string strCertFile(certificate_path ? certificate_path : "");
-    string strPKeyFile("");  // Usually same as cert for p12
+    string strPKeyFile("");
     string strProvFile(provisioning_profile_path ? provisioning_profile_path : "");
     string strEntitleFile("");
     string strPassword(password ? password : "");
@@ -62,7 +63,8 @@ extern "C" bool c_zsign_sign_app(
         string strVersion(version ? version : "");
         string strDisplayName(display_name ? display_name : "");
 
-        return bundle.SignFolder(&g_zsa, strBundlePath, strBundleId, strVersion, strDisplayName, g_arrDylibFiles, true);
+        return bundle.SignFolder(&g_zsa, strBundlePath, strBundleId, strVersion, strDisplayName, 
+                                g_arrDylibFiles, g_arrRemoveDylibNames, true, false, true, false);
 
     } catch (...) {
         return false;
@@ -82,7 +84,6 @@ extern "C" const char* c_zsign_get_certificate_info(const char* certificate_path
     string strPath(certificate_path ? certificate_path : "");
     string strPassword(password ? password : "");
     try {
-        // Get certificate info - using ZSignAsset static methods
         strInfo = "{ \"status\": \"implemented\" }";
         return strInfo.c_str();
     } catch (...) {
@@ -92,7 +93,6 @@ extern "C" const char* c_zsign_get_certificate_info(const char* certificate_path
 }
 
 extern "C" bool c_zsign_set_entitlements(const char* entitlements_json) {
-    // Entitlements are passed via ZSignAsset Init or set separately
     return true;
 }
 
