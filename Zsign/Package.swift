@@ -11,7 +11,7 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "ZsignC",
+            name: "Zsign",
             targets: ["ZsignC"]
         ),
     ],
