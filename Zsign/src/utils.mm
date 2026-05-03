@@ -5,11 +5,11 @@
 #include "openssl.h"
 
 // MARK: - C Wrapper Functions
-// These functions will be called from Swift via the ZsignC target
+// These functions provide C-style access to the C++ classes
 
 extern "C" {
     
-    bool zsign_sign_app(
+    bool zsign_sign_app_wrapper(
         const char* bundle_path,
         const char* certificate_path,
         const char* password,
@@ -24,14 +24,20 @@ extern "C" {
         try {
             ZSign::CSigning signing;
             
-            // Load certificate
-            if (!signing.LoadCertificate(certificate_path, password)) {
-                NSLog(@"Failed to load certificate");
-                return false;
+            // Load certificate if not ad-hoc
+            if (!adhoc) {
+                if (!certificate_path || strlen(certificate_path) == 0) {
+                    NSLog(@"No certificate provided for non ad-hoc signing");
+                    return false;
+                }
+                if (!signing.LoadCertificate(certificate_path, password ? password : "")) {
+                    NSLog(@"Failed to load certificate");
+                    return false;
+                }
             }
             
             // Load provisioning profile if not ad-hoc
-            if (!adhoc && provisioning_profile_path) {
+            if (!adhoc && provisioning_profile_path && strlen(provisioning_profile_path) > 0) {
                 if (!signing.LoadProvisioningProfile(provisioning_profile_path)) {
                     NSLog(@"Failed to load provisioning profile");
                     return false;
@@ -39,21 +45,22 @@ extern "C" {
             }
             
             // Set bundle info if provided
-            if (bundle_id) {
+            if (bundle_id && strlen(bundle_id) > 0) {
                 signing.SetBundleId(bundle_id);
             }
-            if (display_name) {
+            if (display_name && strlen(display_name) > 0) {
                 signing.SetDisplayName(display_name);
             }
-            if (version) {
+            if (version && strlen(version) > 0) {
                 signing.SetVersion(version);
             }
-            if (short_version) {
+            if (short_version && strlen(short_version) > 0) {
                 signing.SetShortVersion(short_version);
             }
             
             // Sign the bundle
-            bool result = signing.Sign(bundle_path, output_path ? output_path : bundle_path, adhoc);
+            const char* output = output_path && strlen(output_path) > 0 ? output_path : bundle_path;
+            bool result = signing.Sign(bundle_path, output, adhoc);
             
             return result;
         } catch (...) {
@@ -62,19 +69,19 @@ extern "C" {
         }
     }
     
-    bool zsign_check_certificate(const char* certificate_path, const char* password) {
+    bool zsign_check_certificate_wrapper(const char* certificate_path, const char* password) {
         try {
             ZSign::CCertCheck certCheck;
-            return certCheck.LoadCertificate(certificate_path, password);
+            return certCheck.LoadCertificate(certificate_path, password ? password : "");
         } catch (...) {
             return false;
         }
     }
     
-    const char* zsign_get_certificate_info(const char* certificate_path, const char* password) {
+    const char* zsign_get_certificate_info_wrapper(const char* certificate_path, const char* password) {
         try {
             ZSign::CCertCheck certCheck;
-            if (!certCheck.LoadCertificate(certificate_path, password)) {
+            if (!certCheck.LoadCertificate(certificate_path, password ? password : "")) {
                 return nullptr;
             }
             

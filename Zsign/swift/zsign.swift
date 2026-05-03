@@ -16,7 +16,7 @@ import Foundation
 ///   - short_version: New short version (can be nil)
 ///   - adhoc: Sign ad-hoc (no certificate needed)
 /// - Returns: True if signing succeeded
-@_silgen_name("zsign_sign_app")
+@_silgen_name("zsign_sign_app_wrapper")
 func c_zsign_sign_app(
     _ bundle_path: UnsafePointer<CChar>,
     _ certificate_path: UnsafePointer<CChar>,
@@ -35,7 +35,7 @@ func c_zsign_sign_app(
 ///   - certificate_path: Path to the .p12 certificate
 ///   - password: Password for the certificate
 /// - Returns: True if certificate is valid
-@_silgen_name("zsign_check_certificate")
+@_silgen_name("zsign_check_certificate_wrapper")
 func c_zsign_check_certificate(
     _ certificate_path: UnsafePointer<CChar>,
     _ password: UnsafePointer<CChar>
@@ -46,7 +46,7 @@ func c_zsign_check_certificate(
 ///   - certificate_path: Path to the .p12 certificate
 ///   - password: Password for the certificate
 /// - Returns: JSON string with certificate info, or nil if failed
-@_silgen_name("zsign_get_certificate_info")
+@_silgen_name("zsign_get_certificate_info_wrapper")
 func c_zsign_get_certificate_info(
     _ certificate_path: UnsafePointer<CChar>,
     _ password: UnsafePointer<CChar>
