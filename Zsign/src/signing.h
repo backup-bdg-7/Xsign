@@ -1,12 +1,6 @@
 #pragma once
 #include "openssl.h"
 
-// Define CS_BlobIndex structure for code signing
-// This matches Apple's CoreServices internal structure
-typedef struct {
-    uint32_t type;
-    uint32_t offset;
-} CS_BlobIndex;
 
 class ZSign
 {
