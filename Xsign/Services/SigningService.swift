@@ -10,22 +10,21 @@ class SigningService {
         var bundleName: String?
         var bundleVersion: String?
         var bundleBuildVersion: String?
-        var dylibPaths: [String]?
     }
 
     func sign(appFile: AppFile, certificate: Certificate, options: SigningOptions) async throws -> URL {
-        // 1. Prepare file paths - need to write certificate data to temp files
+        // 1. Prepare file paths
         let fileManager = FileManager.default
         let tempURL = fileManager.temporaryDirectory
-        
-        // Get app file path - use the filePath property which returns the full URL
+
+        // Get app file path
         let appPath = appFile.filePath.path
-        
+
         // Write P12 data to temp file
         let p12Data = try certificate.decryptedP12Data()
         let p12Path = tempURL.appendingPathComponent("cert.p12")
         try p12Data.write(to: p12Path)
-        
+
         // Write provisioning profile to temp file if available
         var provisionPath: String? = nil
         if let provData = certificate.provisioningProfileData {
@@ -33,7 +32,7 @@ class SigningService {
             try provData.write(to: provURL)
             provisionPath = provURL.path
         }
-        
+
         // Get password
         let password = certificate.decryptedPassword() ?? ""
 
@@ -47,19 +46,19 @@ class SigningService {
             options.bundleID ?? "",
             options.bundleName ?? "",
             options.bundleVersion ?? "",
-            nil, // short_version - not used
+            options.bundleBuildVersion ?? "",
             false // adhoc
         )
-        
-        // Clean up temp files
+
+        // 3. Clean up temp files
         try? fileManager.removeItem(at: p12Path)
         if provisionPath != nil {
             try? fileManager.removeItem(at: URL(fileURLWithPath: provisionPath!))
         }
-        
+
         guard signSuccess else { throw NSError(domain: "Signing", code: 1) }
 
-        // 3. Return signed app path
+        // 4. Return signed app path
         let signedPath = URL(fileURLWithPath: appPath).deletingLastPathComponent().appendingPathComponent("signed_\(appFile.fileName)")
         return signedPath
     }
