@@ -1,4 +1,5 @@
 import Foundation
+import ZsignC
 
 class SigningService {
     static let shared = SigningService()
@@ -8,72 +9,39 @@ class SigningService {
         var bundleID: String?
         var bundleName: String?
         var bundleVersion: String?
-        var dylibPaths: [String]?
-        var entitlements: String? // XML plist content
+        var bundleBuildVersion: String?
     }
 
     func sign(appFile: AppFile, certificate: Certificate, options: SigningOptions) async throws -> URL {
-        let p12Data = try certificate.decryptedP12Data()
-        let password = certificate.decryptedPassword() ?? ""
+        // 1. Prepare file paths
+        let fileManager = FileManager.default
+        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let appPath = documentsURL.appendingPathComponent(appFile.fileName)
+        let p12Path = documentsURL.appendingPathComponent(certificate.fileName)
+        let provisionPath = documentsURL.appendingPathComponent(certificate.provisionFileName ?? "")
+        let entitlementsPath = documentsURL.appendingPathComponent("entitlements.plist")
 
-        let workspace = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
-        try FileManager.default.createDirectory(at: workspace, withIntermediateDirectories: true)
+        // 2. Extract certificate password
+        let password = certificate.password ?? ""
 
-        // 1. Prepare Credentials
-        let p12Path = workspace.appendingPathComponent("cert.p12")
-        try p12Data.write(to: p12Path)
+        // 3. Call C function from ZsignC module
+        let signSuccess = c_zsign_sign_app(
+            appPath.path,
+            p12Path.path,
+            password,
+            provisionPath.path,
+            nil, // output_path - use default
+            options.bundleID ?? "",
+            options.bundleName ?? "",
+            options.bundleVersion ?? "",
+            nil, // short_version - not used
+            false // adhoc
+        )
 
-        let provisionPath = workspace.appendingPathComponent("embedded.mobileprovision")
-        if let profileData = certificate.provisioningProfileData {
-            try profileData.write(to: provisionPath)
-        }
-
-        // 2. Prepare Entitlements if provided
-        var entitlementsPath: String? = nil
-        if let entitlementsData = options.entitlements {
-            let path = workspace.appendingPathComponent("entitlements.plist")
-            try entitlementsData.write(to: path, atomically: true, encoding: .utf8)
-            entitlementsPath = path.path
-        }
-
-        // 3. Extract IPA for folder-based signing
-        let unzipDir = workspace.appendingPathComponent("AppPayload")
-        try ZipService.shared.unzip(at: appFile.filePath, to: unzipDir)
-
-        // Find the .app folder
-        let appPath = unzipDir.appendingPathComponent("Payload").appendingPathComponent("\(appFile.fileName).app")
-
-        let outputPath = workspace.appendingPathComponent("signed_\(appFile.fileName)")
-
-        // 4. Sign using Zsign Swift package
-        let signSuccess = Zsign.sign(
-            appPath: appPath.path,
-            provisionPath: provisionPath.path,
-            p12Path: p12Path.path,
-            p12Password: password,
-            entitlementsPath: entitlementsPath ?? "",
-            customIdentifier: options.bundleID ?? "",
-            customName: options.bundleName ?? "",
-            customVersion: options.bundleVersion ?? "",
-            adhoc: false,
-            removeProvision: false
-        ) { success in
-            print("[ZSign] Signing completion: \(success)")
-        }
-        
-        // Note: Zsign.sign() appears to be synchronous based on Feather's usage
-        // The completion handler is called before the function returns
         guard signSuccess else { throw NSError(domain: "Signing", code: 1) }
 
-        // 5. Repackage signed folder into IPA
-        let ipaOutputPath = outputPath.appendingPathExtension("ipa")
-        // TODO: Implement IPA creation from signed .app folder
-
-        appFile.isSigned = true
-        appFile.signatureStatus = .signed
-        appFile.lastSignedDate = Date()
-        await PersistenceService.shared.save()
-
-        return ipaOutputPath as URL
+        // 4. Return signed app path (simplified - need to handle IPA creation)
+        let signedPath = appPath.deletingLastPathComponent().appendingPathComponent("signed_\(appFile.fileName)")
+        return signedPath
     }
 }
