@@ -1,5 +1,4 @@
-// log.h - Minimal logging class for Zsign
-// This is a simplified version to allow compilation on iOS
+// log.h - Logging class for Zsign
 
 #ifndef log_h
 #define log_h
@@ -9,26 +8,35 @@
 
 class ZLog {
 public:
-    static void ErrorV(const char* format, ...) {
-        va_list args;
-        va_start(args, format);
-        vfprintf(stderr, format, args);
-        va_end(args);
-    }
+    static const int E_NONE = 0;
+    static const int E_ERROR = 1;
+    static const int E_INFO = 2;
+    static const int E_DEBUG = 3;
+    static const int E_WARN = 4;
     
-    static void WarningV(const char* format, ...) {
-        va_list args;
-        va_start(args, format);
-        vfprintf(stderr, format, args);
-        va_end(args);
-    }
+    static int g_nLogLevel;
     
-    static void InfoV(const char* format, ...) {
-        va_list args;
-        va_start(args, format);
-        vfprintf(stdout, format, args);
-        va_end(args);
-    }
+    static void _Print(const char* szLog, int nColor = 0);
+    static void Print(int nLevel, const char* szLog);
+    static void PrintV(int nLevel, const char* szFormat, ...);
+    
+    static bool Error(const char* szLog);
+    static bool ErrorV(const char* szFormat, ...);
+    
+    static bool Success(const char* szLog);
+    static bool SuccessV(const char* szFormat, ...);
+    
+    static bool PrintResult(bool bSuccess, const char* szLog);
+    static bool PrintResultV(bool bSuccess, const char* szFormat, ...);
+    
+    static bool Warn(const char* szLog);
+    static bool WarnV(const char* szFormat, ...);
+    
+    static void Print(const char* szLog);
+    static void PrintV(const char* szFormat, ...);
+    
+    static void Debug(const char* szLog);
+    static void DebugV(const char* szFormat, ...);
 };
 
 #endif /* log_h */
