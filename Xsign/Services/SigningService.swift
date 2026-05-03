@@ -17,7 +17,9 @@ class SigningService {
         // 1. Prepare file paths - need to write certificate data to temp files
         let fileManager = FileManager.default
         let tempURL = fileManager.temporaryDirectory
-        let appPath = appFile.fileURL.path
+        
+        // Get app file path - use the filePath property which returns the full URL
+        let appPath = appFile.filePath.path
         
         // Write P12 data to temp file
         let p12Data = try certificate.decryptedP12Data()
