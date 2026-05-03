@@ -25,7 +25,7 @@ class SigningService {
         try p12Data.write(to: p12Path)
         
         // Write provisioning profile to temp file if available
-        var provisionPath = ""
+        var provisionPath: String? = nil
         if let provData = certificate.provisioningProfileData {
             let provURL = tempURL.appendingPathComponent("profile.mobileprovision")
             try provData.write(to: provURL)
@@ -40,7 +40,7 @@ class SigningService {
             appPath,
             p12Path.path,
             password,
-            provisionPath.isEmpty ? nil : provisionPath,
+            provisionPath,
             nil, // output_path - use default
             options.bundleID ?? "",
             options.bundleName ?? "",
@@ -48,7 +48,13 @@ class SigningService {
             nil, // short_version - not used
             false // adhoc
         )
-
+        
+        // Clean up temp files
+        try? fileManager.removeItem(at: p12Path)
+        if provisionPath != nil {
+            try? fileManager.removeItem(at: URL(fileURLWithPath: provisionPath!))
+        }
+        
         guard signSuccess else { throw NSError(domain: "Signing", code: 1) }
 
         // 3. Return signed app path
