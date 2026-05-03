@@ -65,6 +65,9 @@ targets:
       - path: Xsign/Resources
         includes:
           - "**/*"
+      - path: Xsign/Resources/Assets.xcassets
+        includes:
+          - "**/*"
 
     settings:
       base:
@@ -76,6 +79,7 @@ targets:
         ONLY_ACTIVE_ARCH: YES
         CODE_SIGN_STYLE: Automatic
         CODE_SIGNING_ALLOWED: NO
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
 
     dependencies:
       # Swift Packages
