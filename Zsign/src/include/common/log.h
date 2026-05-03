@@ -29,8 +29,8 @@ public:
     static bool PrintResult(bool bSuccess, const char* szLog);
     static bool PrintResultV(bool bSuccess, const char* szFormat, ...);
     
-    static bool Warn(const char* szLog);
-    static bool WarnV(const char* szFormat, ...);
+    static bool Warning(const char* szLog);
+    static bool WarningV(const char* szFormat, ...);
     
     static void Print(const char* szLog);
     static void PrintV(const char* szFormat, ...);
