@@ -1,5 +1,4 @@
 import Foundation
-import Zsign
 
 class SigningService {
     static let shared = SigningService()
