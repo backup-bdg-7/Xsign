@@ -27,8 +27,7 @@ let package = Package(
             path: "src",
             exclude: [
                 "common/archive.cpp",
-                "zsign.cpp",
-                "zsign_c_wrapper.cpp"
+                "zsign.cpp"
             ],
             sources: [
                 "archo.cpp",
@@ -36,6 +35,7 @@ let package = Package(
                 "macho.cpp",
                 "openssl.cpp",
                 "signing.cpp",
+                "zsign_c_wrapper.cpp",
                 "common/base64.cpp",
                 "common/fs.cpp",
                 "common/json.cpp",
