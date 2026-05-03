@@ -52,10 +52,10 @@ struct LibraryView: View {
             if !categories.isEmpty {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 8) {
-                        CategoryPill("All", icon: "square.grid.2x2", color: "gray", isSelected: selectedCategoryID == nil)
+                        CategoryPill("All", icon: "square.grid.2x2", colorName: "gray", isSelected: selectedCategoryID == nil)
                             .onTapGesture { selectedCategoryID = nil }
                         ForEach(categories) { cat in
-                            CategoryPill(cat.name, icon: cat.icon, color: cat.color, isSelected: selectedCategoryID == cat.id)
+                            CategoryPill(cat.name, icon: cat.icon, colorName: cat.color, isSelected: selectedCategoryID == cat.id)
                                 .onTapGesture { selectedCategoryID = cat.id }
                         }
                     }
