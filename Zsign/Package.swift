@@ -46,7 +46,7 @@ let package = Package(
                 "common/sha.cpp",
                 "common/timer.cpp",
                 "common/util.cpp",
-                "utils.mm"
+                "zsign_c_wrapper.cpp"
             ],
             publicHeadersPath: "include",
             cxxSettings: [

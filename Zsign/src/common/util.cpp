@@ -59,11 +59,20 @@ bool  ZUtil::SystemExecV(const char* szCmd, ...)
 		return false;
 	}
 
+#if !TARGET_OS_IPHONE && !TARGET_OS_SIMULATOR
 	int status = system(szRealCmd);
 	if (0 != status) {
 		ZLog::ErrorV("SystemExec: \"%s\", error!\n", szRealCmd);
 		return false;
 	}
+#else
+	ZLog::WarningV("SystemExec not available on iOS, skipping: \"%s\"\n", szRealCmd);
+#endif
+
+
+
+
+
 	return true;
 }
 
