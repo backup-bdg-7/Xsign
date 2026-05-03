@@ -1,0 +1,8 @@
+2026-05-03T23:36:32.9870000Z Evaluating build.if
+2026-05-03T23:36:32.9870000Z Evaluating: success()
+2026-05-03T23:36:32.9870000Z Result: true
+2026-05-03T23:36:32.9890000Z Requested labels: macos-15
+2026-05-03T23:36:32.9890000Z Job defined at: backup-bdg-7/Xsign/.github/workflows/ios-build-monitor.yml@refs/heads/main
+2026-05-03T23:36:32.9890000Z Waiting for a runner to pick up this job...
+2026-05-03T23:36:33.4890000Z Job is about to start running on the hosted runner: GitHub Actions 1000000392
+2026-05-03T23:36:33.4890000Z Job is waiting for a hosted runner to come online.
