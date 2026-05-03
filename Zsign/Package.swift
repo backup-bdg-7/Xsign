@@ -30,6 +30,7 @@ let package = Package(
             sources: [
                 "archo.cpp",
                 "bundle.cpp",
+                "certcheck.cpp",
                 "macho.cpp",
                 "openssl.cpp",
                 "signing.cpp",

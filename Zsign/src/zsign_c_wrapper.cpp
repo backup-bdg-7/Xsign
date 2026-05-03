@@ -1,4 +1,3 @@
-// zsign_c_wrapper.cpp - C++ implementation of C interface for Zsign
 #include "zsign_c.h"
 #include "signing.h"
 #include "certcheck.h"
@@ -10,8 +9,9 @@
 #include <sstream>
 
 using namespace std;
+using namespace ZSign;
 
-static CSigning g_signing;
+static ZSign g_signing;
 
 static vector<string> splitDylibPaths(const string& str) {
     vector<string> result;
@@ -48,7 +48,7 @@ extern "C" bool c_zsign_sign_app(
     string strDylibPaths(dylib_paths ? dylib_paths : "");
 
     try {
-        g_signing = CSigning();
+        g_signing = ZSign();
         if (!adhoc && !strCertificatePath.empty()) {
             if (!g_signing.SetCertificate(strCertificatePath, strPassword)) return false;
         }
@@ -75,8 +75,7 @@ extern "C" bool c_zsign_check_certificate(const char* certificate_path, const ch
     string strCertificatePath(certificate_path ? certificate_path : "");
     string strPassword(password ? password : "");
     try {
-        CCertCheck certCheck;
-        return certCheck.CheckCertificate(strCertificatePath, strPassword);
+        return CheckCertificate(strCertificatePath, strPassword) == 0;
     } catch (...) { return false; }
 }
 
@@ -85,8 +84,7 @@ extern "C" const char* c_zsign_get_certificate_info(const char* certificate_path
     string strCertificatePath(certificate_path ? certificate_path : "");
     string strPassword(password ? password : "");
     try {
-        CCertCheck certCheck;
-        strInfo = certCheck.GetCertificateInfoJSON(strCertificatePath, strPassword);
+        strInfo = GetCertificateInfoJSON(strCertificatePath, strPassword);
         return strInfo.c_str();
     } catch (...) {
         strInfo = "{}";
