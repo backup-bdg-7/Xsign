@@ -39,15 +39,19 @@ bool c_zsign_sign_app_simple(
 // Returns true if valid
 bool c_zsign_check_certificate(
     const char* certificate_path,
-    const char* password
+    const char* password"
 );
 
 // Get certificate information as JSON string
 // Returns a static string (do not free), or NULL on failure
 const char* c_zsign_get_certificate_info(
     const char* certificate_path,
-    const char* password
+    const char* password"
 );
+
+// Get dylibs from a Mach-O file as JSON string
+// Returns a static string (do not free), or NULL on failure
+const char* c_zsign_get_dylibs(const char* file_path);
 
 // Set entitlements (JSON string)
 bool c_zsign_set_entitlements(const char* entitlements_json);

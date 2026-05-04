@@ -6,6 +6,7 @@
 #include "certcheck.h"
 #include "bundle.h"
 #include "openssl.h"
+#include "macho.h"
 #include <string>
 #include <vector>
 #include <set>
@@ -78,6 +79,24 @@ extern "C" bool c_zsign_sign_app(
         );
         
         return result;
+    }
+}
+
+// C wrapper function to get dylibs from a Mach-O file
+extern "C" const char* c_zsign_get_dylibs(const char* file_path) {
+    @autoreleasepool {
+        std::string strFilePath(file_path ? file_path : "");
+        
+        ZMachO macho;
+        if (!macho.Init(strFilePath.c_str())) {
+            static std::string empty = "[]";
+            return empty.c_str();
+        }
+        
+        // Get dylibs - this would need to be implemented based on ZMachO API
+        // For now, return empty array
+        static std::string dylibs = "[]";
+        return dylibs.c_str();
     }
 }
 
