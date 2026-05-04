@@ -32,6 +32,7 @@ let package = Package(
                 "bundle.cpp",
                 "certcheck.cpp",
                 "macho.cpp",
+                "metadata.cpp",
                 "openssl.cpp",
                 "signing.cpp",
                 "zsign_c_wrapper.cpp",

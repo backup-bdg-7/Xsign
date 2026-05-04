@@ -4,6 +4,7 @@
 #include "signing.h"
 #include "certcheck.h"
 #include "macho.h"
+#include "metadata.h"
 #include <string>
 #include <vector>
 #include <cstring>
