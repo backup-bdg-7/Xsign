@@ -91,6 +91,7 @@ class TweakManager {
         
         return extensions
     }
+    
     /// Inject a dylib into an extension
     private func injectIntoExtension(extensionURL: URL, dylibName: String, options: TweakOptions) {
         guard
@@ -100,44 +101,47 @@ class TweakManager {
             print("Skipping \(extensionURL.lastPathComponent): couldn't read bundle")
             return
         }
-
+        
         var injectFolder = options.injectFolder
         if options.injectPath == .rpath && options.injectFolder == .frameworks {
             injectFolder = .root
         }
-
+        
         let injectPath: String
-        if options.injectPath == .rpath {
-            injectPath = "@rpath/\(dylibName)"
-        } else {
-            if injectFolder == .frameworks {
-                injectPath = "@executable_path/../../Frameworks/\(dylibName)"
-            } else {
-                injectPath = "@executable_path/../../\(dylibName)"
-            }
+        switch injectFolder {
+        case .root:
+            injectPath = ""
+        case .frameworks:
+            injectPath = "Frameworks/"
         }
-
-        let success = c_zsign_inject_dylib(extExecutable.path, injectPath)
-
+        
+        let dylibPath = "\(injectPath)\(dylibName)"
+        let fullDylibPath = options.injectPath.rawValue + dylibPath
+        
+        // Use zsign C function to inject the dylib
+        let success = c_zsign_inject_dylib(
+            extExecutable.path,
+            (fullDylibPath as NSString).utf8String!
+        )
+        
         if success {
-            print("Injected \(dylibName) into extension: \(extensionURL.lastPathComponent)")
+            print("Injected \(dylibName) into \(extensionURL.lastPathComponent)")
         } else {
-            print("Failed to inject into extension: \(extensionURL.lastPathComponent)")
+            print("Failed to inject \(dylibName) into \(extensionURL.lastPathComponent)")
         }
     }
 }
 
-// MARK: - Options and Errors
 struct TweakOptions {
     var injectPath: InjectPath = .rpath
     var injectFolder: InjectFolder = .frameworks
     var injectIntoExtensions: Bool = false
-
+    
     enum InjectPath: String {
         case rpath = "@rpath/"
         case executablePath = "@executable_path/"
     }
-
+    
     enum InjectFolder: String {
         case root = "/"
         case frameworks = "Frameworks/"
@@ -157,5 +161,3 @@ func c_zsign_inject_dylib(_ appExecutable: UnsafePointer<CChar>, _ dylibPath: Un
 
 @_silgen_name("c_zsign_change_dylib_path")
 func c_zsign_change_dylib_path(_ dylibPath: UnsafePointer<CChar>, _ oldPath: UnsafePointer<CChar>, _ newPath: UnsafePointer<CChar>) -> Bool
-
-}
