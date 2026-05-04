@@ -59,6 +59,10 @@ bool c_zsign_set_entitlements(const char* entitlements_json);
 // Set signing options
 void c_zsign_set_option(const char* option_name, bool enabled);
 
+// Get metadata from an app bundle
+// Returns a static string (do not free), or NULL on failure
+const char* c_zsign_get_metadata(const char* app_folder, const char* output_dir, const char* ipa_file);
+
 #ifdef __cplusplus
 }
 #endif
