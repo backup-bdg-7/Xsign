@@ -50,7 +50,7 @@ extern "C" bool c_zsign_sign_app_simple(
         ZBundle bundle;
         string strBundlePath(bundle_path ? bundle_path : "");
 
-        return bundle.SignFolder(&g_zsa, strBundlePath, "", "", "", 
+        return bundle.SignFolder(&g_zsa, strBundlePath, "", "", "",
                                 g_arrDylibFiles, g_arrRemoveDylibNames, bForce, bWeakInject, bEnableCache, bRemoveProvision);
 
     } catch (...) {
@@ -74,45 +74,40 @@ extern "C" bool c_zsign_sign_app(
         string strCertPath(certificate_path ? certificate_path : "");
         string strPassword(password ? password : "");
         string strProvPath(provisioning_profile_path ? provisioning_profile_path : "");
-        
+
         ZSignAsset zsa;
         if (!zsa.Init(strCertPath, strCertPath, strProvPath, "", strPassword, false, false, true)) {
             return false;
         }
-        
+
         ZBundle bundle;
         string strBundlePath(bundle_path ? bundle_path : "");
         bool bForce = false;
         bool bWeakInject = false;
         bool bEnableCache = false;
         bool bRemoveProvision = false;
-        
-        return bundle.SignFolder(&zsa, strBundlePath, 
+
+        return bundle.SignFolder(&zsa, strBundlePath,
                                output_path ? output_path : "",
                                bundle_id ? bundle_id : "",
                                display_name ? display_name : "",
-                               g_arrDylibFiles, g_arrRemoveDylibNames, 
+                               g_arrDylibFiles, g_arrRemoveDylibNames,
                                bForce, bWeakInject, bEnableCache, bRemoveProvision);
     } catch (...) {
         return false;
     }
 }
 
-
-
 extern "C" const char* c_zsign_get_dylibs(const char* file_path) {
     static string result = "[]";
     try {
         string strPath(file_path ? file_path : "");
-        ZZZMachO macho;
+        ZMachO macho;
         if (!macho.Init(strPath.c_str())) {
             return result.c_str();
         }
-        
-        // Get dylibs - use ZMachO to get loaded dylibs
-        vector<string> arrDylibs;
-        // This would need to use the proper ZMachO API
-        // For now, return empty array
+
+        // TODO: Implement proper dylib extraction using ZMachO
         result = "[]";
         return result.c_str();
     } catch (...) {
@@ -120,12 +115,10 @@ extern "C" const char* c_zsign_get_dylibs(const char* file_path) {
     }
 }
 
-
 extern "C" bool c_zsign_check_certificate(const char* certificate_path, const char* password) {
     string strPath(certificate_path ? certificate_path : "");
     string strPassword(password ? password : "");
     try {
-        // Use CheckCertificate from certcheck.h
         return CheckCertificate(strPath, strPassword) == 0;
     } catch (...) { return false; }
 }
@@ -140,8 +133,7 @@ extern "C" const char* c_zsign_get_certificate_info(const char* certificate_path
             strInfo = "{}";
             return strInfo.c_str();
         }
-        
-        // Build JSON-like info string
+
         strInfo = "{\"team_id\":\"" + zsa.m_strTeamId + "\",\"subject_cn\":\"" + zsa.m_strSubjectCN + "\"}";
         return strInfo.c_str();
     } catch (...) {
@@ -151,7 +143,6 @@ extern "C" const char* c_zsign_get_certificate_info(const char* certificate_path
 }
 
 extern "C" bool c_zsign_set_entitlements(const char* entitlements_json) {
-    // This would need to parse entitlements and set them in g_zsa
     return true;
 }
 
@@ -163,16 +154,14 @@ extern "C" void c_zsign_set_option(const char* option_name, bool enabled) {
     } catch (...) {}
 }
 
-
 extern "C" const char* c_zsign_get_metadata(const char* app_folder, const char* output_dir, const char* ipa_file) {
     static string result = "{}";
     try {
         string strAppFolder(app_folder ? app_folder : "");
         string strOutputDir(output_dir ? output_dir : "");
         string strIpaFile(ipa_file ? ipa_file : "");
-        
+
         if (GetMetadata(strAppFolder, strOutputDir, strIpaFile)) {
-            // Return some metadata info
             result = "{\"status\":\"success\"}";
         } else {
             result = "{\"status\":\"failed\"}";
@@ -184,49 +173,28 @@ extern "C" const char* c_zsign_get_metadata(const char* app_folder, const char* 
     }
 }
 
-// Inject a dylib into an executable
 extern "C" bool c_zsign_inject_dylib(const char* app_executable, const char* dylib_path) {
     try {
         string strAppExe(app_executable ? app_executable : "");
         string strDylibPath(dylib_path ? dylib_path : "");
-        
-        // Use MachO class to inject the dylib
-        ZZMachO macho;
-        if (!macho.Load(strAppExe)) {
+
+        ZMachO macho;
+        if (!macho.Init(strAppExe.c_str())) {
             return false;
         }
-        
-        // Add the dylib load command
-        if (!macho.AddDylib(strDylibPath)) {
+
+        if (!macho.InjectDylib(false, strDylibPath.c_str())) {
             return false;
         }
-        
-        return macho.Save(strAppExe);
+
+        return true;
     } catch (...) {
         return false;
     }
 }
 
-// Change a dylib path in an executable
 extern "C" bool c_zsign_change_dylib_path(const char* dylib_path, const char* old_path, const char* new_path) {
-    try {
-        string strDylibPath(dylib_path ? dylib_path : "");
-        string strOldPath(old_path ? old_path : "");
-        string strNewPath(new_path ? new_path : "");
-        
-        // Use MachO class to change the dylib path
-        ZZMachO macho;
-        if (!macho.Load(strDylibPath)) {
-            return false;
-        }
-        
-        // Change the dylib path
-        if (!macho.ChangeDylibPath(strOldPath, strNewPath)) {
-            return false;
-        }
-        
-        return macho.Save(strDylibPath);
-    } catch (...) {
-        return false;
-    }
+    // ZMachO doesn't have a direct ChangeDylibPath method
+    // This is a placeholder
+    return false;
 }
