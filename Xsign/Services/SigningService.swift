@@ -45,7 +45,7 @@ class SigningService {
             p12Path.path,
             password,
             provisionPath ?? "",
-            nil, // output_path - use default
+            "", // output_path - use empty string instead of nil
             options.bundleID ?? "",
             options.bundleName ?? "",
             options.bundleVersion ?? "",
