@@ -1,111 +1,233 @@
 import Foundation
 import ZIPFoundation
 import SWCompression
+import ZsignC
 
+/**
+ * TweakManager handles dylib injection and tweak management.
+ * Based on Feather's TweakHandler implementation.
+ */
 class TweakManager {
     static let shared = TweakManager()
+    private let fileManager = FileManager.default
+    private var injectedDylibNames: [String] = []
+
     private init() {}
 
-    func prepareTweak(at url: URL) throws -> URL {
-        if url.pathExtension == "dylib" {
-            return url
-        } else if url.pathExtension == "deb" {
-            return try extractDylibFromDeb(at: url)
+    /// Process tweak files (dylib or deb) for injection
+    func processTweak(at url: URL, appURL: URL, options: TweakOptions = .default) async throws -> [URL] {
+        var processedURLs: [URL] = []
+
+        switch url.pathExtension.lowercased() {
+        case "dylib":
+            let processed = try await handleDylib(at: url, appURL: appURL, options: options)
+            processedURLs.append(processed)
+        case "deb":
+            let processed = try await handleDeb(at: url, appURL: appURL)
+            processedURLs.append(contentsOf: processed)
+        default:
+            throw TweakError.unsupportedFileExtension(url.pathExtension)
         }
-        return url
+
+        return processedURLs
     }
 
-    private func extractDylibFromDeb(at url: URL) throws -> URL {
+    /// Handle a dylib file for injection
+    private func handleDylib(at url: URL, appURL: URL, options: TweakOptions) async throws -> URL {
+        var destinationURL = appURL
+        let injectFolder = options.injectFolder
+
+        // Check for Frameworks folder
+        if injectFolder == .frameworks {
+            destinationURL = destinationURL.appendingPathComponent("Frameworks")
+            try fileManager.createDirectory(at: destinationURL, withIntermediateDirectories: true)
+        }
+
+        destinationURL = destinationURL.appendingPathComponent(url.lastPathComponent)
+
+        // Copy dylib to app
+        try fileManager.copyItem(at: url, to: destinationURL)
+
+        // Change dylib paths if needed (for CydiaSubstrate compatibility)
+        if fileManager.fileExists(atPath: destinationURL.path) {
+            _ = c_zsign_change_dylib_path(
+                destinationURL.path,
+                "/Library/Frameworks/CydiaSubstrate.framework/CydiaSubstrate",
+                "@rpath/CydiaSubstrate.framework/CydiaSubstrate"
+            )
+        }
+
+        // Inject into main executable
+        if let appexe = Bundle(url: appURL)?.executableURL {
+            let injectPath = "\(options.injectPath.rawValue)\(injectFolder.rawValue)\(destinationURL.lastPathComponent)"
+            _ = c_zsign_inject_dylib(appexe.path, injectPath)
+        }
+
+        injectedDylibNames.append(destinationURL.lastPathComponent)
+
+        return destinationURL
+    }
+
+    /// Handle a deb file for injection
+    private func handleDeb(at url: URL, appURL: URL) async throws -> [URL] {
+        let baseTmpDir = fileManager.temporaryDirectory
+            .appendingPathComponent("TweakManager_\(UUID().uuidString)")
+        try fileManager.createDirectory(at: baseTmpDir, withIntermediateDirectories: true)
+
+        // Parse deb file
         let data = try Data(contentsOf: url)
-        
-        // Parse the deb file (.deb files are ar archives)
-        // The ar format has a global magic "!<arch>\n" followed by file entries
         guard let archive = ArArchive(data: data) else {
-            throw NSError(domain: "TweakManager", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to parse deb file"])
-        }
-        
-        // Find the data.tar file in the archive (could be data.tar, data.tar.gz, data.tar.xz, etc.)
-        guard let dataEntry = archive.entries.first(where: { $0.name.hasPrefix("data.tar") }) else {
-            throw NSError(domain: "TweakManager", code: 1, userInfo: [NSLocalizedDescriptionKey: "No data.tar found in deb file"])
+            throw TweakError.decompressionFailed("Failed to parse deb file")
         }
 
-        // Decompress if needed
-        var tarData = dataEntry.data
-        if dataEntry.name.hasSuffix(".gz") {
-            tarData = try GzipArchive.unarchive(archive: dataEntry.data)
-        } else if dataEntry.name.hasSuffix(".xz") {
-            tarData = try XZArchive.unarchive(archive: dataEntry.data)
-        } else if dataEntry.name.hasSuffix(".bz2") {
-            tarData = try BZip2.decompress(data: dataEntry.data)
-        }
+        var processedURLs: [URL] = []
 
-        // Parse the tar archive
-        let tar = try TarContainer.open(container: tarData)
-        
-        // Find the dylib file
-        guard let dylibEntry = tar.first(where: { $0.info.name.hasSuffix(".dylib") }) else {
-            throw NSError(domain: "TweakManager", code: 2, userInfo: [NSLocalizedDescriptionKey: "No dylib found in deb file"])
-        }
+        for entry in archive.entries where entry.name.hasPrefix("data.tar") {
+            var tarData = entry.data
 
-        // Write to temp location
-        guard let dylibData = dylibEntry.data else {
-            throw NSError(domain: "TweakManager", code: 3, userInfo: [NSLocalizedDescriptionKey: "Dylib data is nil"])
-        }
-        
-        let tempPath = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString + ".dylib")
-        try dylibData.write(to: tempPath)
-        return tempPath
-    }
-}
+            // Decompress if needed
+            if entry.name.hasSuffix(".gz") {
+                tarData = try GzipArchive.unarchive(archive: tarData)
+            } else if entry.name.hasSuffix(".xz") {
+                tarData = try XZArchive.unarchive(archive: tarData)
+            } else if entry.name.hasSuffix(".bz2") {
+                tarData = try BZip2.decompress(data: tarData)
+            }
 
-// Simple AR archive parser for .deb files
-struct ArArchive {
-    let entries: [ArEntry]
-    
-    init?(data: Data) {
-        // Check for ar magic
-        let magic = Data("!<arch>\n".utf8)
-        guard data.count > magic.count && data.prefix(magic.count) == magic else {
-            return nil
-        }
-        
-        var entries: [ArEntry] = []
-        var offset = magic.count
-        
-        while offset < data.count {
-            // Each entry has a header of 60 bytes
-            guard offset + 60 <= data.count else { break }
-            
-            let headerData = data.subdata(in: offset..<offset + 60)
-            guard let header = String(data: headerData, encoding: .ascii) else { break }
-            
-            // Parse header fields
-            // Format: name (16) + timestamp (12) + ownerID (6) + groupID (6) + mode (8) + size (10) + ` (2)
-            let name = header.prefix(16).trimmingCharacters(in: .whitespacesAndNewlines)
-            let sizeStr = header.dropFirst(16 + 12 + 6 + 6 + 8).prefix(10).trimmingCharacters(in: .whitespacesAndNewlines)
-            
-            guard let size = Int(sizeStr) else { break }
-            
-            offset += 60
-            
-            // Read file data
-            guard offset + size <= data.count else { break }
-            let fileData = data.subdata(in: offset..<offset + size)
-            
-            entries.append(ArEntry(name: name, data: fileData))
-            
-            // Align to even byte boundary
-            offset += size
-            if offset % 2 != 0 {
-                offset += 1
+            // Parse tar archive
+            let tar = try TarContainer.open(container: tarData)
+
+            // Process entries
+            for entry in tar {
+                let name = entry.info.name
+                guard let data = entry.data else { continue }
+
+                // Check for dylibs, frameworks, or bundles
+                if name.hasSuffix(".dylib") {
+                    let destURL = baseTmpDir.appendingPathComponent(URL(fileURLWithPath: name).lastPathComponent)
+                    try data.write(to: destURL)
+                    processedURLs.append(destURL)
+                } else if name.hasSuffix(".framework/") || name.hasSuffix(".framework") {
+                    // Handle framework
+                    let frameworkURL = baseTmpDir.appendingPathComponent(URL(fileURLWithPath: name).lastPathComponent)
+                    try fileManager.createDirectory(at: frameworkURL, withIntermediateDirectories: true)
+                } else if name.hasSuffix(".bundle/") || name.hasSuffix(".bundle") {
+                    // Handle bundle
+                    let bundleURL = baseTmpDir.appendingPathComponent(URL(fileURLWithPath: name).lastPathComponent)
+                    try fileManager.createDirectory(at: bundleURL, withIntermediateDirectories: true)
+                }
             }
         }
-        
-        self.entries = entries
+
+        return processedURLs
+    }
+
+    /// Inject dylibs into all app extensions
+    func injectIntoExtensions(appURL: URL, dylibNames: [String], options: TweakOptions) {
+        let extensions = discoverAppExtensions(in: appURL)
+
+        guard !extensions.isEmpty else { return }
+
+        for extURL in extensions {
+            for dylibName in dylibNames {
+                injectIntoExtension(extensionURL: extURL, dylibName: dylibName, options: options)
+            }
+        }
+    }
+
+    /// Discover app extensions (PlugIns and Extensions directories)
+    private func discoverAppExtensions(in appURL: URL) -> [URL] {
+        var extensions: [URL] = []
+
+        let plugInsPath = appURL.appendingPathComponent("PlugIns")
+        let extensionsPath = appURL.appendingPathComponent("Extensions")
+
+        for directory in [plugInsPath, extensionsPath] {
+            guard fileManager.fileExists(atPath: directory.path) else { continue }
+
+            do {
+                let contents = try fileManager.contentsOfDirectory(
+                    at: directory,
+                    includingPropertiesForKeys: nil,
+                    options: [.skipsHiddenFiles]
+                )
+
+                let appexFiles = contents.filter { url in
+                    url.pathExtension.lowercased() == "appex" && url.hasDirectoryPath
+                }
+
+                extensions.append(contentsOf: appexFiles)
+            } catch {
+                print("Failed to enumerate \(directory.path): \(error.localizedDescription)")
+            }
+        }
+
+        return extensions
+    }
+
+    /// Inject a dylib into an extension
+    private func injectIntoExtension(extensionURL: URL, dylibName: String, options: TweakOptions) {
+        guard
+            let extBundle = Bundle(url: extensionURL),
+            let extExecutable = extBundle.executableURL
+        else {
+            print("Skipping \(extensionURL.lastPathComponent): couldn't read bundle")
+            return
+        }
+
+        var injectFolder = options.injectFolder
+        if options.injectPath == .rpath && options.injectFolder == .frameworks {
+            injectFolder = .root
+        }
+
+        let injectPath: String
+        if options.injectPath == .rpath {
+            injectPath = "@rpath/\(dylibName)"
+        } else {
+            if injectFolder == .frameworks {
+                injectPath = "@executable_path/../../Frameworks/\(dylibName)"
+            } else {
+                injectPath = "@executable_path/../../\(dylibName)"
+            }
+        }
+
+        let success = c_zsign_inject_dylib(extExecutable.path, injectPath)
+
+        if success {
+            print("Injected \(dylibName) into extension: \(extensionURL.lastPathComponent)")
+        } else {
+            print("Failed to inject into extension: \(extensionURL.lastPathComponent)")
+        }
     }
 }
 
-struct ArEntry {
-    let name: String
-    let data: Data
+// MARK: - Options and Errors
+struct TweakOptions {
+    var injectPath: InjectPath = .rpath
+    var injectFolder: InjectFolder = .frameworks
+    var injectIntoExtensions: Bool = false
+
+    enum InjectPath: String {
+        case rpath = "@rpath/"
+        case executablePath = "@executable_path/"
+    }
+
+    enum InjectFolder: String {
+        case root = "/"
+        case frameworks = "Frameworks/"
+    }
 }
+
+enum TweakError: Error {
+    case unsupportedFileExtension(String)
+    case decompressionFailed(String)
+    case missingFile(String)
+    case noAccess
+}
+
+// MARK: - C Function Declarations
+@_silgen_name("c_zsign_inject_dylib")
+func c_zsign_inject_dylib(_ appExecutable: UnsafePointer<CChar>, _ dylibPath: UnsafePointer<CChar>) -> Bool
+
+@_silgen_name("c_zsign_change_dylib_path")
+func c_zsign_change_dylib_path(_ dylibPath: UnsafePointer<CChar>, _ oldPath: UnsafePointer<CChar>, _ newPath: UnsafePointer<CChar>) -> Bool

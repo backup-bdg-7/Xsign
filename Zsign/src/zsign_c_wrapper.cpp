@@ -183,3 +183,50 @@ extern "C" const char* c_zsign_get_metadata(const char* app_folder, const char* 
         return result.c_str();
     }
 }
+
+// Inject a dylib into an executable
+extern "C" bool c_zsign_inject_dylib(const char* app_executable, const char* dylib_path) {
+    try {
+        string strAppExe(app_executable ? app_executable : "");
+        string strDylibPath(dylib_path ? dylib_path : "");
+        
+        // Use MachO class to inject the dylib
+        MachO macho;
+        if (!macho.Load(strAppExe)) {
+            return false;
+        }
+        
+        // Add the dylib load command
+        if (!macho.AddDylib(strDylibPath)) {
+            return false;
+        }
+        
+        return macho.Save(strAppExe);
+    } catch (...) {
+        return false;
+    }
+}
+
+// Change a dylib path in an executable
+extern "C" bool c_zsign_change_dylib_path(const char* dylib_path, const char* old_path, const char* new_path) {
+    try {
+        string strDylibPath(dylib_path ? dylib_path : "");
+        string strOldPath(old_path ? old_path : "");
+        string strNewPath(new_path ? new_path : "");
+        
+        // Use MachO class to change the dylib path
+        MachO macho;
+        if (!macho.Load(strDylibPath)) {
+            return false;
+        }
+        
+        // Change the dylib path
+        if (!macho.ChangeDylibPath(strOldPath, strNewPath)) {
+            return false;
+        }
+        
+        return macho.Save(strDylibPath);
+    } catch (...) {
+        return false;
+    }
+}
