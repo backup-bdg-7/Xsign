@@ -56,15 +56,28 @@ struct ProvisioningInfo {
 
     init(from plist: [String: Any]) {
         self.appID = plist["AppIDName"] as? String
-        self.teamID = plist["TeamIdentifier"] as? String
-        self.bundleID = plist["Entitlements"] as? String
-
-        if let entitlementsPlist = plist["Entitlements"] as? [String: Any] {
-            self.entitlements = entitlementsPlist
+        self.teamID = (plist["TeamIdentifier"] as? [String])?.first
+        
+        // Extract bundle ID from entitlements
+        if let entitlements = plist["Entitlements"] as? [String: Any] {
+            self.entitlements = entitlements
+            // Get bundle ID from application-identifier entitlement
+            if let appID = entitlements["application-identifier"] as? String {
+                // Format is usually "TEAMID.com.example.app"
+                let components = appID.split(separator: ".")
+                if components.count > 1 {
+                    self.bundleID = components.dropFirst().joined(separator: ".")
+                } else {
+                    self.bundleID = String(appID)
+                }
+            } else {
+                self.bundleID = nil
+            }
         } else {
             self.entitlements = nil
+            self.bundleID = nil
         }
-
+        
         if let date = plist["ExpirationDate"] as? Date {
             self.expirationDate = date
         } else {
