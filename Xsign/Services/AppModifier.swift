@@ -1,37 +1,86 @@
 import Foundation
+import ZsignC
 
+/**
+ * AppModifier handles app bundle modifications.
+ * Based on Feather's approach for modifying app properties.
+ */
 class AppModifier {
     static let shared = AppModifier()
     private init() {}
 
-    func modifyApp(at ipaURL: URL, newBundleID: String?, newVersion: String?, newBuild: String?) throws -> URL {
-        let workingDir = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
-        try FileManager.default.createDirectory(at: workingDir, withIntermediateDirectories: true)
+    /// Modify an app's Info.plist with new properties
+    func modifyInfoPlist(appURL: URL, properties: [String: Any]) throws {
+        let infoPlistURL = appURL.appendingPathComponent("Info.plist")
 
-        // 1. Unzip
-        try ZipService.shared.unzip(at: ipaURL, to: workingDir)
-
-        // 2. Modify Info.plist
-        let payloadDir = workingDir.appendingPathComponent("Payload")
-        let contents = try FileManager.default.contentsOfDirectory(at: payloadDir, includingPropertiesForKeys: nil)
-        guard let appDir = contents.first(where: { $0.pathExtension == "app" }) else {
-            throw NSError(domain: "AppModifier", code: 1, userInfo: [NSLocalizedDescriptionKey: "App bundle not found"])
+        guard FileManager.default.fileExists(atPath: infoPlistURL.path) else {
+            throw AppModifierError.plistNotFound
         }
 
-        let plistURL = appDir.appendingPathComponent("Info.plist")
-        if var plist = try? PropertyListSerialization.propertyList(from: Data(contentsOf: plistURL), options: [], format: nil) as? [String: Any] {
-            if let bundleID = newBundleID { plist["CFBundleIdentifier"] = bundleID }
-            if let version = newVersion { plist["CFBundleShortVersionString"] = version }
-            if let build = newBuild { plist["CFBundleVersion"] = build }
+        var plist = try NSMutableDictionary(contentsOf: infoPlistURL)
 
-            let updatedData = try PropertyListSerialization.data(fromPropertyList: plist, format: .xml, options: 0)
-            try updatedData.write(to: plistURL)
+        for (key, value) in properties {
+            plist[key] = value
         }
 
-        // 3. Re-zip
-        let outputIPA = FileManager.default.temporaryDirectory.appendingPathComponent("\(UUID().uuidString).ipa")
-        try ZipService.shared.zip(directory: workingDir, to: outputIPA)
-
-        return outputIPA
+        try plist.write(to: infoPlistURL)
     }
+
+    /// Change an app's bundle ID
+    func changeBundleID(appURL: URL, newBundleID: String) throws {
+        try modifyInfoPlist(appURL: appURL, properties: ["CFBundleIdentifier": newBundleID])
+    }
+
+    /// Change an app's display name
+    func changeDisplayName(appURL: URL, newName: String) throws {
+        try modifyInfoPlist(appURL: appURL, properties: ["CFBundleDisplayName": newName])
+    }
+
+    /// Change an app's version
+    func changeVersion(appURL: URL, newVersion: String) throws {
+        try modifyInfoPlist(appURL: appURL, properties: ["CFBundleVersion": newVersion])
+    }
+
+    /// Change an app's short version
+    func changeShortVersion(appURL: URL, newVersion: String) throws {
+        try modifyInfoPlist(appURL: appURL, properties: ["CFBundleShortVersionString": newVersion])
+    }
+
+    /// Remove files from an app bundle
+    func removeFiles(from appURL: URL, fileNames: [String]) throws {
+        let fileManager = FileManager.default
+
+        for fileName in fileNames {
+            let fileURL = appURL.appendingPathComponent(fileName)
+            if fileManager.fileExists(atPath: fileURL.path) {
+                try fileManager.removeItem(at: fileURL)
+            }
+        }
+    }
+
+    /// Add a file to an app bundle
+    func addFile(to appURL: URL, fileURL: URL, destinationPath: String? = nil) throws {
+        let fileName = destinationPath ?? fileURL.lastPathComponent
+        let destinationURL = appURL.appendingPathComponent(fileName)
+
+        if FileManager.default.fileExists(atPath: destinationURL.path) {
+            try FileManager.default.removeItem(at: destinationURL)
+        }
+
+        try FileManager.default.copyItem(at: fileURL, to: destinationURL)
+    }
+
+    /// Resign an app with zsign (after modifications)
+    func resignApp(at appURL: URL, certificate: Certificate) throws -> URL {
+        // This is a wrapper around SigningService
+        // Just call SigningService.shared.sign with appropriate options
+        let options = SigningService.SigningOptions()
+        return try await SigningService.shared.sign(appFile: AppFile(filePath: appURL), certificate: certificate, options: options)
+    }
+}
+
+enum AppModifierError: Error {
+    case plistNotFound
+    case modificationFailed
+    case fileOperationFailed
 }
