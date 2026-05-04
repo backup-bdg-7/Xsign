@@ -154,3 +154,17 @@ extern "C" const char* c_zsign_get_certificate_info(
         return info.c_str();
     }
 }
+
+// C wrapper function to get metadata from an app bundle
+extern "C" const char* c_zsign_get_metadata(const char* app_folder, const char* output_dir, const char* ipa_file) {
+    @autoreleasepool {
+        std::string strAppFolder(app_folder ? app_folder : "");
+        std::string strOutputDir(output_dir ? output_dir : "");
+        std::string strIpaFile(ipa_file ? ipa_file : "");
+        
+        bool result = GetMetadata(strAppFolder, strOutputDir, strIpaFile);
+        
+        static std::string status = result ? "success" : "failed";
+        return status.c_str();
+    }
+}
