@@ -23,8 +23,7 @@ bool c_zsign_sign_app(
     const char* display_name,
     const char* version,
     const char* short_version,
-    const char* dylib_paths,
-    bool adhoc
+    const char* dylib_paths
 );
 
 // Check if a certificate is valid

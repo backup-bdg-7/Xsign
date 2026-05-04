@@ -34,8 +34,7 @@ extern "C" bool c_zsign_sign_app(
     const char* display_name,
     const char* version,
     const char* short_version,
-    const char* dylib_paths,
-    bool adhoc
+    const char* dylib_paths
 ) {
     string strCertFile(certificate_path ? certificate_path : "");
     string strPKeyFile("");
@@ -48,7 +47,7 @@ extern "C" bool c_zsign_sign_app(
     bool bRemoveProvision = false;
 
     try {
-        if (!g_zsa.Init(strCertFile, strPKeyFile, strProvFile, strEntitleFile, strPassword, adhoc, false, false)) {
+        if (!g_zsa.Init(strCertFile, strPKeyFile, strProvFile, strEntitleFile, strPassword, false, false, false)) {
             return false;
         }
 
