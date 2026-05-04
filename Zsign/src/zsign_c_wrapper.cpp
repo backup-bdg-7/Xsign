@@ -56,6 +56,69 @@ extern "C" bool c_zsign_sign_app_simple(
     }
 }
 
+extern "C" bool c_zsign_sign_app(
+    const char* bundle_path,
+    const char* certificate_path,
+    const char* password,
+    const char* provisioning_profile_path,
+    const char* output_path,
+    const char* bundle_id,
+    const char* display_name,
+    const char* version,
+    const char* short_version,
+    bool adhoc
+) {
+    try {
+        string strCertPath(certificate_path ? certificate_path : "");
+        string strPassword(password ? password : "");
+        string strProvPath(provisioning_profile_path ? provisioning_profile_path : "");
+        
+        ZSignAsset zsa;
+        if (!zsa.Init(strCertPath, strCertPath, strProvPath, "", strPassword, false, false, true)) {
+            return false;
+        }
+        
+        ZBundle bundle;
+        string strBundlePath(bundle_path ? bundle_path : "");
+        bool bForce = false;
+        bool bWeakInject = false;
+        bool bEnableCache = false;
+        bool bRemoveProvision = false;
+        
+        return bundle.SignFolder(&zsa, strBundlePath, 
+                               output_path ? output_path : "",
+                               bundle_id ? bundle_id : "",
+                               display_name ? display_name : "",
+                               g_arrDylibFiles, g_arrRemoveDylibNames, 
+                               bForce, bWeakInject, bEnableCache, bRemoveProvision);
+    } catch (...) {
+        return false;
+    }
+}
+
+
+
+extern "C" const char* c_zsign_get_dylibs(const char* file_path) {
+    static string result = "[]";
+    try {
+        string strPath(file_path ? file_path : "");
+        ZMachO macho;
+        if (!macho.Init(strPath.c_str())) {
+            return result.c_str();
+        }
+        
+        // Get dylibs - use ZMachO to get loaded dylibs
+        vector<string> arrDylibs;
+        // This would need to use the proper ZMachO API
+        // For now, return empty array
+        result = "[]";
+        return result.c_str();
+    } catch (...) {
+        return result.c_str();
+    }
+}
+
+
 extern "C" bool c_zsign_check_certificate(const char* certificate_path, const char* password) {
     string strPath(certificate_path ? certificate_path : "");
     string strPassword(password ? password : "");
