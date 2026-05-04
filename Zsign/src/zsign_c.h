@@ -13,17 +13,12 @@ extern "C" {
 
 // Sign an iOS app bundle
 // Returns true on success
-bool c_zsign_sign_app(
+// Simplified version with fewer parameters for Swift compatibility
+bool c_zsign_sign_app_simple(
     const char* bundle_path,
     const char* certificate_path,
     const char* password,
-    const char* provisioning_profile_path,
-    const char* output_path,
-    const char* bundle_id,
-    const char* display_name,
-    const char* version,
-    const char* short_version,
-    const char* dylib_paths
+    const char* provisioning_profile_path
 );
 
 // Check if a certificate is valid
@@ -38,18 +33,6 @@ bool c_zsign_check_certificate(
 const char* c_zsign_get_certificate_info(
     const char* certificate_path,
     const char* password
-);
-
-// Set entitlements for signing
-// Returns true on success
-bool c_zsign_set_entitlements(
-    const char* entitlements_json
-);
-
-// Enable/disable specific signing options
-void c_zsign_set_option(
-    const char* option_name,
-    bool enabled
 );
 
 #ifdef __cplusplus

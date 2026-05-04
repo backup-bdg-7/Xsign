@@ -40,17 +40,11 @@ class SigningService {
         let dylibsString = options.dylibPaths?.joined(separator: ",") ?? ""
         
         // Call C function from ZsignC module
-        let signSuccess = c_zsign_sign_app(
+        let signSuccess = c_zsign_sign_app_simple(
             appPath,
             p12Path.path,
             password,
-            provisionPath ?? "",
-            "", // output_path - use empty string instead of nil
-            options.bundleID ?? "",
-            options.bundleName ?? "",
-            options.bundleVersion ?? "",
-            options.bundleBuildVersion ?? "",
-            "" // dylib_paths - empty for now
+            provisionPath ?? ""
         )
         
         // Clean up temp files

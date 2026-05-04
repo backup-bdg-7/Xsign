@@ -24,17 +24,11 @@ static vector<string> splitDylibPaths(const string& str) {
     return result;
 }
 
-extern "C" bool c_zsign_sign_app(
+extern "C" bool c_zsign_sign_app_simple(
     const char* bundle_path,
     const char* certificate_path,
     const char* password,
-    const char* provisioning_profile_path,
-    const char* output_path,
-    const char* bundle_id,
-    const char* display_name,
-    const char* version,
-    const char* short_version,
-    const char* dylib_paths
+    const char* provisioning_profile_path
 ) {
     string strCertFile(certificate_path ? certificate_path : "");
     string strPKeyFile("");
@@ -51,19 +45,10 @@ extern "C" bool c_zsign_sign_app(
             return false;
         }
 
-        string strDylibPaths(dylib_paths ? dylib_paths : "");
-        g_arrDylibFiles.clear();
-        if (!strDylibPaths.empty()) {
-            g_arrDylibFiles = splitDylibPaths(strDylibPaths);
-        }
-
         ZBundle bundle;
         string strBundlePath(bundle_path ? bundle_path : "");
-        string strBundleId(bundle_id ? bundle_id : "");
-        string strVersion(version ? version : "");
-        string strDisplayName(display_name ? display_name : "");
 
-        return bundle.SignFolder(&g_zsa, strBundlePath, strBundleId, strVersion, strDisplayName, 
+        return bundle.SignFolder(&g_zsa, strBundlePath, "", "", "", 
                                 g_arrDylibFiles, g_arrRemoveDylibNames, bForce, bWeakInject, bEnableCache, bRemoveProvision);
 
     } catch (...) {
