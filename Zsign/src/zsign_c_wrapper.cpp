@@ -104,7 +104,7 @@ extern "C" const char* c_zsign_get_dylibs(const char* file_path) {
     static string result = "[]";
     try {
         string strPath(file_path ? file_path : "");
-        ZMachO macho;
+        ZZZMachO macho;
         if (!macho.Init(strPath.c_str())) {
             return result.c_str();
         }
@@ -191,7 +191,7 @@ extern "C" bool c_zsign_inject_dylib(const char* app_executable, const char* dyl
         string strDylibPath(dylib_path ? dylib_path : "");
         
         // Use MachO class to inject the dylib
-        MachO macho;
+        ZZMachO macho;
         if (!macho.Load(strAppExe)) {
             return false;
         }
@@ -215,7 +215,7 @@ extern "C" bool c_zsign_change_dylib_path(const char* dylib_path, const char* ol
         string strNewPath(new_path ? new_path : "");
         
         // Use MachO class to change the dylib path
-        MachO macho;
+        ZZMachO macho;
         if (!macho.Load(strDylibPath)) {
             return false;
         }
