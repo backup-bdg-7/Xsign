@@ -193,7 +193,7 @@ struct SignModalView: View {
             bundleID: newID.isEmpty ? nil : newID,
             bundleName: newName.isEmpty ? nil : newName,
             bundleVersion: newVersion.isEmpty ? nil : newVersion,
-            dylibPaths: availableDylibs.filter { selectedDylibIDs.contains($0.id) }.map { $0.filePath.path }
+            injectDylibs: availableDylibs.filter { selectedDylibIDs.contains($0.id) }.map { $0.filePath }
         )
         
         Task {

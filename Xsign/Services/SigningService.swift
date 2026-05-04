@@ -61,6 +61,9 @@ class SigningService {
             .map { $0.path }
             .joined(separator: ",") ?? ""
 
+        // Determine if adhoc
+        let adhoc = options.signingOption == .adhoc
+
         // Call C function from ZsignC module
         let signSuccess = c_zsign_sign_app(
             appPath,
@@ -68,11 +71,11 @@ class SigningService {
             password,
             provisionPath ?? "",
             entitlementsPath,
-            dylibsString,
             options.bundleID ?? "",
             options.bundleName ?? "",
             options.bundleVersion ?? "",
-            options.bundleBuildVersion ?? ""
+            options.bundleBuildVersion ?? "",
+            adhoc
         )
 
         // Clean up temp files
@@ -81,7 +84,9 @@ class SigningService {
             try? fileManager.removeItem(at: URL(fileURLWithPath: provisionPath!))
         }
 
-        guard signSuccess else { throw NSError(domain: "Signing", code: 1, userInfo: [NSLocalizedDescriptionKey: "Signing failed"]) }
+        guard signSuccess else {
+            throw NSError(domain: "Signing", code: 1, userInfo: [NSLocalizedDescriptionKey: "Signing failed"])
+        }
 
         // Return signed app path
         let signedPath = URL(fileURLWithPath: appPath).deletingLastPathComponent().appendingPathComponent("signed_\(appFile.fileName)")
@@ -113,7 +118,28 @@ class SigningService {
             "",
             "",
             "",
-            ""
+            true
         )
     }
 }
+
+// MARK: - C Function Declarations
+@_silgen_name("c_zsign_sign_app")
+func c_zsign_sign_app(
+    _ bundle_path: UnsafePointer<CChar>,
+    _ certificate_path: UnsafePointer<CChar>,
+    _ password: UnsafePointer<CChar>,
+    _ provisioning_profile_path: UnsafePointer<CChar>,
+    _ output_path: UnsafePointer<CChar>,
+    _ bundle_id: UnsafePointer<CChar>,
+    _ display_name: UnsafePointer<CChar>,
+    _ version: UnsafePointer<CChar>,
+    _ short_version: UnsafePointer<CChar>,
+    _ adhoc: Bool
+) -> Bool
+
+@_silgen_name("c_zsign_check_certificate")
+func c_zsign_check_certificate(_ certificate_path: UnsafePointer<CChar>, _ password: UnsafePointer<CChar>) -> Bool
+
+@_silgen_name("c_zsign_get_certificate_info")
+func c_zsign_get_certificate_info(_ certificate_path: UnsafePointer<CChar>, _ password: UnsafePointer<CChar>) -> UnsafePointer<CChar>?

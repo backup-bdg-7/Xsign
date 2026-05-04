@@ -72,19 +72,13 @@ class BackdoorTLS {
 
     /// Generate self-signed certificate and key
     private func generateIdentity(certURL: URL, keyURL: URL) {
-        // Use OpenSSL via command line to generate self-signed cert
-        // This is a fallback - ideally certificates should be pre-bundled like Feather
-
-        let script = """
-        openssl req -x509 -newkey rsa:2048 -keyout "\(keyURL.path)" -out "\(certURL.path)" \
-        -days 365 -nodes -subj "/CN=127.0.0.1" 2>/dev/null
-        """
-
-        let task = Process()
-        task.launchPath = "/bin/bash"
-        task.arguments = ["-c", script]
-        try? task.run()
-        task.waitUntilExit()
+        // On iOS, we can't use Process to run openssl
+        // Instead, we should either:
+        // 1. Bundle pre-generated certificates in the app
+        // 2. Use a Swift-based TLS library to generate certificates
+        // For now, we'll just log an error
+        print("Warning: Cannot generate TLS certificate on iOS. Please bundle pre-generated certificates.")
+        // The app should include server.crt and server.key in the bundle
     }
 
     /// Get TLS configuration for Vapor (like Feather's tls() function)
