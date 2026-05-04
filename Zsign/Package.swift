@@ -35,7 +35,6 @@ let package = Package(
                 "openssl.cpp",
                 "signing.cpp",
                 "zsign_c_wrapper.cpp",
-                "zsign_c_wrapper.mm",
                 "common/base64.cpp",
                 "common/fs.cpp",
                 "common/json.cpp",
