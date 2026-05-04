@@ -45,8 +45,13 @@ class EntitlementManager {
 
     /// Get entitlements from a provisioning profile (use ProvisioningParser)
     func extractEntitlements(from provisioningProfile: Data) -> [String: Any]? {
-        let info = ProvisioningParser.shared.parse(provisioningProfile: provisioningProfile)
-        return info.entitlements
+        do {
+            let info = try ProvisioningParser.shared.parse(provisioningProfile: provisioningProfile)
+            return info.entitlements
+        } catch {
+            print("Failed to parse provisioning profile: \(error)")
+            return nil
+        }
     }
 }
 
