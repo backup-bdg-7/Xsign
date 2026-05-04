@@ -50,7 +50,7 @@ class SigningService {
             options.bundleName ?? "",
             options.bundleVersion ?? "",
             options.bundleBuildVersion ?? "",
-            dylibsString,
+            "", // dylib_paths - empty for now
             false // adhoc - we have certificate
         )
         
