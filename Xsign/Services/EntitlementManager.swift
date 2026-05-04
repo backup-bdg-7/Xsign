@@ -43,27 +43,10 @@ class EntitlementManager {
         try data.write(to: url)
     }
 
-    /// Get entitlements from a provisioning profile
+    /// Get entitlements from a provisioning profile (use ProvisioningParser)
     func extractEntitlements(from provisioningProfile: Data) -> [String: Any]? {
-        // Provisioning profiles are DER-encoded
-        // We need to find the entitlements plist inside
-        guard let plistData = extractPlist(from: provisioningProfile) else {
-            return nil
-        }
-
-        return try? PropertyListSerialization.propertyList(from: plistData, options: [], format: nil) as? [String: Any]
-    }
-
-    private func extractPlist(from data: Data) -> Data? {
-        // Simple search for <?xml tag
-        let xmlHeader = "<?xml".data(using: .utf8)!
-        let plistHeader = "<plist".data(using: .utf8)!
-
-        if let range = data.range(of: xmlHeader) ?? data.range(of: plistHeader) {
-            return data.subdata(in: range.lowerBound..<data.count)
-        }
-
-        return nil
+        let info = ProvisioningParser.shared.parse(provisioningProfile: provisioningProfile)
+        return info.entitlements
     }
 }
 
