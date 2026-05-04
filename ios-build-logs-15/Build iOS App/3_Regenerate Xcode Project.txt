@@ -1,0 +1,17 @@
+﻿2026-05-04T00:08:07.3116860Z ##[group]Run echo "Regenerating Xcode project with XcodeGen..."
+2026-05-04T00:08:07.3118070Z [36;1mecho "Regenerating Xcode project with XcodeGen..."[0m
+2026-05-04T00:08:07.3119080Z [36;1mbrew install xcodegen 2>/dev/null || true[0m
+2026-05-04T00:08:07.3119910Z [36;1mcd $GITHUB_WORKSPACE[0m
+2026-05-04T00:08:07.3120720Z [36;1mxcodegen generate --spec project.yml --project ./[0m
+2026-05-04T00:08:07.3121660Z [36;1mecho "Xcode project regenerated"[0m
+2026-05-04T00:08:07.3154900Z shell: /bin/bash -e {0}
+2026-05-04T00:08:07.3155510Z ##[endgroup]
+2026-05-04T00:08:07.3379210Z Regenerating Xcode project with XcodeGen...
+2026-05-04T00:08:10.1813690Z [32m==>[0m [1mFetching downloads for: [32mxcodegen[39m[0m
+2026-05-04T00:08:11.3773970Z [34m==>[0m [1mPouring xcodegen--2.45.4.arm64_sequoia.bottle.tar.gz[0m
+2026-05-04T00:08:12.6917180Z 🍺  /opt/homebrew/Cellar/xcodegen/2.45.4: 38 files, 7.4MB
+2026-05-04T00:08:12.7727650Z ⚙️  Generating plists...
+2026-05-04T00:08:12.7728160Z ⚙️  Generating project...
+2026-05-04T00:08:12.8066790Z ⚙️  Writing project...
+2026-05-04T00:08:12.8164060Z Created project at /Users/runner/work/Xsign/Xsign/Xsign.xcodeproj
+2026-05-04T00:08:12.8167620Z Xcode project regenerated

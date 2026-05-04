@@ -42,21 +42,22 @@ extern "C" bool c_zsign_sign_app(
     string strProvFile(provisioning_profile_path ? provisioning_profile_path : "");
     string strEntitleFile("");
     string strPassword(password ? password : "");
+    bool bForce = true;
+    bool bWeakInject = false;
+    bool bEnableCache = true;
+    bool bRemoveProvision = false;
 
     try {
-        // Init ZSignAsset
-        if (!g_zsa.Init(strCertFile, strPKeyFile, strProvFile, strEntitleFile, strPassword, adhoc, false)) {
+        if (!g_zsa.Init(strCertFile, strPKeyFile, strProvFile, strEntitleFile, strPassword, adhoc, false, false)) {
             return false;
         }
 
-        // Set dylib paths if provided
         string strDylibPaths(dylib_paths ? dylib_paths : "");
         g_arrDylibFiles.clear();
         if (!strDylibPaths.empty()) {
             g_arrDylibFiles = splitDylibPaths(strDylibPaths);
         }
 
-        // Sign the bundle/folder
         ZBundle bundle;
         string strBundlePath(bundle_path ? bundle_path : "");
         string strBundleId(bundle_id ? bundle_id : "");
@@ -64,7 +65,7 @@ extern "C" bool c_zsign_sign_app(
         string strDisplayName(display_name ? display_name : "");
 
         return bundle.SignFolder(&g_zsa, strBundlePath, strBundleId, strVersion, strDisplayName, 
-                                g_arrDylibFiles, g_arrRemoveDylibNames, true, false, true, false);
+                                g_arrDylibFiles, g_arrRemoveDylibNames, bForce, bWeakInject, bEnableCache, bRemoveProvision);
 
     } catch (...) {
         return false;
