@@ -78,9 +78,13 @@ struct ImportCertificateView: View {
     private func handleProfileImport(_ result: Result<URL, Error>) {
         if let url = try? result.get() {
             profileData = try? Data(contentsOf: url)
-            if let data = profileData, 
-               let profile = ProvisioningParser.shared.parse(provisioningProfile: data) {
-                if name.isEmpty { name = profile.name }
+            if let data = profileData {
+                do {
+                    let profile = try ProvisioningParser.shared.parse(provisioningProfile: data)
+                    if name.isEmpty { name = profile.appID ?? "Profile" }
+                } catch {
+                    print("Failed to parse provisioning profile: \(error)")
+                }
             }
         }
     }

@@ -74,10 +74,24 @@ class AppModifier {
 
     /// Resign an app with zsign (after modifications)
     func resignApp(at appURL: URL, certificate: Certificate) async throws -> URL {
-        // This is a wrapper around SigningService
-        // Just call SigningService.shared.sign with appropriate options
+        // Create AppFile properly
+        let fileName = appURL.lastPathComponent
+        let relativePath = fileName // Simplified - in reality would need proper relative path
+        let attributes = try FileManager.default.attributesOfItem(atPath: appURL.path)
+        let size = attributes[.size] as? Int64 ?? 0
+        let type = appURL.pathExtension.lowercased() == "ipa" ? FileType.ipa : .dylib
+        
+        let appFile = AppFile(
+            name: fileName,
+            fileName: fileName,
+            relativePath: relativePath,
+            type: type,
+            size: size,
+            creationDate: Date()
+        )
+        
         let options = SigningService.SigningOptions()
-        return try await SigningService.shared.sign(appFile: AppFile(filePath: appURL), certificate: certificate, options: options)
+        return try await SigningService.shared.sign(appFile: appFile, certificate: certificate, options: options)
     }
 }
 
