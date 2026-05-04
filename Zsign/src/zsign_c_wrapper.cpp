@@ -3,6 +3,7 @@
 #include "bundle.h"
 #include "signing.h"
 #include "certcheck.h"
+#include "macho.h"
 #include <string>
 #include <vector>
 #include <cstring>
@@ -159,4 +160,25 @@ extern "C" void c_zsign_set_option(const char* option_name, bool enabled) {
         if (strOption == "sha256_only") g_zsa.m_bSHA256Only = enabled;
         else if (strOption == "ad_hoc") g_zsa.m_bAdhoc = enabled;
     } catch (...) {}
+}
+
+
+extern "C" const char* c_zsign_get_metadata(const char* app_folder, const char* output_dir, const char* ipa_file) {
+    static string result = "{}";
+    try {
+        string strAppFolder(app_folder ? app_folder : "");
+        string strOutputDir(output_dir ? output_dir : "");
+        string strIpaFile(ipa_file ? ipa_file : "");
+        
+        if (GetMetadata(strAppFolder, strOutputDir, strIpaFile)) {
+            // Return some metadata info
+            result = "{\"status\":\"success\"}";
+        } else {
+            result = "{\"status\":\"failed\"}";
+        }
+        return result.c_str();
+    } catch (...) {
+        result = "{\"status\":\"error\"}";
+        return result.c_str();
+    }
 }
