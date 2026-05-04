@@ -1,12 +1,12 @@
 // zsign_c_wrapper.mm - Objective-C++ wrapper for Zsign C++ library
 // This file provides C functions that can be called from Swift via modulemap
 
-#include "zsign.h"
 #include "signing.h"
 #include "certcheck.h"
 #include "bundle.h"
 #include "openssl.h"
 #include "macho.h"
+#include "metadata.h"
 #include <string>
 #include <vector>
 #include <set>
