@@ -11,9 +11,6 @@ class SigningService {
         var bundleVersion: String?
         var bundleBuildVersion: String?
         var dylibPaths: [String]?
-        var entitlements: String?
-        var weakInject: Bool = false
-        var sha256Only: Bool = false
     }
     
     func sign(appFile: AppFile, certificate: Certificate, options: SigningOptions) async throws -> URL {
@@ -40,16 +37,7 @@ class SigningService {
         let password = certificate.decryptedPassword() ?? ""
         
         // Convert dylibPaths to comma-separated string
-        let dylibsString = options.dylibPaths?.joined(separator: ",")
-        
-        // Set entitlements if provided
-        if let entitlements = options.entitlements {
-            c_zsign_set_entitlements(entitlements)
-        }
-        
-        // Set options
-        c_zsign_set_option("weak_inject", options.weakInject)
-        c_zsign_set_option("sha256_only", options.sha256Only)
+        let dylibsString = options.dylibPaths?.joined(separator: ",") ?? ""
         
         // Call C function from ZsignC module
         let signSuccess = c_zsign_sign_app(
@@ -62,7 +50,7 @@ class SigningService {
             options.bundleName ?? "",
             options.bundleVersion ?? "",
             options.bundleBuildVersion ?? "",
-            dylibsString ?? "",
+            dylibsString,
             false // adhoc - we have certificate
         )
         

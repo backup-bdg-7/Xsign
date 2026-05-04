@@ -1,0 +1,21 @@
+﻿2026-05-04T00:22:51.5743180Z ##[group]Run actions/upload-artifact@v4
+2026-05-04T00:22:51.5743510Z with:
+2026-05-04T00:22:51.5743660Z   name: build-logs
+2026-05-04T00:22:51.5743810Z   path: build_logs/
+2026-05-04T00:22:51.5743970Z   retention-days: 14
+2026-05-04T00:22:51.5744160Z   if-no-files-found: warn
+2026-05-04T00:22:51.5744410Z   compression-level: 6
+2026-05-04T00:22:51.5744580Z   overwrite: false
+2026-05-04T00:22:51.5744740Z   include-hidden-files: false
+2026-05-04T00:22:51.5744910Z ##[endgroup]
+2026-05-04T00:22:51.8021820Z With the provided path, there will be 1 file uploaded
+2026-05-04T00:22:51.8024610Z Artifact name is valid!
+2026-05-04T00:22:51.8026370Z Root directory input is valid!
+2026-05-04T00:22:52.1381090Z Beginning upload of artifact content to blob storage
+2026-05-04T00:22:52.7537430Z Uploaded bytes 220484
+2026-05-04T00:22:52.8625530Z Finished uploading artifact content to blob storage!
+2026-05-04T00:22:52.8626970Z SHA256 digest of uploaded artifact zip is fd42537c290803e66d89486994a3d5866d495f1b90b6abc694aa781c3b15248b
+2026-05-04T00:22:52.8627980Z Finalizing artifact upload
+2026-05-04T00:22:53.0310810Z Artifact build-logs.zip successfully finalized. Artifact ID 6774896440
+2026-05-04T00:22:53.0311370Z Artifact build-logs has been successfully uploaded! Final size is 220484 bytes. Artifact ID is 6774896440
+2026-05-04T00:22:53.0317440Z Artifact download URL: https://github.com/backup-bdg-7/Xsign/actions/runs/25294927695/artifacts/6774896440
