@@ -17,7 +17,9 @@ class AppModifier {
             throw AppModifierError.plistNotFound
         }
 
-        var plist = try NSMutableDictionary(contentsOf: infoPlistURL)
+        guard let plist = try NSMutableDictionary(contentsOf: infoPlistURL) else {
+            throw NSError(domain: "AppModifier", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to read Info.plist"])
+        }
 
         for (key, value) in properties {
             plist[key] = value
@@ -71,7 +73,7 @@ class AppModifier {
     }
 
     /// Resign an app with zsign (after modifications)
-    func resignApp(at appURL: URL, certificate: Certificate) throws -> URL {
+    func resignApp(at appURL: URL, certificate: Certificate) async throws -> URL {
         // This is a wrapper around SigningService
         // Just call SigningService.shared.sign with appropriate options
         let options = SigningService.SigningOptions()

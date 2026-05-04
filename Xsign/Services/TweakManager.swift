@@ -15,7 +15,7 @@ class TweakManager {
     private init() {}
 
     /// Process tweak files (dylib or deb) for injection
-    func processTweak(at url: URL, appURL: URL, options: TweakOptions = .default) async throws -> [URL] {
+    func processTweak(at url: URL, appURL: URL, options: TweakOptions = TweakOptions()) async throws -> [URL] {
         var processedURLs: [URL] = []
 
         switch url.pathExtension.lowercased() {
@@ -76,7 +76,7 @@ class TweakManager {
 
         // Parse deb file
         let data = try Data(contentsOf: url)
-        guard let archive = ArArchive(data: data) else {
+        guard let archive = Archive(archiveData: data) else {
             throw TweakError.decompressionFailed("Failed to parse deb file")
         }
 

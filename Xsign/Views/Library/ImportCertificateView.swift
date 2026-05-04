@@ -79,7 +79,7 @@ struct ImportCertificateView: View {
         if let url = try? result.get() {
             profileData = try? Data(contentsOf: url)
             if let data = profileData, 
-               let profile = ProvisioningParser.shared.parse(data: data) {
+               let profile = ProvisioningParser.shared.parse(provisioningProfile: data) {
                 if name.isEmpty { name = profile.name }
             }
         }

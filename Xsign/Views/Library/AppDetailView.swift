@@ -94,7 +94,11 @@ struct AppDetailView: View {
                 extractedDylibs = BinaryParser.shared.getDylibs(at: appFile.filePath)
             }
             if appFile.type == .ipa {
-                entitlements = EntitlementManager.shared.extractEntitlements(from: appFile.filePath) ?? [:]
+                // Read the provisioning profile data from the app bundle
+                let provisioningProfileURL = appFile.filePath.appendingPathComponent("embedded.mobileprovision")
+                if let data = try? Data(contentsOf: provisioningProfileURL) {
+                    entitlements = EntitlementManager.shared.extractEntitlements(from: data) ?? [:]
+                }
             }
         }
     }
