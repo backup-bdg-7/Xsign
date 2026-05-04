@@ -36,6 +36,7 @@ class SigningService {
 
         // Get app file path
         let appPath = appFile.filePath.path
+        let signedAppPath = tempURL.appendingPathComponent("signed_\(appFile.fileName)").path
 
         // Write P12 data to temp file
         let p12Data = try certificate.decryptedP12Data()
@@ -43,7 +44,7 @@ class SigningService {
         try p12Data.write(to: p12Path)
 
         // Write provisioning profile to temp file if available
-        var provisionPath: String? = nil
+        var provisionPath: String = ""
         if let provData = certificate.provisioningProfileData {
             let provURL = tempURL.appendingPathComponent("profile.mobileprovision")
             try provData.write(to: provURL)
@@ -56,11 +57,6 @@ class SigningService {
         // Get entitlements path
         let entitlementsPath = options.entitlementsURL?.path ?? ""
 
-        // Convert dylib paths to comma-separated string
-        let dylibsString = options.injectDylibs?
-            .map { $0.path }
-            .joined(separator: ",") ?? ""
-
         // Determine if adhoc
         let adhoc = options.signingOption == .adhoc
 
@@ -69,8 +65,8 @@ class SigningService {
             appPath,
             p12Path.path,
             password,
-            provisionPath ?? "",
-            entitlementsPath,
+            provisionPath,
+            signedAppPath,  // output path
             options.bundleID ?? "",
             options.bundleName ?? "",
             options.bundleVersion ?? "",
@@ -80,8 +76,8 @@ class SigningService {
 
         // Clean up temp files
         try? fileManager.removeItem(at: p12Path)
-        if provisionPath != nil {
-            try? fileManager.removeItem(at: URL(fileURLWithPath: provisionPath!))
+        if !provisionPath.isEmpty {
+            try? fileManager.removeItem(at: URL(fileURLWithPath: provisionPath))
         }
 
         guard signSuccess else {
@@ -89,8 +85,7 @@ class SigningService {
         }
 
         // Return signed app path
-        let signedPath = URL(fileURLWithPath: appPath).deletingLastPathComponent().appendingPathComponent("signed_\(appFile.fileName)")
-        return signedPath
+        return URL(fileURLWithPath: signedAppPath)
     }
 
     /// Check if a certificate is valid
@@ -108,22 +103,31 @@ class SigningService {
 
     /// Ad-hoc sign an app (no certificate needed)
     func adhocSign(appPath: String, entitlementsPath: String?) -> Bool {
+        let tempPath = NSTemporaryDirectory() + "signed_app"
         return c_zsign_sign_app(
             appPath,
-            "",
-            "",
-            "",
-            entitlementsPath ?? "",
-            "",
-            "",
-            "",
-            "",
-            true
+            "",  // no certificate
+            "",  // no password
+            "",  // no provisioning profile
+            tempPath,  // output path
+            "",  // no bundle id change
+            "",  // no display name change
+            "",  // no version change
+            "",  // no short version change
+            true  // adhoc
         )
     }
 }
 
 // MARK: - C Function Declarations
+@_silgen_name("c_zsign_sign_app_simple")
+func c_zsign_sign_app_simple(
+    _ bundle_path: UnsafePointer<CChar>,
+    _ certificate_path: UnsafePointer<CChar>,
+    _ password: UnsafePointer<CChar>,
+    _ provisioning_profile_path: UnsafePointer<CChar>
+) -> Bool
+
 @_silgen_name("c_zsign_sign_app")
 func c_zsign_sign_app(
     _ bundle_path: UnsafePointer<CChar>,
