@@ -3,6 +3,7 @@
 #include "sha.h"
 #include "fs.h"
 #include "util.h"
+using namespace std;
 
 static void GetIconNames(jvalue& jvInfo, vector<string>& arrNames)
 {
@@ -65,7 +66,7 @@ static bool FindLargestIcon(const string& strAppFolder, const vector<string>& ar
 	return (nBestSize > 0);
 }
 
-bool GetMetadata(const string& strAppFolder, const string& strOutputDir, const string& strIpaFile)
+bool GetMetadata(const std::string& strAppFolder, const std::string& strOutputDir, const std::string& strIpaFile)
 {
 	string strInfoPlistData;
 	string strInfoPlistPath = strAppFolder + "/Info.plist";

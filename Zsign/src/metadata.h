@@ -1,4 +1,4 @@
 #pragma once
-#include "common.h"
+#include "common/common.h"
 
-bool GetMetadata(const string& strAppFolder, const string& strOutputDir, const string& strIpaFile);
+bool GetMetadata(const std::string& strAppFolder, const std::string& strOutputDir, const std::string& strIpaFile);

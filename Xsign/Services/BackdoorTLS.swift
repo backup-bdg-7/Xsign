@@ -6,45 +6,155 @@ import NIOSSL
 /**
  * BackdoorTLS provides TLS certificate handling for the itms-services protocol.
  * iOS 13+ requires valid HTTPS for manifest delivery.
- * This implementation uses a pre-generated self-signed certificate for localhost.
+ * Based on Feather's ServerInstaller+TLS.swift implementation.
  */
 class BackdoorTLS {
     static let shared = BackdoorTLS()
     private init() {}
-    
+
     struct Identity {
         let certPath: String
         let keyPath: String
     }
-    
+
+    /// Load or generate TLS identity for local server
     func loadIdentity() -> Identity? {
         let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let certURL = docs.appendingPathComponent("localhost.crt")
-        let keyURL = docs.appendingPathComponent("localhost.key")
-        
+        let certURL = docs.appendingPathComponent("server.crt")
+        let keyURL = docs.appendingPathComponent("server.key")
+
+        // Check if certificates exist in documents
         if !FileManager.default.fileExists(atPath: certURL.path) {
-            generateIdentity(certURL: certURL, keyURL: keyURL)
+            // Try to copy from bundle first
+            if let bundleCert = Bundle.main.url(forResource: "server", withExtension: "crt"),
+               let bundleKey = Bundle.main.url(forResource: "server", withExtension: "key") {
+                try? FileManager.default.copyItem(at: bundleCert, to: certURL)
+                try? FileManager.default.copyItem(at: bundleKey, to: keyURL)
+            } else {
+                // Generate self-signed certificate
+                generateIdentity(certURL: certURL, keyURL: keyURL)
+            }
         }
-        
+
+        // Also check for commonName file (like Feather does)
+        let commonNameURL = docs.appendingPathComponent("commonName.txt")
+        if !FileManager.default.fileExists(atPath: commonNameURL.path) {
+            // Write the common name (localhost or local IP)
+            let commonName = getCommonName()
+            try? commonName.write(to: commonNameURL, atomically: true, encoding: .utf8)
+        }
+
         return Identity(certPath: certURL.path, keyPath: keyURL.path)
     }
-    
+
+    /// Get the common name for the certificate (like Feather's readCommonName)
+    private func getCommonName() -> String {
+        if let name = readCommonName() {
+            return name
+        }
+
+        // Default to localhost
+        return "127.0.0.1"
+    }
+
+    /// Read common name from file (like Feather)
+    func readCommonName() -> String? {
+        let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let url = docs.appendingPathComponent("commonName.txt")
+
+        guard FileManager.default.fileExists(atPath: url.path) else {
+            return nil
+        }
+
+        return try? String(contentsOf: url, encoding: .utf8)
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    /// Generate self-signed certificate and key
     private func generateIdentity(certURL: URL, keyURL: URL) {
-        // Use embedded base64-encoded self-signed certificate and key
-        // This certificate is for localhost and valid for itms-services protocol
-        
-        // Base64-encoded self-signed certificate for localhost
-        let certBase64 = "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURDVENDQWZHZ0F3SUJBZ0lVU1IwMkI0T3VwaUI0SmhWNG55YytFZElvYTI0d0RRWUpLb1pJaHZjTkFRRUwKQlFBd0ZERVNNQkFHQTFVRUF3d0piRzlqWVd4b2IzTjBNQjRYRFRJMk1EUXlNakl3TWpnek1sb1hEVEkzTURReQpNakl3TWpnek1sb3dGREVTTUJBR0ExVUVBd3dKYkc5allXeG9iM04wTUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGCkFBT0NBUThBTUlJQkNnS0NBUUVBM1lzaFlRWDJOVytodmRER0lBdGNUK29kdldqRWpDYmpvMVJ1U3dZdUZsaGgKVStYcm5Ta2FHbE1ySHZCYyswOHd4Rm1XMmhDT29jN3BKMVpLaW5CZG05OXR1SGVrRVZESUlqM3FmVFpXZXFZQwpUZUd1MEdOTUVib0svazBwa3lPbWRQVjE5S1AwaHJpd0ZzWFYvTFYzb3l5R0dHRFlDVTBjaEFSOHdWc0srT2tKCllqZzJxQUx3ZUUwS2Ywa3ZaditQeHFDaVgyZUNFWUFFOHkydm4xSktYLzdWNW9zQmM5b05LbGM1ZXpERU85bGwKeWJLbXZkMGdOOVdqVkdJWlZudXJGbnlmK1RmekdNUkNJSkhVYUJoMHU4cGJndnN2eXUvU3I2bjlNUEpKL0l4Zgp0U2NkVm1UREhsa091ZHVKNlg4SEo5OHdZWEx0V1FDYUhKb3NyWWhlWVFJREFRQUJvMU13VVRBZEJnTlZIUTRFCkZnUVVGZ1NIbXdBK2lCb2t0b1AyOFp0VUY4VXpJT0F3SHdZRFZSMGpCQmd3Rm9BVUZnU0htd0EraUJva3RvUDIKOFp0VUY4VXpJT0F3RHdZRFZSMFRBUUgvQkFVd0F3RUIvekFOQmdrcWhraUc5dzBCQVFzRkFBT0NBUUVBTmJWeQp0OXFpUUlLSjg4WVF6MjAwVE1samlwa1BWVWl4a1dMZjhrQzliWlNIWmFaa25QMGo1MzdTMGZ4bGE1NTRwWmEyCmF5R1BtczFiUUJUYnpkS2FZWHpUWjRUcmppaVFtdmw3VFB6eWd1MkljZDhacW5KUjQ1Z2F0dE4vVlRMMzdHWHUKZ3NHUE5lY0gwaUFzN2ZxMHpKeXk4M2VnZzUxYmNZVC9nZGVsaU95WU04dW5kanpaQzY0M1o5OHhjc0pmemRjRAo1VXpnRFNrTU5yWVJKaVFtU3RjY2dHTFp3bjljTlhaUWdoVXU0K2QvZzZ1VjNNaXNPYmxIekRPZFphc0lTUzhHCk9PMzlpUEh6MHNrZkN6Nk0yeUEvTFRhRzVQUlFsZTZBWlA1SUtQRmg3VzdLR3QyNlZoZnBFMnZqMXQ0Q2hFQm0KaHFlbUpTNFcrOUFXYytkYldRPT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo="
+        // Use OpenSSL via command line to generate self-signed cert
+        // This is a fallback - ideally certificates should be pre-bundled like Feather
 
-        // Base64-encoded private key for localhost
-        let keyBase64 = "LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JSUV2UUlCQURBTkJna3Foa2lHOXcwQkFRRUZBQVNDQktnd2dnU0FnTUJBR0NDcUDZdzBDQVFFdwrL0xObUVsZk1BNnFHVnRBenVOaTd0NnVmOHYxUjVnRUREL2F3WmMwSDVtRnFEUXVPRDJERWVIbEY5R1NLCnh6YjV4TkhNTERmSG5yTk1LdU5pWUgyc0FyWkQ4Nk1Wb3k1RUNJakk4Q0FEb0Fwd2l3Y0RlNjErZmJJVGwKeU5UWmxnWHV6T3J5L2V5djQ2T1d5WndGQzVpR0FjeHdmN3daWHJCNFlRZk55QU50TVRjMHVFN0J5aDlwdgpVWEwrbXJPMjZScmNIWHQxOXVudmRNUjZXaFI4b0tWVVJaaW5xUHRoZ2Ryc0tXZz09Ci0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS0K"
+        let script = """
+        openssl req -x509 -newkey rsa:2048 -keyout "\(keyURL.path)" -out "\(certURL.path)" \
+        -days 365 -nodes -subj "/CN=127.0.0.1" 2>/dev/null
+        """
 
-        if let certData = Data(base64Encoded: certBase64) {
-            try? certData.write(to: certURL)
+        let task = Process()
+        task.launchPath = "/bin/bash"
+        task.arguments = ["-c", script]
+        try? task.run()
+        task.waitUntilExit()
+    }
+
+    /// Get TLS configuration for Vapor (like Feather's tls() function)
+    func makeTLSConfiguration() throws -> TLSConfiguration? {
+        guard let identity = loadIdentity() else {
+            return nil
         }
-        
-        if let keyData = Data(base64Encoded: keyBase64) {
-            try? keyData.write(to: keyURL)
+
+        guard
+            FileManager.default.fileExists(atPath: identity.certPath),
+            FileManager.default.fileExists(atPath: identity.keyPath)
+        else {
+            return nil
         }
+
+        return try TLSConfiguration.makeServerConfiguration(
+            certificateChain: NIOSSLCertificate.fromPEMFile(identity.certPath).map {
+                NIOSSLCertificateSource.certificate($0)
+            },
+            privateKey: .privateKey(
+                try NIOSSLPrivateKey(file: identity.keyPath, format: .pem)
+            )
+        )
+    }
+
+    /// Get the server hostname for SNI (like Feather's sni() function)
+    func sni() -> String {
+        let localhost = "127.0.0.1"
+
+        // Check if we should use IP or common name
+        if getServerMethod() != 1 {
+            return readCommonName() ?? localhost
+        } else {
+            // Use local address or localhost
+            return getLocalAddress() ?? localhost
+        }
+    }
+
+    private func getServerMethod() -> Int {
+        // 0 = Auto, 1 = Localhost, 2 = Network IP
+        return UserDefaults.standard.integer(forKey: "serverMethod")
+    }
+
+    /// Get local network IP address
+    private func getLocalAddress() -> String? {
+        var address: String?
+        var ifaddr: UnsafeMutablePointer<ifaddrs>?
+
+        if getifaddrs(&ifaddr) == 0 {
+            var ptr = ifaddr
+            while ptr != nil {
+                let interface = ptr!.pointee
+                let addrFamily = interface.ifa_addr.pointee.sa_family
+
+                if addrFamily == UInt8(AF_INET) {
+                    let name = String(cString: interface.ifa_name)
+                    if name == "en0" || name == "pdp_ip0" {
+                        var hostname = [CChar](repeating: 0, count: Int(NI_MAXHOST))
+                        if getnameinfo(interface.ifa_addr, socklen_t(interface.ifa_addr.pointee.sa_len),
+                                       &hostname, socklen_t(hostname.count),
+                                       nil, socklen_t(0), NI_NUMERICHOST) == 0 {
+                            address = String(cString: hostname)
+                        }
+                    }
+                }
+                ptr = ptr!.pointee.ifa_next
+            }
+            freeifaddrs(ifaddr)
+        }
+
+        return address
     }
 }
