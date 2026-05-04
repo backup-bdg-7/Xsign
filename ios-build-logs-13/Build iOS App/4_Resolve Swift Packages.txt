@@ -1,0 +1,254 @@
+﻿2026-05-03T23:53:29.7835510Z ##[group]Run echo "🔄 Resolving Swift Package dependencies..."
+2026-05-03T23:53:29.7835900Z [36;1mecho "🔄 Resolving Swift Package dependencies..."[0m
+2026-05-03T23:53:29.7836300Z [36;1mxcodebuild -project Xsign.xcodeproj -scheme Xsign -resolvePackageDependencies[0m
+2026-05-03T23:53:29.7867200Z shell: /bin/bash -e {0}
+2026-05-03T23:53:29.7867370Z ##[endgroup]
+2026-05-03T23:53:29.8384290Z 🔄 Resolving Swift Package dependencies...
+2026-05-03T23:53:30.7411580Z Command line invocation:
+2026-05-03T23:53:30.7413440Z     /Applications/Xcode_16.4.app/Contents/Developer/usr/bin/xcodebuild -project Xsign.xcodeproj -scheme Xsign -resolvePackageDependencies
+2026-05-03T23:53:30.7413960Z 
+2026-05-03T23:53:32.8976520Z Resolve Package Graph
+2026-05-03T23:53:41.9676490Z 
+2026-05-03T23:53:41.9784800Z Fetching from https://github.com/vapor/routing-kit.git
+2026-05-03T23:53:43.4355600Z 
+2026-05-03T23:53:43.4456410Z Fetching from https://github.com/apple/swift-system.git
+2026-05-03T23:53:43.4558110Z 
+2026-05-03T23:53:43.4642020Z Fetching from https://github.com/apple/swift-http-structured-headers.git
+2026-05-03T23:53:44.4386240Z 
+2026-05-03T23:53:44.4387450Z Fetching from https://github.com/apple/swift-service-context.git
+2026-05-03T23:53:44.4388140Z 
+2026-05-03T23:53:44.4435040Z Fetching from https://github.com/apple/swift-atomics.git
+2026-05-03T23:53:45.5180310Z 
+2026-05-03T23:53:45.5186760Z Fetching from https://github.com/apple/swift-nio-transport-services.git
+2026-05-03T23:53:45.5207680Z 
+2026-05-03T23:53:45.5231890Z Fetching from https://github.com/airbnb/lottie-ios
+2026-05-03T23:53:57.9959400Z 
+2026-05-03T23:53:57.9995130Z Fetching from https://github.com/apple/swift-asn1.git
+2026-05-03T23:53:58.0046620Z 
+2026-05-03T23:53:58.0048410Z Fetching from https://github.com/weichsel/ZIPFoundation
+2026-05-03T23:53:59.4109530Z 
+2026-05-03T23:53:59.4113890Z Fetching from https://github.com/apple/swift-http-types.git
+2026-05-03T23:53:59.4127130Z 
+2026-05-03T23:53:59.4132020Z Fetching from https://github.com/apple/swift-crypto
+2026-05-03T23:54:01.0242910Z 
+2026-05-03T23:54:01.0244970Z Fetching from https://github.com/tsolomko/BitByteData
+2026-05-03T23:54:01.0247340Z 
+2026-05-03T23:54:01.0274820Z Fetching from https://github.com/apple/swift-algorithms.git
+2026-05-03T23:54:01.7556980Z 
+2026-05-03T23:54:01.7558400Z Fetching from https://github.com/vapor/vapor
+2026-05-03T23:54:03.5743380Z 
+2026-05-03T23:54:03.5744150Z Fetching from https://github.com/vapor/console-kit.git
+2026-05-03T23:54:03.5744620Z 
+2026-05-03T23:54:03.5744960Z Fetching from https://github.com/apple/swift-collections.git
+2026-05-03T23:54:04.6174200Z 
+2026-05-03T23:54:04.6187640Z Fetching from https://github.com/marmelroy/Zip
+2026-05-03T23:54:04.8831040Z 
+2026-05-03T23:54:04.8832980Z Fetching from https://github.com/apple/swift-nio-ssl.git
+2026-05-03T23:54:06.7399130Z 
+2026-05-03T23:54:06.7400340Z Fetching from https://github.com/apple/swift-metrics.git
+2026-05-03T23:54:06.7401330Z 
+2026-05-03T23:54:06.7401700Z Fetching from https://github.com/swift-server/async-http-client.git
+2026-05-03T23:54:07.7910580Z 
+2026-05-03T23:54:07.8012200Z Fetching from https://github.com/vapor/websocket-kit.git
+2026-05-03T23:54:07.8113160Z 
+2026-05-03T23:54:07.8215220Z Fetching from https://github.com/apple/swift-log.git
+2026-05-03T23:54:09.1233880Z 
+2026-05-03T23:54:09.1334960Z Fetching from https://github.com/tsolomko/SWCompression
+2026-05-03T23:54:09.5887610Z 
+2026-05-03T23:54:09.5888000Z Fetching from https://github.com/vapor/async-kit.git
+2026-05-03T23:54:10.0605230Z 
+2026-05-03T23:54:10.0605700Z Fetching from https://github.com/apple/swift-certificates.git
+2026-05-03T23:54:10.8626250Z 
+2026-05-03T23:54:10.8629140Z Fetching from https://github.com/apple/swift-distributed-tracing.git
+2026-05-03T23:54:11.4063560Z 
+2026-05-03T23:54:11.4071400Z Fetching from https://github.com/apple/swift-nio.git
+2026-05-03T23:54:15.0980360Z 
+2026-05-03T23:54:15.0980750Z Fetching from https://github.com/apple/swift-async-algorithms.git
+2026-05-03T23:54:15.0981060Z 
+2026-05-03T23:54:15.0981220Z Fetching from https://github.com/apple/swift-nio-http2.git
+2026-05-03T23:54:15.0987750Z 
+2026-05-03T23:54:15.0987890Z Fetching from https://github.com/apple/swift-numerics.git
+2026-05-03T23:54:15.4368090Z 
+2026-05-03T23:54:15.4372610Z Fetching from https://github.com/swift-server/swift-service-lifecycle.git
+2026-05-03T23:54:16.1423940Z 
+2026-05-03T23:54:16.1460300Z Fetching from https://github.com/vapor/multipart-kit.git
+2026-05-03T23:54:17.1842350Z 
+2026-05-03T23:54:17.1951360Z Fetching from https://github.com/apple/swift-nio-extras.git
+2026-05-03T23:54:17.4424300Z 
+2026-05-03T23:54:17.4424850Z Fetching from https://github.com/krzyzanowskim/OpenSSL
+2026-05-03T23:55:02.3057600Z 
+2026-05-03T23:55:28.0460460Z Creating working copy of package ‘routing-kit’
+2026-05-03T23:55:28.1231840Z 
+2026-05-03T23:55:28.1267310Z Checking out 4.9.3 of package ‘routing-kit’
+2026-05-03T23:55:28.1739460Z 
+2026-05-03T23:55:28.2000640Z Creating working copy of package ‘swift-nio-transport-services’
+2026-05-03T23:55:28.2404800Z 
+2026-05-03T23:55:28.2411750Z Checking out 1.28.0 of package ‘swift-nio-transport-services’
+2026-05-03T23:55:28.2678950Z 
+2026-05-03T23:55:28.2887760Z Creating working copy of package ‘swift-asn1’
+2026-05-03T23:55:28.3164980Z 
+2026-05-03T23:55:28.3166090Z Checking out 1.7.0 of package ‘swift-asn1’
+2026-05-03T23:55:28.4115910Z 
+2026-05-03T23:55:28.4455560Z Creating working copy of package ‘swift-metrics’
+2026-05-03T23:55:28.4812960Z 
+2026-05-03T23:55:28.4816480Z Checking out 2.10.1 of package ‘swift-metrics’
+2026-05-03T23:55:28.5201320Z 
+2026-05-03T23:55:28.5463140Z Creating working copy of package ‘swift-numerics’
+2026-05-03T23:55:28.5900330Z 
+2026-05-03T23:55:28.5909790Z Checking out 1.1.1 of package ‘swift-numerics’
+2026-05-03T23:55:28.6415700Z 
+2026-05-03T23:55:28.6709280Z Creating working copy of package ‘OpenSSL’
+2026-05-03T23:55:28.7141620Z 
+2026-05-03T23:55:28.7142960Z Checking out 3.6.1 of package ‘OpenSSL’
+2026-05-03T23:55:31.7055350Z 
+2026-05-03T23:55:31.7428920Z Creating working copy of package ‘swift-crypto’
+2026-05-03T23:55:31.8096110Z 
+2026-05-03T23:55:31.8097750Z Checking out 3.15.1 of package ‘swift-crypto’
+2026-05-03T23:55:32.3460030Z 
+2026-05-03T23:55:32.3813710Z Creating working copy of package ‘swift-service-lifecycle’
+2026-05-03T23:55:32.4452110Z 
+2026-05-03T23:55:32.4453460Z Checking out 2.11.0 of package ‘swift-service-lifecycle’
+2026-05-03T23:55:32.5094780Z 
+2026-05-03T23:55:32.5426160Z Creating working copy of package ‘swift-nio-http2’
+2026-05-03T23:55:32.6250390Z 
+2026-05-03T23:55:32.6252600Z Checking out 1.43.0 of package ‘swift-nio-http2’
+2026-05-03T23:55:33.0097800Z 
+2026-05-03T23:55:33.0381450Z Creating working copy of package ‘swift-http-structured-headers’
+2026-05-03T23:55:33.0944210Z 
+2026-05-03T23:55:33.0946670Z Checking out 1.7.0 of package ‘swift-http-structured-headers’
+2026-05-03T23:55:33.1343490Z 
+2026-05-03T23:55:33.1695890Z Creating working copy of package ‘swift-async-algorithms’
+2026-05-03T23:55:33.2110500Z 
+2026-05-03T23:55:33.2111370Z Checking out 1.1.3 of package ‘swift-async-algorithms’
+2026-05-03T23:55:33.2889810Z 
+2026-05-03T23:55:33.3178520Z Creating working copy of package ‘swift-nio-ssl’
+2026-05-03T23:55:33.3825660Z 
+2026-05-03T23:55:33.3827110Z Checking out 2.37.0 of package ‘swift-nio-ssl’
+2026-05-03T23:55:33.6451610Z 
+2026-05-03T23:55:33.6713870Z Creating working copy of package ‘swift-http-types’
+2026-05-03T23:55:33.7008680Z 
+2026-05-03T23:55:33.7009830Z Checking out 1.5.1 of package ‘swift-http-types’
+2026-05-03T23:55:33.7225180Z 
+2026-05-03T23:55:33.7514430Z Creating working copy of package ‘multipart-kit’
+2026-05-03T23:55:33.8091540Z 
+2026-05-03T23:55:33.8096770Z Checking out 4.7.1 of package ‘multipart-kit’
+2026-05-03T23:55:33.8347750Z 
+2026-05-03T23:55:33.8586080Z Creating working copy of package ‘swift-log’
+2026-05-03T23:55:33.9215000Z 
+2026-05-03T23:55:33.9216400Z Checking out 1.12.0 of package ‘swift-log’
+2026-05-03T23:55:33.9780650Z 
+2026-05-03T23:55:34.0078510Z Creating working copy of package ‘BitByteData’
+2026-05-03T23:55:34.0500540Z 
+2026-05-03T23:55:34.0502460Z Checking out 2.0.4 of package ‘BitByteData’
+2026-05-03T23:55:34.1010840Z 
+2026-05-03T23:55:34.1361640Z Creating working copy of package ‘swift-certificates’
+2026-05-03T23:55:34.1883230Z 
+2026-05-03T23:55:34.1884320Z Checking out 1.19.1 of package ‘swift-certificates’
+2026-05-03T23:55:34.3271240Z 
+2026-05-03T23:55:34.3548880Z Creating working copy of package ‘swift-distributed-tracing’
+2026-05-03T23:55:34.4068780Z 
+2026-05-03T23:55:34.4070560Z Checking out 1.4.1 of package ‘swift-distributed-tracing’
+2026-05-03T23:55:34.4575410Z 
+2026-05-03T23:55:34.4794200Z Creating working copy of package ‘websocket-kit’
+2026-05-03T23:55:34.5094630Z 
+2026-05-03T23:55:34.5095770Z Checking out 2.16.2 of package ‘websocket-kit’
+2026-05-03T23:55:34.5321620Z 
+2026-05-03T23:55:34.5602130Z Creating working copy of package ‘swift-system’
+2026-05-03T23:55:34.6288210Z 
+2026-05-03T23:55:34.6291160Z Checking out 1.6.4 of package ‘swift-system’
+2026-05-03T23:55:34.6677080Z 
+2026-05-03T23:55:34.6913300Z Creating working copy of package ‘ZIPFoundation’
+2026-05-03T23:55:34.7244110Z 
+2026-05-03T23:55:34.7245820Z Checking out 0.9.20 of package ‘ZIPFoundation’
+2026-05-03T23:55:34.8632610Z 
+2026-05-03T23:55:34.9003410Z Creating working copy of package ‘swift-nio’
+2026-05-03T23:55:34.9960310Z 
+2026-05-03T23:55:34.9963880Z Checking out 2.99.0 of package ‘swift-nio’
+2026-05-03T23:55:35.2595590Z 
+2026-05-03T23:55:35.2970650Z Creating working copy of package ‘console-kit’
+2026-05-03T23:55:35.3470940Z 
+2026-05-03T23:55:35.3472530Z Checking out 4.16.0 of package ‘console-kit’
+2026-05-03T23:55:35.3761580Z 
+2026-05-03T23:55:35.4015940Z Creating working copy of package ‘swift-algorithms’
+2026-05-03T23:55:35.4471590Z 
+2026-05-03T23:55:35.4482840Z Checking out 1.2.1 of package ‘swift-algorithms’
+2026-05-03T23:55:35.4869620Z 
+2026-05-03T23:55:35.5054420Z Creating working copy of package ‘SWCompression’
+2026-05-03T23:55:35.5449320Z 
+2026-05-03T23:55:35.5456680Z Checking out 4.8.6 of package ‘SWCompression’
+2026-05-03T23:55:36.7409780Z 
+2026-05-03T23:55:36.7744710Z Creating working copy of package ‘async-kit’
+2026-05-03T23:55:36.8316010Z 
+2026-05-03T23:55:36.8320210Z Checking out 1.22.0 of package ‘async-kit’
+2026-05-03T23:55:36.8762640Z 
+2026-05-03T23:55:36.9038470Z Creating working copy of package ‘async-http-client’
+2026-05-03T23:55:36.9667540Z 
+2026-05-03T23:55:36.9769690Z Checking out 1.33.1 of package ‘async-http-client’
+2026-05-03T23:55:37.0661180Z 
+2026-05-03T23:55:37.0895610Z Creating working copy of package ‘swift-collections’
+2026-05-03T23:55:37.1378610Z 
+2026-05-03T23:55:37.1379620Z Checking out 1.4.1 of package ‘swift-collections’
+2026-05-03T23:55:37.4367440Z 
+2026-05-03T23:55:37.4685020Z Creating working copy of package ‘swift-service-context’
+2026-05-03T23:55:37.5160250Z 
+2026-05-03T23:55:37.5161660Z Checking out 1.3.0 of package ‘swift-service-context’
+2026-05-03T23:55:37.5540230Z 
+2026-05-03T23:55:37.5800690Z Creating working copy of package ‘swift-atomics’
+2026-05-03T23:55:37.6264430Z 
+2026-05-03T23:55:37.6267700Z Checking out 1.3.0 of package ‘swift-atomics’
+2026-05-03T23:55:37.6985390Z 
+2026-05-03T23:55:37.7307650Z Creating working copy of package ‘swift-nio-extras’
+2026-05-03T23:55:37.7784530Z 
+2026-05-03T23:55:37.7785720Z Checking out 1.34.0 of package ‘swift-nio-extras’
+2026-05-03T23:55:37.8274110Z 
+2026-05-03T23:55:37.8506360Z Creating working copy of package ‘lottie-ios’
+2026-05-03T23:55:37.9039510Z 
+2026-05-03T23:55:37.9041770Z Checking out 4.6.0 of package ‘lottie-ios’
+2026-05-03T23:55:39.6050770Z 
+2026-05-03T23:55:39.6300320Z Creating working copy of package ‘Zip’
+2026-05-03T23:55:39.6696910Z 
+2026-05-03T23:55:39.6722300Z Checking out 2.1.2 of package ‘Zip’
+2026-05-03T23:55:39.7398340Z 
+2026-05-03T23:55:39.7653620Z Creating working copy of package ‘vapor’
+2026-05-03T23:55:39.8597660Z 
+2026-05-03T23:55:39.8598850Z Checking out 4.121.4 of package ‘vapor’
+2026-05-03T23:55:39.9442100Z 
+2026-05-03T23:56:01.9985740Z 
+2026-05-03T23:56:01.9989670Z Resolved source packages:
+2026-05-03T23:56:02.0002090Z   swift-nio-extras: https://github.com/apple/swift-nio-extras.git @ 1.34.0
+2026-05-03T23:56:02.0018840Z   swift-nio-transport-services: https://github.com/apple/swift-nio-transport-services.git @ 1.28.0
+2026-05-03T23:56:02.0019620Z   swift-metrics: https://github.com/apple/swift-metrics.git @ 2.10.1
+2026-05-03T23:56:02.0020090Z   swift-algorithms: https://github.com/apple/swift-algorithms.git @ 1.2.1
+2026-05-03T23:56:02.0020550Z   swift-atomics: https://github.com/apple/swift-atomics.git @ 1.3.0
+2026-05-03T23:56:02.0021100Z   swift-nio-ssl: https://github.com/apple/swift-nio-ssl.git @ 2.37.0
+2026-05-03T23:56:02.0021620Z   swift-service-context: https://github.com/apple/swift-service-context.git @ 1.3.0
+2026-05-03T23:56:02.0022260Z   swift-collections: https://github.com/apple/swift-collections.git @ 1.4.1
+2026-05-03T23:56:02.0022780Z   console-kit: https://github.com/vapor/console-kit.git @ 4.16.0
+2026-05-03T23:56:02.0023780Z   swift-nio-http2: https://github.com/apple/swift-nio-http2.git @ 1.43.0
+2026-05-03T23:56:02.0024260Z   swift-log: https://github.com/apple/swift-log.git @ 1.12.0
+2026-05-03T23:56:02.0028430Z   SWCompression: https://github.com/tsolomko/SWCompression @ 4.8.6
+2026-05-03T23:56:02.0029050Z   swift-http-structured-headers: https://github.com/apple/swift-http-structured-headers.git @ 1.7.0
+2026-05-03T23:56:02.0029640Z   swift-async-algorithms: https://github.com/apple/swift-async-algorithms.git @ 1.1.3
+2026-05-03T23:56:02.0030160Z   websocket-kit: https://github.com/vapor/websocket-kit.git @ 2.16.2
+2026-05-03T23:56:02.0030770Z   swift-certificates: https://github.com/apple/swift-certificates.git @ 1.19.1
+2026-05-03T23:56:02.0031440Z   swift-service-lifecycle: https://github.com/swift-server/swift-service-lifecycle.git @ 2.11.0
+2026-05-03T23:56:02.0031980Z   Zsign: /Users/runner/work/Xsign/Xsign/Zsign
+2026-05-03T23:56:02.0032350Z   swift-asn1: https://github.com/apple/swift-asn1.git @ 1.7.0
+2026-05-03T23:56:02.0032860Z   swift-http-types: https://github.com/apple/swift-http-types.git @ 1.5.1
+2026-05-03T23:56:02.0033300Z   async-kit: https://github.com/vapor/async-kit.git @ 1.22.0
+2026-05-03T23:56:02.0033760Z   ZIPFoundation: https://github.com/weichsel/ZIPFoundation @ 0.9.20
+2026-05-03T23:56:02.0034150Z   swift-crypto: https://github.com/apple/swift-crypto @ 3.15.1
+2026-05-03T23:56:02.0034610Z   Lottie: https://github.com/airbnb/lottie-ios @ 4.6.0
+2026-05-03T23:56:02.0035010Z   swift-system: https://github.com/apple/swift-system.git @ 1.6.4
+2026-05-03T23:56:02.0035490Z   async-http-client: https://github.com/swift-server/async-http-client.git @ 1.33.1
+2026-05-03T23:56:02.0036010Z   vapor: https://github.com/vapor/vapor @ 4.121.4
+2026-05-03T23:56:02.0036470Z   swift-distributed-tracing: https://github.com/apple/swift-distributed-tracing.git @ 1.4.1
+2026-05-03T23:56:02.0037060Z   routing-kit: https://github.com/vapor/routing-kit.git @ 4.9.3
+2026-05-03T23:56:02.0037470Z   OpenSSL: https://github.com/krzyzanowskim/OpenSSL @ 3.6.1
+2026-05-03T23:56:02.0038360Z   Zip: https://github.com/marmelroy/Zip @ 2.1.2
+2026-05-03T23:56:02.0038750Z   swift-nio: https://github.com/apple/swift-nio.git @ 2.99.0
+2026-05-03T23:56:02.0039200Z   swift-numerics: https://github.com/apple/swift-numerics.git @ 1.1.1
+2026-05-03T23:56:02.0039970Z   multipart-kit: https://github.com/vapor/multipart-kit.git @ 4.7.1
+2026-05-03T23:56:02.0040390Z   BitByteData: https://github.com/tsolomko/BitByteData @ 2.0.4
+2026-05-03T23:56:02.0040660Z 
+2026-05-03T23:56:02.0048810Z resolved source packages: swift-nio-extras, swift-nio-transport-services, swift-metrics, swift-algorithms, swift-atomics, swift-nio-ssl, swift-service-context, swift-collections, console-kit, swift-nio-http2, swift-log, SWCompression, swift-http-structured-headers, swift-async-algorithms, websocket-kit, swift-certificates, swift-service-lifecycle, Zsign, swift-asn1, swift-http-types, async-kit, ZIPFoundation, swift-crypto, Lottie, swift-system, async-http-client, vapor, swift-distributed-tracing, routing-kit, OpenSSL, Zip, swift-nio, swift-numerics, multipart-kit, BitByteData
