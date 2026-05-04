@@ -60,6 +60,7 @@ extern "C" bool c_zsign_check_certificate(const char* certificate_path, const ch
     string strPath(certificate_path ? certificate_path : "");
     string strPassword(password ? password : "");
     try {
+        // Use CheckCertificate from certcheck.h
         return CheckCertificate(strPath, strPassword) == 0;
     } catch (...) { return false; }
 }
@@ -69,7 +70,14 @@ extern "C" const char* c_zsign_get_certificate_info(const char* certificate_path
     string strPath(certificate_path ? certificate_path : "");
     string strPassword(password ? password : "");
     try {
-        strInfo = "{ \"status\": \"implemented\" }";
+        ZSignAsset zsa;
+        if (!zsa.Init(strPath, strPath, "", "", strPassword, false, false, false)) {
+            strInfo = "{}";
+            return strInfo.c_str();
+        }
+        
+        // Build JSON-like info string
+        strInfo = "{\"team_id\":\"" + zsa.m_strTeamId + "\",\"subject_cn\":\"" + zsa.m_strSubjectCN + "\"}";
         return strInfo.c_str();
     } catch (...) {
         strInfo = "{}";
@@ -78,6 +86,7 @@ extern "C" const char* c_zsign_get_certificate_info(const char* certificate_path
 }
 
 extern "C" bool c_zsign_set_entitlements(const char* entitlements_json) {
+    // This would need to parse entitlements and set them in g_zsa
     return true;
 }
 

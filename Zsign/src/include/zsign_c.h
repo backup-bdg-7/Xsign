@@ -11,7 +11,7 @@
 extern "C" {
 #endif
 
-// Sign an iOS app bundle
+// Sign an iOS app bundle - matches Swift @_silgen_name("c_zsign_sign_app")
 // Returns true on success
 bool c_zsign_sign_app(
     const char* bundle_path,
@@ -24,6 +24,15 @@ bool c_zsign_sign_app(
     const char* version,
     const char* short_version,
     bool adhoc
+);
+
+// Simple version for signing (for backward compatibility)
+// Returns true on success
+bool c_zsign_sign_app_simple(
+    const char* bundle_path,
+    const char* certificate_path,
+    const char* password,
+    const char* provisioning_profile_path
 );
 
 // Check if a certificate is valid
@@ -39,6 +48,12 @@ const char* c_zsign_get_certificate_info(
     const char* certificate_path,
     const char* password
 );
+
+// Set entitlements (JSON string)
+bool c_zsign_set_entitlements(const char* entitlements_json);
+
+// Set signing options
+void c_zsign_set_option(const char* option_name, bool enabled);
 
 #ifdef __cplusplus
 }
