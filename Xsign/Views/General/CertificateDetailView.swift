@@ -34,15 +34,15 @@ struct CertificateDetailView: View {
             
             // Actions Section
             Section {
-                Button(action: {
+                Button {
                     // Export certificate action
-                }) {
+                } label: {
                     Label("Export Certificate", systemImage: "square.and.arrow.up")
                 }
                 
-                Button(role: .destructive, action: {
+                Button(role: .destructive) {
                     // Delete certificate action
-                }) {
+                } label: {
                     Label("Delete Certificate", systemImage: "trash")
                 }
             }
