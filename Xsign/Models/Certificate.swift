@@ -6,7 +6,7 @@ enum CertificateType: String, Codable {
 }
 
 @Model
-final class Certificate: Identifiable {
+final class Certificate: Identifiable, @unchecked Sendable {
     @Attribute(.unique) var id: UUID
     var name: String
     var encryptedP12Data: Data

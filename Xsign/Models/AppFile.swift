@@ -10,7 +10,7 @@ enum SignatureStatus: String, Codable {
 }
 
 @Model
-final class AppFile: Identifiable {
+final class AppFile: Identifiable, @unchecked Sendable {
     @Attribute(.unique) var id: UUID
     var name: String
     var fileName: String

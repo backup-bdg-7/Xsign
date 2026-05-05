@@ -31,9 +31,22 @@ struct XSignView: View {
                 }
             }
             .navigationTitle("XSign")
-            .searchable(text: $searchText, placement: .platform())
+            .searchable(text: $searchText)
             .scrollDismissesKeyboard(.interactively)
-            .toolbar { toolbarContent }
+            .toolbar {
+                if editMode.isEditing {
+                    ToolbarItem(placement: .destructiveAction) {
+                        Button("Delete (\(selectedAppIDs.count))") {
+                            bulkDeleteSelectedApps()
+                        }
+                        .disabled(selectedAppIDs.isEmpty)
+                    }
+                }
+                
+                ToolbarItem(placement: .cancellationAction) {
+                    EditButton()
+                }
+            }
             .environment(\.editMode, $editMode)
             .onChange(of: editMode) { mode in
                 if mode == .inactive {
