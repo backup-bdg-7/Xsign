@@ -51,5 +51,8 @@ struct FolderSetup {
         if !fileManager.fileExists(atPath: logsDir.path) {
             try? fileManager.createDirectory(at: logsDir, withIntermediateDirectories: true)
         }
+        
+        // Create default categories
+        PersistenceService.shared.createDefaultCategories()
     }
 }

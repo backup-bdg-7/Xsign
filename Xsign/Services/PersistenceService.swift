@@ -81,4 +81,32 @@ class PersistenceService {
         let descriptor = FetchDescriptor<AppLog>(sortBy: [SortDescriptor(\.timestamp, order: .reverse)])
         return (try? context.fetch(descriptor)) ?? []
     }
+    
+    func fetchAppFile(by fileName: String) -> AppFile? {
+        let descriptor = FetchDescriptor<AppFile>(predicate: #Predicate { $0.fileName == fileName })
+        return try? context.fetch(descriptor).first
+    }
+    
+    func createDefaultCategories() {
+        let defaultCategories = [
+            (name: "IPA Files", icon: "doc.fill", color: "blue"),
+            (name: "Dylibs", icon: "curlybraces", color: "purple"),
+            (name: "Debs", icon: "square.stack.3d.up.fill", color: "orange"),
+            (name: "Signed", icon: "checkmark.seal.fill", color: "green"),
+            (name: "Unsigned", icon: "exclamationmark.shield.fill", color: "red")
+        ]
+        
+        for categoryData in defaultCategories {
+            if fetchCategory(by: categoryData.name) == nil {
+                let category = Category(name: categoryData.name, icon: categoryData.icon, color: categoryData.color)
+                context.insert(category)
+            }
+        }
+        save()
+    }
+    
+    func fetchCategory(by name: String) -> Category? {
+        let descriptor = FetchDescriptor<Category>(predicate: #Predicate { $0.name == name })
+        return try? context.fetch(descriptor).first
+    }
 }

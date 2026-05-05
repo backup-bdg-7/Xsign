@@ -52,18 +52,10 @@ struct LibraryView: View {
                     }
                 } else {
                     ToolbarItem(placement: .primaryAction) {
-                        Menu {
-                            Button("Import IPA") {
-                                showingImportPicker = true
-                            }
-                            Button("Import dylib") {
-                                // Handle dylib import
-                            }
-                            Button("Import deb") {
-                                // Handle deb import  
-                            }
+                        Button {
+                            showingImportPicker = true
                         } label: {
-                            Image(systemName: "plus")
+                            Label("Import Files", systemImage: "plus")
                         }
                     }
                 }
@@ -85,6 +77,42 @@ struct LibraryView: View {
                     }
                 )
                 .ignoresSafeArea()
+            }
+            .sheet(isPresented: $showingCategoryPicker) {
+                NavigationStack {
+                    List {
+                        Section("Select Category for Imported File") {
+                            Button("None (No Category)") {
+                                // Assign no category
+                                if let url = importedFileURL,
+                                   let fileName = url.lastPathComponent as String?,
+                                   let appFile = PersistenceService.shared.fetchAppFile(by: fileName) {
+                                    appFile.category = nil
+                                    PersistenceService.shared.save()
+                                }
+                                showingCategoryPicker = false
+                            }
+                            ForEach(categories) { cat in
+                                Button(cat.name) {
+                                    // Assign selected category to the imported file
+                                    if let url = importedFileURL,
+                                       let fileName = url.lastPathComponent as String?,
+                                       let appFile = PersistenceService.shared.fetchAppFile(by: fileName) {
+                                        appFile.category = cat
+                                        PersistenceService.shared.save()
+                                    }
+                                    showingCategoryPicker = false
+                                }
+                            }
+                        }
+                    }
+                    .navigationTitle("Choose Category")
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Cancel") { showingCategoryPicker = false }
+                        }
+                    }
+                }
             }
             .onChange(of: editMode) { mode in
                 if mode == .inactive {
@@ -208,6 +236,19 @@ struct LibraryView: View {
                 signatureStatus: .unsigned
             )
             
+            // If categories exist, prompt user to select one
+            if !categories.isEmpty {
+                // Set the imported file URL to trigger category picker
+                importedFileURL = url
+                showingCategoryPicker = true
+                // Store the file temporarily and handle category assignment in the sheet
+                PersistenceService.shared.context.insert(appFile)
+                // We'll set the category after user picks one
+            } else {
+                // No categories, just save
+                PersistenceService.shared.context.insert(appFile)
+            }
+            
             // Save file to documents directory
             let documentsDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             let importsDir = documentsDir.appendingPathComponent("imports", isDirectory: true)
@@ -219,7 +260,6 @@ struct LibraryView: View {
             let destinationURL = importsDir.appendingPathComponent(fileName)
             try data.write(to: destinationURL)
             
-            PersistenceService.shared.context.insert(appFile)
             PersistenceService.shared.save()
             
         } catch {
