@@ -28,7 +28,7 @@ class PersistenceService {
         let logsURL = getLogsFileURL()
         if !FileManager.default.fileExists(atPath: logsURL.path) {
             FileManager.default.createFile(atPath: logsURL.path, contents: nil)
-            appendToLogsFile("=== Xsign Logs ===\n")
+            appendToLogsFile("=== XSign Logs ===\n")
         }
     }
     
@@ -57,8 +57,15 @@ class PersistenceService {
     }
     
     func getLogsFileURL() -> URL {
-        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent(logsFileName)
+        let logsDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("logs", isDirectory: true)
+        
+        // Create logs directory if it doesn't exist
+        if !FileManager.default.fileExists(atPath: logsDir.path) {
+            try? FileManager.default.createDirectory(at: logsDir, withIntermediateDirectories: true)
+        }
+        
+        return logsDir.appendingPathComponent(logsFileName)
     }
     
     func getDocumentsDirectory() -> URL {

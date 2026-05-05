@@ -1,22 +1,13 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
-// Define custom UTTypes for our file types
-extension UTType {
-    static let p12 = UTType(filenameExtension: "p12") ?? .data
-    static let mobileprovision = UTType(filenameExtension: "mobileprovision") ?? .data
-    static let ipa = UTType(filenameExtension: "ipa") ?? .data
-    static let dylib = UTType(filenameExtension: "dylib") ?? .unixExecutable
-    static let deb = UTType(filenameExtension: "deb") ?? .data
-}
-
 struct ImportCertificateView: View {
     @Environment(\.dismiss) var dismiss
 
     @State private var name = ""
     @State private var password = ""
-    @State private var p12Data: Data?
-    @State private var profileData: Data?
+    @State private var p12URL: URL?
+    @State private var provisionURL: URL?
     @State private var showingP12Picker = false
     @State private var showingProfilePicker = false
 
@@ -32,21 +23,25 @@ struct ImportCertificateView: View {
                     HStack {
                         Text(".p12 Certificate")
                         Spacer()
-                        if p12Data != nil { 
+                        if p12URL != nil { 
                             Image(systemName: "checkmark.circle.fill")
                                 .foregroundColor(.green) 
                         }
-                        Button("Select") { showingP12Picker = true }
+                        Button(p12URL == nil ? "Select" : "Change") { 
+                            showingP12Picker = true 
+                        }
                     }
 
                     HStack {
                         Text("Provisioning Profile")
                         Spacer()
-                        if profileData != nil { 
+                        if provisionURL != nil { 
                             Image(systemName: "checkmark.circle.fill")
                                 .foregroundColor(.green) 
                         }
-                        Button("Select") { showingProfilePicker = true }
+                        Button(provisionURL == nil ? "Select" : "Change") { 
+                            showingProfilePicker = true 
+                        }
                     }
                 }
             }
@@ -54,58 +49,77 @@ struct ImportCertificateView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") { saveCertificate() }
-                        .disabled(name.isEmpty || p12Data == nil)
+                        .disabled(name.isEmpty || p12URL == nil || provisionURL == nil)
                 }
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
                 }
             }
-            .fileImporter(isPresented: $showingP12Picker, allowedContentTypes: [.p12]) { result in
-                handleP12Import(result)
+            .sheet(isPresented: $showingP12Picker) {
+                FileImporterRepresentableView(
+                    allowedContentTypes: [.p12],
+                    onDocumentsPicked: { urls in
+                        guard let selectedFileURL = urls.first else { return }
+                        p12URL = selectedFileURL
+                        // Try to parse provisioning profile to get name if not set
+                        if name.isEmpty {
+                            // Will set name after both files are selected
+                        }
+                    }
+                )
+                .ignoresSafeArea()
             }
-            .fileImporter(isPresented: $showingProfilePicker, allowedContentTypes: [.mobileprovision]) { result in
-                handleProfileImport(result)
+            .sheet(isPresented: $showingProfilePicker) {
+                FileImporterRepresentableView(
+                    allowedContentTypes: [.mobileprovision],
+                    onDocumentsPicked: { urls in
+                        guard let selectedFileURL = urls.first else { return }
+                        provisionURL = selectedFileURL
+                        // Try to parse provisioning profile to get name if not set
+                        if name.isEmpty {
+                            do {
+                                let data = try Data(contentsOf: selectedFileURL)
+                                let profile = try ProvisioningParser.shared.parse(provisioningProfile: data)
+                                name = profile.appID ?? "Profile"
+                            } catch {
+                                print("Failed to parse provisioning profile: \(error)")
+                            }
+                        }
+                    }
+                )
+                .ignoresSafeArea()
             }
         }
     }
     
-    private func handleP12Import(_ result: Result<URL, Error>) {
-        if let url = try? result.get() {
-            p12Data = try? Data(contentsOf: url)
-        }
-    }
-    
-    private func handleProfileImport(_ result: Result<URL, Error>) {
-        if let url = try? result.get() {
-            profileData = try? Data(contentsOf: url)
-            if let data = profileData {
-                do {
-                    let profile = try ProvisioningParser.shared.parse(provisioningProfile: data)
-                    if name.isEmpty { name = profile.appID ?? "Profile" }
-                } catch {
-                    print("Failed to parse provisioning profile: \(error)")
-                }
-            }
-        }
-    }
-
     private func saveCertificate() {
-        guard let p12 = p12Data else { return }
+        guard let p12URL = p12URL,
+              let provisionURL = provisionURL else { return }
         
-        let newCert = Certificate(
-            name: name,
-            p12Data: p12,
-            provisioningProfileData: profileData,
-            password: password.isEmpty ? nil : password,
-            type: .distribution,
-            expiryDate: Date().addingTimeInterval(365*24*60*60),
-            commonName: name,
-            fingerprint: UUID().uuidString,
-            canSign: true
-        )
-        
-        PersistenceService.shared.context.insert(newCert)
-        PersistenceService.shared.save()
-        dismiss()
+        do {
+            let p12Data = try Data(contentsOf: p12URL)
+            let provisionData = try Data(contentsOf: provisionURL)
+            
+            // Verify the certificate can be used for signing
+            // (In a real implementation, you'd verify the p12 password here)
+            
+            let newCert = Certificate(
+                name: name,
+                p12Data: p12Data,
+                provisioningProfileData: provisionData,
+                password: password.isEmpty ? nil : password,
+                type: .distribution,
+                expiryDate: Date().addingTimeInterval(365*24*60*60),
+                commonName: name,
+                fingerprint: UUID().uuidString,
+                canSign: true
+            )
+            
+            PersistenceService.shared.context.insert(newCert)
+            PersistenceService.shared.save()
+            dismiss()
+        } catch {
+            print("Failed to save certificate: \(error)")
+        }
     }
 }

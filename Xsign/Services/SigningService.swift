@@ -19,12 +19,29 @@ class SigningService {
         var injectDylibs: [URL]?
         var entitlementsURL: URL?
         var signingOption: SigningOption = .default
+        
+        // Additional options from Feather
+        var ppqProtection: Bool = false
+        var appAppearance: AppAppearance = .default
+        var minimumAppRequirement: MinimumAppRequirement = .default
+        var fileSharing: Bool = false
+        var itunesFileSharing: Bool = false
+        var proMotion: Bool = false
+        var gameMode: Bool = false
+        var ipadFullscreen: Bool = false
+        var removeURLScheme: Bool = false
+        var removeProvisioning: Bool = false
+        var changeLanguageFilesForCustomDisplayName: Bool = false
+        var post_installAppAfterSigned: Bool = false
+        var post_deleteAppAfterSigned: Bool = false
+        var experiment_replaceSubstrateWithEllekit: Bool = false
+        var experiment_supportLiquidGlass: Bool = false
     }
 
-    enum SigningOption {
-        case `default`
-        case adhoc
-        case onlyModify
+    enum SigningOption: String {
+        case `default` = "default"
+        case adhoc = "adhoc"
+        case onlyModify = "onlyModify"
     }
 
     /// Sign an app with the given certificate and options
@@ -54,8 +71,24 @@ class SigningService {
         // Get password
         let password = certificate.decryptedPassword() ?? ""
 
-        // Get entitlements path
-        let entitlementsPath = options.entitlementsURL?.path ?? ""
+        // Determine bundle ID (apply PPQ protection if enabled)
+        var bundleID = options.bundleID ?? appFile.bundleID ?? ""
+        if options.ppqProtection {
+            // Append random string to bundle ID for PPQ protection
+            let randomString = UUID().uuidString.prefix(8).lowercased()
+            if !bundleID.isEmpty {
+                bundleID = "\(bundleID).\(randomString)"
+            } else {
+                bundleID = "com.xsign.\(randomString)"
+            }
+        }
+
+        // Determine display name
+        let displayName = options.bundleName ?? appFile.name
+
+        // Determine version
+        let version = options.bundleVersion ?? appFile.version ?? "1.0"
+        let buildVersion = options.bundleBuildVersion ?? appFile.build ?? "1"
 
         // Determine if adhoc
         let adhoc = options.signingOption == .adhoc
@@ -66,11 +99,11 @@ class SigningService {
             p12Path.path,
             password,
             provisionPath,
-            signedAppPath,  // output path
-            options.bundleID ?? "",
-            options.bundleName ?? "",
-            options.bundleVersion ?? "",
-            options.bundleBuildVersion ?? "",
+            signedAppPath, // output path
+            bundleID,
+            displayName,
+            version,
+            buildVersion,
             adhoc
         )
 
@@ -82,6 +115,11 @@ class SigningService {
 
         guard signSuccess else {
             throw NSError(domain: "Signing", code: 1, userInfo: [NSLocalizedDescriptionKey: "Signing failed"])
+        }
+
+        // Apply post-signing options
+        if options.post_deleteAppAfterSigned {
+            try? fileManager.removeItem(at: appFile.filePath)
         }
 
         // Return signed app path

@@ -1,45 +1,217 @@
 import SwiftUI
+import SwiftData
 
 struct GeneralView: View {
-    @State private var signedApps: [AppFile] = []
-    @State private var logs: [AppLog] = []
-    @State private var selectedSegment = 0
+    @Query private var certificates: [Certificate]
+    @State private var selectedCertIndex: Int = 0
+    @State private var showingCertificatesView = false
+    @State private var showingSigningOptions = false
+    @State private var showingAppIconView = false
+    @State private var showingResetView = false
+    @State private var showingAboutView = false
+    
+    var selectedCertificate: Certificate? {
+        guard selectedCertIndex >= 0, selectedCertIndex < certificates.count else {
+            return nil
+        }
+        return certificates[selectedCertIndex]
+    }
     
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                // Segmented picker at top
-                Picker("Section", selection: $selectedSegment) {
-                    Text("Signed").tag(0)
-                    Text("Certs").tag(1)
-                    Text("Logs").tag(2)
-                    Text("Device").tag(3)
-                }
-                .pickerStyle(.segmented)
-                .padding()
-                
-                // Content below picker
-                ZStack {
-                    XsignTheme.background.ignoresSafeArea()
+            Form {
+                // Certificates Section
+                Section(header: Text("Certificates")) {
+                    if let cert = selectedCertificate {
+                        HStack {
+                            Image(systemName: "checkmark.seal.fill")
+                                .foregroundColor(.green)
+                            VStack(alignment: .leading) {
+                                Text(cert.name)
+                                    .font(.headline)
+                                Text(cert.commonName)
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.secondary)
+                        }
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            showingCertificatesView = true
+                        }
+                    } else {
+                        Text("No Certificate")
+                            .font(.footnote)
+                            .foregroundColor(.secondary)
+                    }
                     
-                    switch selectedSegment {
-                    case 0: SignedAppsListView(apps: signedApps)
-                    case 1: CertificateManagementView()
-                    case 2: LogsListView(logs: logs)
-                    default: DeviceManagementView()
+                    Button(action: { showingCertificatesView = true }) {
+                        Label("Certificates", systemImage: "checkmark.seal")
+                    }
+                } footer: {
+                    Text("Add and manage certificates used for signing applications.")
+                }
+                
+                // Features Section
+                Section(header: Text("Features")) {
+                    Button(action: { showingSigningOptions = true }) {
+                        Label("Signing Options", systemImage: "signature")
+                    }
+                    
+                    Button(action: { showingAppIconView = true }) {
+                        Label("App Icon", systemImage: "app.badge")
+                    }
+                } footer: {
+                    Text("Configure the app's signing options and appearance.")
+                }
+                
+                // Directories Section
+                Section(header: Text("Directories")) {
+                    Button("Open Documents") {
+                        UIApplication.shared.open(FileManager.default.documentsDirectory)
+                    }
+                    Button("Open Certificates") {
+                        let certsDir = FileManager.default.documentsDirectory.appendingPathComponent("certificates", isDirectory: true)
+                        UIApplication.shared.open(certsDir)
+                    }
+                    Button("Open Imports") {
+                        let importsDir = FileManager.default.documentsDirectory.appendingPathComponent("imports", isDirectory: true)
+                        UIApplication.shared.open(importsDir)
+                    }
+                } footer: {
+                    Text("All of the app's files are contained in the documents directory, here are some quick links to these.")
+                }
+                
+                // Reset Section
+                Section {
+                    Button(action: { showingResetView = true }) {
+                        Label("Reset", systemImage: "trash")
+                            .foregroundColor(.red)
+                    }
+                } footer: {
+                    Text("Reset the application's sources, certificates, apps, and general contents.")
+                }
+                
+                // About Section
+                Section {
+                    Button(action: { showingAboutView = true }) {
+                        Label("About XSign", systemImage: "info.circle")
                     }
                 }
             }
-            .navigationTitle("General")
-            .onAppear { loadData() }
+            .navigationTitle("Settings")
+            .sheet(isPresented: $showingCertificatesView) {
+                NavigationStack {
+                    CertificateManagementView()
+                        .navigationTitle("Certificates")
+                        .toolbar {
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button("Done") { showingCertificatesView = false }
+                            }
+                        }
+                }
+            }
+            .sheet(isPresented: $showingSigningOptions) {
+                NavigationStack {
+                    SigningOptionsView(options: .constant(SigningOptions()))
+                        .navigationTitle("Signing Options")
+                        .toolbar {
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button("Done") { showingSigningOptions = false }
+                            }
+                        }
+                }
+            }
+            .sheet(isPresented: $showingResetView) {
+                NavigationStack {
+                    ResetView()
+                        .navigationTitle("Reset")
+                        .toolbar {
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button("Done") { showingResetView = false }
+                            }
+                        }
+                }
+            }
+            .sheet(isPresented: $showingAboutView) {
+                NavigationStack {
+                    AboutView()
+                        .navigationTitle("About")
+                        .toolbar {
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button("Done") { showingAboutView = false }
+                            }
+                        }
+                }
+            }
         }
     }
-    
-    private func loadData() {
-        signedApps = PersistenceService.shared.fetchSignedApps()
-        logs = PersistenceService.shared.fetchLogs()
+}
+
+// MARK: - ResetView
+struct ResetView: View {
+    var body: some View {
+        List {
+            Section {
+                Button("Reset All Data") {
+                    // Implement reset functionality
+                }
+                .foregroundColor(.red)
+            } footer: {
+                Text("This will delete all certificates, apps, and settings.")
+            }
+        }
     }
 }
+
+// MARK: - AboutView  
+struct AboutView: View {
+    var body: some View {
+        List {
+            Section {
+                HStack {
+                    Spacer()
+                    VStack(spacing: 16) {
+                        // App icon
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(LinearGradient(
+                                gradient: Gradient(colors: [.blue, .purple]),
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ))
+                            .frame(width: 80, height: 80)
+                            .overlay(
+                                Image(systemName: "signature")
+                                    .font(.system(size: 36))
+                                    .foregroundColor(.white)
+                            )
+                        
+                        Text("XSign")
+                            .font(.title)
+                            .fontWeight(.bold)
+                        
+                        Text("Version 1.0")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    Spacer()
+                }
+            }
+            
+            Section(header: Text("Feedback")) {
+                Button("Submit Feedback") {
+                    // Open GitHub issues
+                }
+                Button("GitHub Repository") {
+                    // Open GitHub repo
+                }
+            }
+        }
+    }
+}
+
 
 struct SignedAppsListView: View {
     let apps: [AppFile]

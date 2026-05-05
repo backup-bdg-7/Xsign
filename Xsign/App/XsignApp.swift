@@ -3,6 +3,11 @@ import SwiftData
 
 @main
 struct XsignApp: App {
+    init() {
+        // Setup folder structure on launch
+        FolderSetup.shared
+    }
+    
     var body: some Scene {
         WindowGroup {
             MainTabView()

@@ -49,6 +49,13 @@
 		F89D222923E601DA5DB7ACF4 /* FileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E7AE47639383126AAE5A623 /* FileService.swift */; };
 		F99C5243079D2DA5E3423781 /* Entitlement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487B89EDC40E05392287B921 /* Entitlement.swift */; };
 		FAA91139D9A8BE522259B8DD /* SWCompression in Frameworks */ = {isa = PBXBuildFile; productRef = 8D69F21E55FC668A00B9FF58 /* SWCompression */; };
+
+		FD64F15A824D461D9F8CBF89 /* SigningOptions.swift */ = {isa = PBXBuildFile; fileRef = 4B77641277C94F5FB2FC5F91 /* SigningOptions.swift */; };
+		BC506853330C4F69B76B2684 /* FileImporterRepresentableView.swift */ = {isa = PBXBuildFile; fileRef = 338446595B804A58B645FB64 /* FileImporterRepresentableView.swift */; };
+		366F8CA2FBEB4CA48AA5A364 /* XSignView.swift */ = {isa = PBXBuildFile; fileRef = 567D370B58B84335A82D308E /* XSignView.swift */; };
+		0F1475BC2FB74E0F9CD2379E /* SigningOptionsView.swift */ = {isa = PBXBuildFile; fileRef = F2C3EF61B7AA45B0A5725D03 /* SigningOptionsView.swift */; };
+		E50F82E70BEE41869C76EBF8 /* LogsView.swift */ = {isa = PBXBuildFile; fileRef = 5C2BE24DE55D49EEA280BAF7 /* LogsView.swift */; };
+		C616212B4A174EBE8177EDC6 /* FolderSetup.swift */ = {isa = PBXBuildFile; fileRef = 35AF6CBCE3254BD1AB032DD0 /* FolderSetup.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -89,6 +96,13 @@
 		D8A55AE27A20E6C607CB1A29 /* SigningService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigningService.swift; sourceTree = "<group>"; };
 		E2E8BE7B3B05679046427CC9 /* AppDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDetailView.swift; sourceTree = "<group>"; };
 		E8E23FA8CE92C04EE48EA96F /* CategoryPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPill.swift; sourceTree = "<group>"; };
+
+		4B77641277C94F5FB2FC5F91 /* SigningOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigningOptions.swift; sourceTree = "<group>"; };
+		338446595B804A58B645FB64 /* FileImporterRepresentableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileImporterRepresentableView.swift; sourceTree = "<group>"; };
+		567D370B58B84335A82D308E /* XSignView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XSignView.swift; sourceTree = "<group>"; };
+		F2C3EF61B7AA45B0A5725D03 /* SigningOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigningOptionsView.swift; sourceTree = "<group>"; };
+		5C2BE24DE55D49EEA280BAF7 /* LogsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsView.swift; sourceTree = "<group>"; };
+		35AF6CBCE3254BD1AB032DD0 /* FolderSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderSetup.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
