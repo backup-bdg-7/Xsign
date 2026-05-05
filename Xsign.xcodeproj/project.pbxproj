@@ -16,6 +16,7 @@
 		25F639445CA922B940011E3A /* SecurityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA00C3AF8E61D7FDC519105E /* SecurityService.swift */; };
 		374DE514DA7E31DF3BE873B5 /* ProvisioningParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011D3D14A6F465826C5F3E02 /* ProvisioningParser.swift */; };
 		3B1D0B453E59E047F81B358C /* EntitlementManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6582E6831F4D79E0A798891 /* EntitlementManager.swift */; };
+		4404699CAF167990A062083D /* CategoryManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6483002EC722A6C822C5FE9 /* CategoryManagementView.swift */; };
 		46E4B27D829D98D424F7614A /* SigningService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A55AE27A20E6C607CB1A29 /* SigningService.swift */; };
 		4A3405A53F28E5C2C096D9D3 /* BitByteData in Frameworks */ = {isa = PBXBuildFile; productRef = BB58180DC547BEBD161EB448 /* BitByteData */; };
 		4DE01B583BFECC4AD3473717 /* Vapor in Frameworks */ = {isa = PBXBuildFile; productRef = 4A77FF2C9E3D895ED101AD35 /* Vapor */; };
@@ -107,6 +108,7 @@
 		E2E8BE7B3B05679046427CC9 /* AppDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDetailView.swift; sourceTree = "<group>"; };
 		E8E23FA8CE92C04EE48EA96F /* CategoryPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPill.swift; sourceTree = "<group>"; };
 		EFA2684926B8CA1357022B9A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		F6483002EC722A6C822C5FE9 /* CategoryManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryManagementView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +135,7 @@
 			children = (
 				E2E8BE7B3B05679046427CC9 /* AppDetailView.swift */,
 				29AE627B0D17B85C685FB903 /* AppFileCard.swift */,
+				F6483002EC722A6C822C5FE9 /* CategoryManagementView.swift */,
 				0F60E1BAE39877BABEBB3D63 /* ImportCertificateView.swift */,
 				80816F4D552F2692EAC764B1 /* LibraryView.swift */,
 				9641DE24385142D19489CE49 /* SigningOptionsView.swift */,
@@ -370,6 +373,7 @@
 				DC68EA776318F6E0F31FB203 /* BinaryInfo.swift in Sources */,
 				E3312836E613907A2620E40C /* BinaryParser.swift in Sources */,
 				9318439ED2F3FF7767D5C924 /* Category.swift in Sources */,
+				4404699CAF167990A062083D /* CategoryManagementView.swift in Sources */,
 				9458CCB6B501EB9A6CBBF7F1 /* CategoryPickerView.swift in Sources */,
 				E3FBC1A198F0ABAEFFC19C67 /* CategoryPill.swift in Sources */,
 				24D3EF467E7A707CD08998E4 /* Certificate.swift in Sources */,
