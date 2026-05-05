@@ -158,7 +158,7 @@ struct GeneralView: View {
             }
             .sheet(isPresented: $showingLogsView) {
                 NavigationStack {
-                    LogsView()
+                    LogsListView(logs: PersistenceService.shared.fetchLogs())
                         .navigationTitle("Logs")
                         .toolbar {
                             ToolbarItem(placement: .cancellationAction) {
