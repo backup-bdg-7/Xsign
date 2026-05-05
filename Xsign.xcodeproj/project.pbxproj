@@ -18,7 +18,6 @@
 		3B1D0B453E59E047F81B358C /* EntitlementManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6582E6831F4D79E0A798891 /* EntitlementManager.swift */; };
 		4404699CAF167990A062083D /* CategoryManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6483002EC722A6C822C5FE9 /* CategoryManagementView.swift */; };
 		46E4B27D829D98D424F7614A /* SigningService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A55AE27A20E6C607CB1A29 /* SigningService.swift */; };
-		49C7DC2CAE59EA713B8062AC /* EntitlementsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDF86E8355555FAF73E0F513 /* EntitlementsListView.swift */; };
 		4A3405A53F28E5C2C096D9D3 /* BitByteData in Frameworks */ = {isa = PBXBuildFile; productRef = BB58180DC547BEBD161EB448 /* BitByteData */; };
 		4DE01B583BFECC4AD3473717 /* Vapor in Frameworks */ = {isa = PBXBuildFile; productRef = 4A77FF2C9E3D895ED101AD35 /* Vapor */; };
 		51A1E57CDEA46CFE5A70764D /* CertificateDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB78B3C1C216D872F418095 /* CertificateDetailView.swift */; };
@@ -38,7 +37,6 @@
 		9152EFCEED55E99D8ADA78DA /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80816F4D552F2692EAC764B1 /* LibraryView.swift */; };
 		9318439ED2F3FF7767D5C924 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D815C2DAE8DC805E63635E /* Category.swift */; };
 		9458CCB6B501EB9A6CBBF7F1 /* CategoryPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7846FC39C995AF98647BCFEE /* CategoryPickerView.swift */; };
-		99F8BB834C593D9AF5621101 /* LogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8FAB6145E726B2D7C7ACAED /* LogsView.swift */; };
 		9D7169B9194B63C6614BDDA1 /* XSignView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2976B7F5254683F1B53E068 /* XSignView.swift */; };
 		A219A89F14EE7F670D4A67C8 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2322869B85B8BC353CCAAC4E /* WelcomeView.swift */; };
 		A2D77AAE0A5EB9FB29E4A9C0 /* SignModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6965F14F1F159D77AF31F0F0 /* SignModalView.swift */; };
@@ -101,8 +99,6 @@
 		AF5E384B3639B4F607D1F370 /* Xsign.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Xsign.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B60C3EDD7AD3FD3EE23D54AA /* BackdoorTLS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackdoorTLS.swift; sourceTree = "<group>"; };
 		B6D33887A2E5CE7D00912185 /* Xsign-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Xsign-Bridging-Header.h"; sourceTree = "<group>"; };
-		B8FAB6145E726B2D7C7ACAED /* LogsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsView.swift; sourceTree = "<group>"; };
-		BDF86E8355555FAF73E0F513 /* EntitlementsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntitlementsListView.swift; sourceTree = "<group>"; };
 		BE7C00F7818A12B94D439691 /* AppLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLog.swift; sourceTree = "<group>"; };
 		C2976B7F5254683F1B53E068 /* XSignView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XSignView.swift; sourceTree = "<group>"; };
 		C6582E6831F4D79E0A798891 /* EntitlementManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntitlementManager.swift; sourceTree = "<group>"; };
@@ -191,7 +187,6 @@
 				2322869B85B8BC353CCAAC4E /* WelcomeView.swift */,
 				891CE3F7B4AF6A7967929785 /* General */,
 				110EB1D10553180CCC5D5AEF /* Library */,
-				6495E5B8E9F18C18C93592AE /* Settings */,
 				5A940691E8E161D768B4DD50 /* Shared */,
 			);
 			path = Views;
@@ -255,15 +250,6 @@
 				9EF70CA9C264020E52D4F770 /* StatusBadge.swift */,
 			);
 			path = Shared;
-			sourceTree = "<group>";
-		};
-		6495E5B8E9F18C18C93592AE /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-				BDF86E8355555FAF73E0F513 /* EntitlementsListView.swift */,
-				B8FAB6145E726B2D7C7ACAED /* LogsView.swift */,
-			);
-			path = Settings;
 			sourceTree = "<group>";
 		};
 		891CE3F7B4AF6A7967929785 /* General */ = {
@@ -400,7 +386,6 @@
 				8F42B8F94C6D70BDF823E9AA /* CreateCategoryView.swift in Sources */,
 				F99C5243079D2DA5E3423781 /* Entitlement.swift in Sources */,
 				3B1D0B453E59E047F81B358C /* EntitlementManager.swift in Sources */,
-				49C7DC2CAE59EA713B8062AC /* EntitlementsListView.swift in Sources */,
 				6FF4A019DEE6F65D77EE5445 /* FileImporterRepresentableView.swift in Sources */,
 				78A4315D26E40B46A155A548 /* FileInfoView.swift in Sources */,
 				F89D222923E601DA5DB7ACF4 /* FileService.swift in Sources */,
@@ -408,7 +393,6 @@
 				E898D9EC8665DFC2EF52BC54 /* ImportCertificateView.swift in Sources */,
 				9152EFCEED55E99D8ADA78DA /* LibraryView.swift in Sources */,
 				D97577F26BE87A11BDA97684 /* LocalServerService.swift in Sources */,
-				99F8BB834C593D9AF5621101 /* LogsView.swift in Sources */,
 				E2BB6882673DC87C98E793A7 /* LogsView.swift in Sources */,
 				55D5C04D5E45584848B41D03 /* LottieView.swift in Sources */,
 				7EE40819B5D471D9FCF0C157 /* MainTabView.swift in Sources */,
