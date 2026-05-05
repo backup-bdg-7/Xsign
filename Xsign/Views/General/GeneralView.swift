@@ -314,3 +314,9 @@ struct DeviceManagementView: View {
         .listStyle(.insetGrouped)
     }
 }
+
+extension FileManager {
+    var documentsDirectory: URL {
+        urls(for: .documentDirectory, in: .userDomainMask)[0]
+    }
+}
