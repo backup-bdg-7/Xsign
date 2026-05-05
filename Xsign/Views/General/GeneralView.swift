@@ -299,60 +299,6 @@ struct LogsListView: View {
     }
 }
 
-struct LogRow: View {
-    let log: AppLog
-    
-    var body: some View {
-        HStack(alignment: .top, spacing: 8) {
-            Image(systemName: iconForLevel(log.level))
-                .foregroundColor(colorForLevel(log.level))
-                .frame(width: 20)
-            
-            VStack(alignment: .leading, spacing: 4) {
-                HStack {
-                    Text(log.category)
-                        .font(.caption)
-                        .fontWeight(.bold)
-                        .foregroundColor(XsignTheme.textSecondary)
-                    Spacer()
-                    Text(log.timestamp, style: .time)
-                        .font(.caption2)
-                        .foregroundColor(XsignTheme.textSecondary)
-                }
-                Text(log.message)
-                    .font(.subheadline)
-                    .foregroundColor(XsignTheme.textPrimary)
-                    .lineLimit(3)
-                if let details = log.details {
-                    Text(details)
-                        .font(.caption)
-                        .foregroundColor(XsignTheme.textSecondary)
-                        .lineLimit(2)
-                }
-            }
-        }
-        .padding(.vertical, 4)
-    }
-    
-    private func iconForLevel(_ level: LogLevel) -> String {
-        switch level {
-        case .info: return "info.circle.fill"
-        case .success: return "checkmark.circle.fill"
-        case .warning: return "exclamationmark.triangle.fill"
-        case .error: return "xmark.circle.fill"
-        }
-    }
-    
-    private func colorForLevel(_ level: LogLevel) -> Color {
-        switch level {
-        case .info: return .blue
-        case .success: return .green
-        case .warning: return .orange
-        case .error: return .red
-        }
-    }
-}
-
 struct DeviceManagementView: View {
     var body: some View {
         List {

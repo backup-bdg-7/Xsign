@@ -40,9 +40,38 @@ struct LibraryView: View {
                 content
             }
             .navigationTitle("Library")
-            .searchable(text: $searchText, placement: .platform())
+            .searchable(text: $searchText)
             .scrollDismissesKeyboard(.interactively)
-            .toolbar { toolbarContent }
+            .toolbar {
+                if editMode.isEditing {
+                    ToolbarItem(placement: .destructiveAction) {
+                        Button("Delete (\(selectedAppIDs.count))") {
+                            bulkDeleteSelectedApps()
+                        }
+                        .disabled(selectedAppIDs.isEmpty)
+                    }
+                } else {
+                    ToolbarItem(placement: .primaryAction) {
+                        Button { showingCategoryCreator = true } label: {
+                            Image(systemName: "folder.badge.plus")
+                        }
+                        Menu {
+                            Button("Import from Files") {
+                                showingImportPicker = true
+                            }
+                            Button("Import from URL") {
+                                // Handle URL import
+                            }
+                        } label: {
+                            Image(systemName: "plus")
+                        }
+                    }
+                }
+                
+                ToolbarItem(placement: .cancellationAction) {
+                    EditButton()
+                }
+            }
             .environment(\.editMode, $editMode)
             .sheet(isPresented: $showingCategoryCreator) { createCategorySheet }
             .sheet(isPresented: $showingImportPicker) {

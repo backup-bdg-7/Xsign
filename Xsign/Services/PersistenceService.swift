@@ -7,7 +7,7 @@ class PersistenceService {
     let container: ModelContainer
     private let logsFileName = "xsign_logs.txt"
     
-    private init() {
+    init() {
         let schema = Schema([AppFile.self, Certificate.self, Category.self, Entitlement.self, AppLog.self])
         container = try! ModelContainer(for: schema, configurations: [ModelConfiguration(isStoredInMemoryOnly: false)])
         setupLogsFile()
@@ -24,7 +24,7 @@ class PersistenceService {
         writeLogToFile(log)
     }
     
-    private func setupLogsFile() {
+    func setupLogsFile() {
         let logsURL = getLogsFileURL()
         if !FileManager.default.fileExists(atPath: logsURL.path) {
             FileManager.default.createFile(atPath: logsURL.path, contents: nil)
