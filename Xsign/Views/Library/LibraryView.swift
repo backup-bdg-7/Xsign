@@ -16,6 +16,13 @@ struct LibraryView: View {
     @State private var selectedAppIDs: Set<UUID> = []
     @State private var editMode: EditMode = .inactive
     
+    // Rename states
+    @State private var showingRenameSheet = false
+    @State private var fileToRename: AppFile?
+    @State private var newFileName = ""
+    @State private var showingSignModal = false
+    @State private var fileToSign: AppFile?
+    
     var filteredFiles: [AppFile] {
         guard let id = selectedCategoryID else { return Array(appFiles) }
         return appFiles.filter { $0.category?.id == id }
@@ -122,6 +129,36 @@ struct LibraryView: View {
             .sheet(isPresented: $showingCategoryCreator) {
                 CategoryManagementView()
             }
+	            .sheet(isPresented: $showingSignModal) {
+                if let file = fileToSign {
+                    SignModalView(appFile: file)
+                }
+            }
+            .sheet(isPresented: $showingRenameSheet) {
+                NavigationStack {
+                    Form {
+                        Section("Rename File") {
+                            TextField("New file name", text: $newFileName)
+                                .autocapitalization(.none)
+                                .disableAutocorrection(true)
+                        }
+                        
+                        Section {
+                            Button("Rename") {
+                                renameFile()
+                                showingRenameSheet = false
+                            }
+                            .disabled(newFileName.isEmpty)
+                        }
+                    }
+                    .navigationTitle("Rename")
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Cancel") { showingRenameSheet = false }
+                        }
+                    }
+                }
+            }
             .onChange(of: editMode) { mode in
                 if mode == .inactive {
                     selectedAppIDs.removeAll()
@@ -198,19 +235,23 @@ struct LibraryView: View {
                     .contextMenu {
                         if !editMode.isEditing {
                             Button {
-                                // Sign the file
+                                fileToSign = file
+                                showingSignModal = true
                             } label: {
                                 Label("Sign", systemImage: "signature")
                             }
                             
                             Button {
-                                // Rename the file
+                                fileToRename = file
+                                newFileName = file.name
+                                showingRenameSheet = true
                             } label: {
                                 Label("Rename", systemImage: "pencil")
                             }
                             
                             Button {
                                 // Duplicate the file
+                                duplicateFile(file)
                             } label: {
                                 Label("Duplicate", systemImage: "doc.on.doc")
                             }
@@ -310,6 +351,64 @@ struct LibraryView: View {
         // Delete the category
         PersistenceService.shared.context.delete(cat)
         PersistenceService.shared.save()
+    }
+    
+    private func renameFile() {
+        guard let file = fileToRename else { return }
+        let documentsDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let oldURL = documentsDir.appendingPathComponent(file.relativePath)
+        let newURL = documentsDir.appendingPathComponent("imports/\(newFileName)")
+        
+        do {
+            try FileManager.default.moveItem(at: oldURL, to: newURL)
+            file.name = newFileName
+            file.fileName = newFileName
+            file.relativePath = "imports/\(newFileName)"
+            PersistenceService.shared.save()
+            refreshID = UUID()
+        } catch {
+            print("Failed to rename file: \(error)")
+        }
+        
+        newFileName = ""
+        fileToRename = nil
+    }
+    
+    private func duplicateFile(_ file: AppFile) {
+        let documentsDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let oldURL = documentsDir.appendingPathComponent(file.relativePath)
+        let fileName = "\(file.name)_copy.\(file.type.rawValue)"
+        let newURL = documentsDir.appendingPathComponent("imports/\(fileName)")
+        
+        do {
+            // Copy the physical file
+            try FileManager.default.copyItem(at: oldURL, to: newURL)
+            
+            // Create new AppFile
+            let newFile = AppFile(
+                name: "\(file.name) (Copy)",
+                fileName: fileName,
+                relativePath: "imports/\(fileName)",
+                type: file.type,
+                size: file.size,
+                creationDate: Date(),
+                bundleID: file.bundleID,
+                version: file.version,
+                build: file.build,
+                isSigned: file.isSigned,
+                signatureStatus: file.signatureStatus,
+                entitlements: file.entitlements,
+                category: file.category
+            )
+            
+            PersistenceService.shared.context.insert(newFile)
+            PersistenceService.shared.save()
+            refreshID = UUID()
+            
+            PersistenceService.shared.log(level: .info, category: "Duplicate", message: "Duplicated file: \(file.name)")
+        } catch {
+            print("Failed to duplicate file: \(error)")
+        }
     }
     
     private func deleteFile(_ file: AppFile) {
