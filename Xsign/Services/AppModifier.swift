@@ -11,7 +11,8 @@ class AppModifier {
     
     /// Sign an app file with the given certificate
     func signApp(_ appFile: AppFile, certificate: Certificate) async throws -> URL {
-        let size = FileManager.default.fileSize(atPath: appFile.filePath.path) ?? 0
+        let filePath = appFile.filePath.path
+        let size = try FileManager.default.attributesOfItem(atPath: filePath)[.size] as? Int64 ?? 0
         let type = appFile.type
         
         // Create AppFile for signing

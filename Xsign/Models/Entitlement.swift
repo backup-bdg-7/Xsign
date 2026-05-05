@@ -82,4 +82,8 @@ enum CapabilityType: String, Codable, CaseIterable {
     case icloud = "icloud"
     case ubiquityContainer = "ubiquity-container"
     case ubiquityKVStore = "ubiquity-kvstore"
+    
+    var description: String {
+        return rawValue
+    }
 }
