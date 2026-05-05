@@ -130,21 +130,6 @@ struct XSignView: View {
         }
     }
     
-    var toolbarContent: some ToolbarContent {
-        ToolbarItemGroup(placement: .primaryAction) {
-            if editMode.isEditing {
-                Button("Delete (\(selectedAppIDs.count))") {
-                    bulkDeleteSelectedApps()
-                }
-                .disabled(selectedAppIDs.isEmpty)
-            }
-        }
-        
-        ToolbarItem(placement: .cancellationAction) {
-            EditButton()
-        }
-    }
-    
     private func deleteFile(_ file: AppFile) {
         do {
             // Delete the physical file

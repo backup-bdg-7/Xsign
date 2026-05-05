@@ -21,7 +21,7 @@ struct GeneralView: View {
         NavigationStack {
             Form {
                 // Certificates Section
-                Section(header: Text("Certificates")) {
+                Section {
                     if let cert = selectedCertificate {
                         HStack {
                             Image(systemName: "checkmark.seal.fill")

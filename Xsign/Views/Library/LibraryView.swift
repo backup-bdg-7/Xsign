@@ -200,35 +200,6 @@ struct LibraryView: View {
         }
     }
     
-    var toolbarContent: some ToolbarContent {
-        ToolbarItemGroup(placement: .primaryAction) {
-            if editMode.isEditing {
-                Button("Delete (\(selectedAppIDs.count))") {
-                    bulkDeleteSelectedApps()
-                }
-                .disabled(selectedAppIDs.isEmpty)
-            } else {
-                Button { showingCategoryCreator = true } label: {
-                    Image(systemName: "folder.badge.plus")
-                }
-                Menu {
-                    Button("Import from Files") {
-                        showingImportPicker = true
-                    }
-                    Button("Import from URL") {
-                        // Handle URL import
-                    }
-                } label: {
-                    Image(systemName: "plus")
-                }
-            }
-        }
-        
-        ToolbarItem(placement: .cancellationAction) {
-            EditButton()
-        }
-    }
-    
     var createCategorySheet: some View {
         NavigationStack {
             CreateCategoryView()
