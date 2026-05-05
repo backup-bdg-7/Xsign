@@ -193,6 +193,35 @@ struct LibraryView: View {
                             }
                         }
                     }
+                    .contextMenu {
+                        if !editMode.isEditing {
+                            Button {
+                                // Sign the file
+                            } label: {
+                                Label("Sign", systemImage: "signature")
+                            }
+                            
+                            Button {
+                                // Rename the file
+                            } label: {
+                                Label("Rename", systemImage: "pencil")
+                            }
+                            
+                            Button {
+                                // Duplicate the file
+                            } label: {
+                                Label("Duplicate", systemImage: "doc.on.doc")
+                            }
+                            
+                            Divider()
+                            
+                            Button(role: .destructive) {
+                                deleteFile(file)
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
+                        }
+                    }
                 }
             }
         }
