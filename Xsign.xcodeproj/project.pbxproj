@@ -50,6 +50,7 @@
 		E2BB6882673DC87C98E793A7 /* LogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DA2258AF46364CEA502FBE /* LogsView.swift */; };
 		E3312836E613907A2620E40C /* BinaryParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67CBC595E06126783D981AAB /* BinaryParser.swift */; };
 		E3FBC1A198F0ABAEFFC19C67 /* CategoryPill.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E23FA8CE92C04EE48EA96F /* CategoryPill.swift */; };
+		E5E425EEDB0868F751BD1FAC /* OptionsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B10C8A8F93563BE955E999 /* OptionsManager.swift */; };
 		E898D9EC8665DFC2EF52BC54 /* ImportCertificateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F60E1BAE39877BABEBB3D63 /* ImportCertificateView.swift */; };
 		EA74DE8EA687F1DB7072BA91 /* StatusBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF70CA9C264020E52D4F770 /* StatusBadge.swift */; };
 		EB1FF551425D73216F091B7C /* TweakManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A772C721A5FE10E49D81DDF /* TweakManager.swift */; };
@@ -78,6 +79,7 @@
 		4CB78B3C1C216D872F418095 /* CertificateDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificateDetailView.swift; sourceTree = "<group>"; };
 		5917AB144DA85B703FBB4423 /* ZipService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZipService.swift; sourceTree = "<group>"; };
 		655C4BF5E94F67D61DEFA56D /* AppFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFile.swift; sourceTree = "<group>"; };
+		65B10C8A8F93563BE955E999 /* OptionsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsManager.swift; sourceTree = "<group>"; };
 		67CBC595E06126783D981AAB /* BinaryParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryParser.swift; sourceTree = "<group>"; };
 		6965F14F1F159D77AF31F0F0 /* SignModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignModalView.swift; sourceTree = "<group>"; };
 		7846FC39C995AF98647BCFEE /* CategoryPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPickerView.swift; sourceTree = "<group>"; };
@@ -206,6 +208,7 @@
 				0E7AE47639383126AAE5A623 /* FileService.swift */,
 				159D602FD6CB802EB4DF59FA /* FolderSetup.swift */,
 				7DA629EC58711CA60E47FE40 /* LocalServerService.swift */,
+				65B10C8A8F93563BE955E999 /* OptionsManager.swift */,
 				89709A707B112BBD856AB5CA /* PersistenceService.swift */,
 				011D3D14A6F465826C5F3E02 /* ProvisioningParser.swift */,
 				CA00C3AF8E61D7FDC519105E /* SecurityService.swift */,
@@ -385,6 +388,7 @@
 				E2BB6882673DC87C98E793A7 /* LogsView.swift in Sources */,
 				55D5C04D5E45584848B41D03 /* LottieView.swift in Sources */,
 				7EE40819B5D471D9FCF0C157 /* MainTabView.swift in Sources */,
+				E5E425EEDB0868F751BD1FAC /* OptionsManager.swift in Sources */,
 				F48F3451823767322A22980A /* PersistenceService.swift in Sources */,
 				374DE514DA7E31DF3BE873B5 /* ProvisioningParser.swift in Sources */,
 				25F639445CA922B940011E3A /* SecurityService.swift in Sources */,
