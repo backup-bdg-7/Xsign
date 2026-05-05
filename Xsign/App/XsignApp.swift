@@ -6,6 +6,11 @@ struct XsignApp: App {
     init() {
         // Setup folder structure on launch
         FolderSetup.shared
+        
+        // Create default categories (needs to be on main actor)
+        Task { @MainActor in
+            PersistenceService.shared.createDefaultCategories()
+        }
     }
     
     var body: some Scene {
