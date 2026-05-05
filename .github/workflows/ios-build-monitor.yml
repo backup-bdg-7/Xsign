@@ -19,14 +19,6 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Regenerate Xcode Project
-        run: |
-          echo "Regenerating Xcode project with XcodeGen..."
-          brew install xcodegen 2>/dev/null || true
-          cd $GITHUB_WORKSPACE
-          xcodegen generate --spec project.yml --project ./
-          echo "Xcode project regenerated"
-
       - name: Resolve Swift Packages
         run: |
           echo "🔄 Resolving Swift Package dependencies..."
