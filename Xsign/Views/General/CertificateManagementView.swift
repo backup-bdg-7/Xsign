@@ -58,19 +58,22 @@ struct CertificateManagementView: View {
 struct CertificateRow: View {
     let cert: Certificate
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            HStack {
-                Text(cert.name).font(.headline).foregroundColor(XsignTheme.textPrimary)
-                Spacer()
-                Text(cert.type.rawValue.uppercased()).font(.system(size: 8, weight: .bold))
-                    .padding(4).background(XsignTheme.primary.opacity(0.2)).foregroundColor(XsignTheme.primary).cornerRadius(4)
-            }
-            Text(cert.commonName).font(.caption).foregroundColor(XsignTheme.textSecondary)
-            HStack {
-                Label(cert.expiryDate.formatted(date: .abbreviated, time: .omitted), systemImage: "calendar")
-                Spacer()
-                Text(cert.fingerprint.prefix(10) + "...").font(.system(size: 8, design: .monospaced))
-            }.font(.caption2).foregroundColor(XsignTheme.textSecondary)
-        }.padding(.vertical, 4)
+        NavigationLink(destination: CertificateDetailView(certificate: cert)) {
+            VStack(alignment: .leading, spacing: 4) {
+                HStack {
+                    Text(cert.name).font(.headline).foregroundColor(XsignTheme.textPrimary)
+                    Spacer()
+                    Text(cert.type.rawValue.uppercased()).font(.system(size: 8, weight: .bold))
+                        .padding(4).background(XsignTheme.primary.opacity(0.2)).foregroundColor(XsignTheme.primary).cornerRadius(4)
+                }
+                Text(cert.commonName).font(.caption).foregroundColor(XsignTheme.textSecondary)
+                HStack {
+                    Label(cert.expiryDate.formatted(date: .abbreviated, time: .omitted), systemImage: "calendar")
+                    Spacer()
+                    Text(cert.fingerprint.prefix(10) + "...").font(.system(size: 8, design: .monospaced))
+                }.font(.caption2).foregroundColor(XsignTheme.textSecondary)
+            }.padding(.vertical, 4)
+        }
+        .buttonStyle(PlainButtonStyle())
     }
 }

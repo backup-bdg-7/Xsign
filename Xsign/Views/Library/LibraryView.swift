@@ -52,15 +52,15 @@ struct LibraryView: View {
                     }
                 } else {
                     ToolbarItem(placement: .primaryAction) {
-                        Button { showingCategoryCreator = true } label: {
-                            Image(systemName: "folder.badge.plus")
-                        }
                         Menu {
-                            Button("Import from Files") {
+                            Button("Import IPA") {
                                 showingImportPicker = true
                             }
-                            Button("Import from URL") {
-                                // Handle URL import
+                            Button("Import dylib") {
+                                // Handle dylib import
+                            }
+                            Button("Import deb") {
+                                // Handle deb import  
                             }
                         } label: {
                             Image(systemName: "plus")
@@ -73,35 +73,18 @@ struct LibraryView: View {
                 }
             }
             .environment(\.editMode, $editMode)
-            .sheet(isPresented: $showingCategoryCreator) { createCategorySheet }
             .sheet(isPresented: $showingImportPicker) {
                 FileImporterRepresentableView(
                     allowedContentTypes: [.ipa, .dylib, .deb, .tipa],
                     allowsMultipleSelection: true,
                     onDocumentsPicked: { urls in
                         guard !urls.isEmpty else { return }
-                        // Handle multiple file imports
                         for url in urls {
-                            importedFileURL = url
-                            // Process the imported file
                             handleImportedFile(url)
                         }
                     }
                 )
                 .ignoresSafeArea()
-            }
-            .sheet(isPresented: $showingCategoryPicker) {
-                if let url = importedFileURL {
-                    NavigationStack {
-                        CategoryPickerView(fileURL: url)
-                            .navigationTitle("Select Category")
-                            .toolbar {
-                                ToolbarItem(placement: .cancellationAction) {
-                                    Button("Cancel") { showingCategoryPicker = false }
-                                }
-                            }
-                    }
-                }
             }
             .onChange(of: editMode) { mode in
                 if mode == .inactive {
@@ -119,18 +102,8 @@ struct LibraryView: View {
                         CategoryPill(name: "All", icon: "square.grid.2x2", colorName: "gray", isSelected: selectedCategoryID == nil)
                             .onTapGesture { selectedCategoryID = nil }
                         ForEach(categories) { cat in
-                            HStack(spacing: 4) {
-                                CategoryPill(name: cat.name, icon: cat.icon, colorName: cat.color, isSelected: selectedCategoryID == cat.id)
-                                    .onTapGesture { selectedCategoryID = cat.id }
-                                
-                                if editMode == .active {
-                                    Button(action: { deleteCategory(cat) }) {
-                                        Image(systemName: "minus.circle.fill")
-                                            .foregroundColor(.red)
-                                            .font(.caption)
-                                    }
-                                }
-                            }
+                            CategoryPill(name: cat.name, icon: cat.icon, colorName: cat.color, isSelected: selectedCategoryID == cat.id)
+                                .onTapGesture { selectedCategoryID = cat.id }
                         }
                     }
                     .padding(.horizontal)
@@ -158,41 +131,32 @@ struct LibraryView: View {
         } else {
             List {
                 ForEach(searchedFiles) { file in
-                    NavigationLink(destination: AppDetailView(appFile: file)) {
-                        AppFileCard(appFile: file)
-                            .contentShape(Rectangle())
+                    HStack {
+                        if editMode.isEditing {
+                            Image(systemName: selectedAppIDs.contains(file.id) ? "checkmark.circle.fill" : "circle")
+                                .foregroundColor(selectedAppIDs.contains(file.id) ? XsignTheme.primary : .secondary)
+                                .onTapGesture {
+                                    if selectedAppIDs.contains(file.id) {
+                                        selectedAppIDs.remove(file.id)
+                                    } else {
+                                        selectedAppIDs.insert(file.id)
+                                    }
+                                }
+                        }
+                        
+                        NavigationLink(destination: AppDetailView(appFile: file)) {
+                            AppFileCard(appFile: file)
+                                .contentShape(Rectangle())
+                        }
+                        .disabled(editMode.isEditing) // Disable navigation in edit mode
                     }
                     .swipeActions {
-                        Button(role: .destructive) {
-                            deleteFile(file)
-                        } label: {
-                            Label("Delete", systemImage: "trash")
-                        }
-                    }
-                    .contextMenu {
-                        Button(action: { 
-                            // Add to selection for bulk delete
-                            if let id = file.id as UUID? {
-                                if selectedAppIDs.contains(id) {
-                                    selectedAppIDs.remove(id)
-                                } else {
-                                    selectedAppIDs.insert(id)
-                                }
+                        if !editMode.isEditing {
+                            Button(role: .destructive) {
+                                deleteFile(file)
+                            } label: {
+                                Label("Delete", systemImage: "trash")
                             }
-                        }) {
-                            Label("Select", systemImage: "checkmark.circle")
-                        }
-                        Button(action: { 
-                            // Sign action
-                        }) {
-                            Label("Sign", systemImage: "signature")
-                        }
-                    }
-                }
-                .onDelete { indexSet in
-                    for index in indexSet {
-                        if index < searchedFiles.count {
-                            deleteFile(searchedFiles[index])
                         }
                     }
                 }

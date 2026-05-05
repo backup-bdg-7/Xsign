@@ -17,6 +17,7 @@ final class Certificate: Identifiable, @unchecked Sendable {
     var commonName: String
     var fingerprint: String
     var canSign: Bool
+    @Relationship(deleteRule: .cascade) var entitlements: [Entitlement]?
 
     init(id: UUID = UUID(),
          name: String,
@@ -27,7 +28,8 @@ final class Certificate: Identifiable, @unchecked Sendable {
          expiryDate: Date,
          commonName: String,
          fingerprint: String,
-         canSign: Bool) {
+         canSign: Bool,
+         entitlements: [Entitlement]? = nil) {
         self.id = id
         self.name = name
         self.encryptedP12Data = (try? SecurityService.shared.encrypt(p12Data)) ?? p12Data
@@ -40,6 +42,7 @@ final class Certificate: Identifiable, @unchecked Sendable {
         self.commonName = commonName
         self.fingerprint = fingerprint
         self.canSign = canSign
+        self.entitlements = entitlements
     }
 
     func decryptedPassword() -> String? {

@@ -16,16 +16,10 @@ struct FolderSetup {
             try? fileManager.createDirectory(at: certsDir, withIntermediateDirectories: true)
         }
         
-        // Create imports folder
-        let importsDir = documentsDir.appendingPathComponent("imports", isDirectory: true)
-        if !fileManager.fileExists(atPath: importsDir.path) {
-            try? fileManager.createDirectory(at: importsDir, withIntermediateDirectories: true)
-        }
-        
-        // Create archives folder (for signed apps)
-        let archivesDir = documentsDir.appendingPathComponent("archives", isDirectory: true)
-        if !fileManager.fileExists(atPath: archivesDir.path) {
-            try? fileManager.createDirectory(at: archivesDir, withIntermediateDirectories: true)
+        // Create apps folder (for .ipa files - renamed from imports)
+        let appsDir = documentsDir.appendingPathComponent("apps", isDirectory: true)
+        if !fileManager.fileExists(atPath: appsDir.path) {
+            try? fileManager.createDirectory(at: appsDir, withIntermediateDirectories: true)
         }
         
         // Create dylibs folder
@@ -34,13 +28,25 @@ struct FolderSetup {
             try? fileManager.createDirectory(at: dylibsDir, withIntermediateDirectories: true)
         }
         
-        // Create deb folder
+        // Create debs folder
         let debDir = documentsDir.appendingPathComponent("debs", isDirectory: true)
         if !fileManager.fileExists(atPath: debDir.path) {
             try? fileManager.createDirectory(at: debDir, withIntermediateDirectories: true)
         }
         
-        // Create logs folder if not exists (logs file is in documents root)
+        // Create signed folder (for signed apps - replaces archives)
+        let signedDir = documentsDir.appendingPathComponent("signed", isDirectory: true)
+        if !fileManager.fileExists(atPath: signedDir.path) {
+            try? fileManager.createDirectory(at: signedDir, withIntermediateDirectories: true)
+        }
+        
+        // Create sources folder (for local signing sources like Vapor, backdoor.dev)
+        let sourcesDir = documentsDir.appendingPathComponent("sources", isDirectory: true)
+        if !fileManager.fileExists(atPath: sourcesDir.path) {
+            try? fileManager.createDirectory(at: sourcesDir, withIntermediateDirectories: true)
+        }
+        
+        // Create logs folder
         let logsDir = documentsDir.appendingPathComponent("logs", isDirectory: true)
         if !fileManager.fileExists(atPath: logsDir.path) {
             try? fileManager.createDirectory(at: logsDir, withIntermediateDirectories: true)

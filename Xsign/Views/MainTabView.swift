@@ -10,7 +10,7 @@ struct MainTabView: View {
                 .tabItem { Label("XSign", systemImage: "signature") }
             
             GeneralView()
-                .tabItem { Label("Settings", systemImage: "gearshape.fill") }
+                .tabItem { Label("General", systemImage: "gearshape.fill") }
         }
         .accentColor(XsignTheme.primary)
     }

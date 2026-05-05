@@ -6,9 +6,10 @@ struct GeneralView: View {
     @State private var selectedCertIndex: Int = 0
     @State private var showingCertificatesView = false
     @State private var showingSigningOptions = false
-    @State private var showingAppIconView = false
     @State private var showingResetView = false
     @State private var showingAboutView = false
+    @State private var showingLogsView = false
+    @State private var showingDeviceView = false
     
     var selectedCertificate: Certificate? {
         guard selectedCertIndex >= 0, selectedCertIndex < certificates.count else {
@@ -59,28 +60,61 @@ struct GeneralView: View {
                     Button(action: { showingSigningOptions = true }) {
                         Label("Signing Options", systemImage: "signature")
                     }
-                    
-                    Button(action: { showingAppIconView = true }) {
-                        Label("App Icon", systemImage: "app.badge")
-                    }
                 } header: {
                     Text("Features")
                 } footer: {
-                    Text("Configure the app's signing options and appearance.")
+                    Text("Configure the app's signing options.")
+                }
+                
+                // Logs Section
+                Section {
+                    Button(action: { showingLogsView = true }) {
+                        Label("View Logs", systemImage: "doc.text")
+                    }
+                } header: {
+                    Text("Logs")
+                } footer: {
+                    Text("View all application logs.")
+                }
+                
+                // Device Info Section
+                Section {
+                    Button(action: { showingDeviceView = true }) {
+                        Label("Device Information", systemImage: "iphone")
+                    }
+                } header: {
+                    Text("Device")
+                } footer: {
+                    Text("View device information and status.")
                 }
                 
                 // Directories Section
                 Section {
                     Button("Open Documents") {
-                        UIApplication.shared.open(FileManager.default.documentsDirectory)
+                        if let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+                            UIApplication.shared.open(documentsURL)
+                        }
+                    }
+                    Button("Open Apps") {
+                        if let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+                            let appsDir = documentsURL.appendingPathComponent("apps", isDirectory: true)
+                            try? FileManager.default.createDirectory(at: appsDir, withIntermediateDirectories: true)
+                            UIApplication.shared.open(appsDir)
+                        }
                     }
                     Button("Open Certificates") {
-                        let certsDir = FileManager.default.documentsDirectory.appendingPathComponent("certificates", isDirectory: true)
-                        UIApplication.shared.open(certsDir)
+                        if let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+                            let certsDir = documentsURL.appendingPathComponent("certificates", isDirectory: true)
+                            try? FileManager.default.createDirectory(at: certsDir, withIntermediateDirectories: true)
+                            UIApplication.shared.open(certsDir)
+                        }
                     }
-                    Button("Open Imports") {
-                        let importsDir = FileManager.default.documentsDirectory.appendingPathComponent("imports", isDirectory: true)
-                        UIApplication.shared.open(importsDir)
+                    Button("Open Signed Apps") {
+                        if let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+                            let signedDir = documentsURL.appendingPathComponent("signed", isDirectory: true)
+                            try? FileManager.default.createDirectory(at: signedDir, withIntermediateDirectories: true)
+                            UIApplication.shared.open(signedDir)
+                        }
                     }
                 } header: {
                     Text("Directories")
@@ -105,7 +139,7 @@ struct GeneralView: View {
                     }
                 }
             }
-            .navigationTitle("Settings")
+            .navigationTitle("General")
             .sheet(isPresented: $showingCertificatesView) {
                 NavigationStack {
                     CertificateManagementView()
@@ -124,6 +158,28 @@ struct GeneralView: View {
                         .toolbar {
                             ToolbarItem(placement: .cancellationAction) {
                                 Button("Done") { showingSigningOptions = false }
+                            }
+                        }
+                }
+            }
+            .sheet(isPresented: $showingLogsView) {
+                NavigationStack {
+                    LogsView()
+                        .navigationTitle("Logs")
+                        .toolbar {
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button("Done") { showingLogsView = false }
+                            }
+                        }
+                }
+            }
+            .sheet(isPresented: $showingDeviceView) {
+                NavigationStack {
+                    DeviceManagementView()
+                        .navigationTitle("Device Info")
+                        .toolbar {
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button("Done") { showingDeviceView = false }
                             }
                         }
                 }
