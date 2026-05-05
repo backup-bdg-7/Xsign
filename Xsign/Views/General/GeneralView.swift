@@ -55,7 +55,7 @@ struct GeneralView: View {
                 }
                 
                 // Features Section
-                Section(header: Text("Features")) {
+                Section {
                     Button(action: { showingSigningOptions = true }) {
                         Label("Signing Options", systemImage: "signature")
                     }
@@ -63,12 +63,14 @@ struct GeneralView: View {
                     Button(action: { showingAppIconView = true }) {
                         Label("App Icon", systemImage: "app.badge")
                     }
+                } header: {
+                    Text("Features")
                 } footer: {
                     Text("Configure the app's signing options and appearance.")
                 }
                 
                 // Directories Section
-                Section(header: Text("Directories")) {
+                Section {
                     Button("Open Documents") {
                         UIApplication.shared.open(FileManager.default.documentsDirectory)
                     }
@@ -80,6 +82,8 @@ struct GeneralView: View {
                         let importsDir = FileManager.default.documentsDirectory.appendingPathComponent("imports", isDirectory: true)
                         UIApplication.shared.open(importsDir)
                     }
+                } header: {
+                    Text("Directories")
                 } footer: {
                     Text("All of the app's files are contained in the documents directory, here are some quick links to these.")
                 }
