@@ -52,26 +52,41 @@ struct SigningOptionsView: View {
                     Label("File Sharing", systemImage: "folder.badge.person.crop")
                 }
                 .tint(.blue)
+                Text("Enable file sharing via Files app. Allows users to access app's documents folder.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
                 
                 Toggle(isOn: $options.itunesFileSharing) {
                     Label("iTunes File Sharing", systemImage: "music.note.list")
                 }
                 .tint(.blue)
+                Text("Enable iTunes file sharing for the app. Allows accessing files via iTunes/Finder.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
                 
                 Toggle(isOn: $options.proMotion) {
                     Label("Pro Motion", systemImage: "speedometer")
                 }
                 .tint(.blue)
+                Text("Enable ProMotion high refresh rate support (120Hz) on supported devices.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
                 
                 Toggle(isOn: $options.gameMode) {
                     Label("Game Mode", systemImage: "gamecontroller")
                 }
                 .tint(.blue)
+                Text("Enable Game Mode optimizations for better gaming performance.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
                 
                 Toggle(isOn: $options.ipadFullscreen) {
                     Label("iPad Fullscreen", systemImage: "ipad.landscape")
                 }
                 .tint(.blue)
+                Text("Allow the app to run in fullscreen mode on iPad.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
             }
             
             // Removal

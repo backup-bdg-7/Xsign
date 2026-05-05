@@ -5,6 +5,7 @@ struct ImportCertificateView: View {
     @Environment(\.dismiss) var dismiss
 
     @State private var name = ""
+    @State private var nickname = ""
     @State private var password = ""
     @State private var p12URL: URL?
     @State private var provisionURL: URL?
@@ -15,7 +16,8 @@ struct ImportCertificateView: View {
         NavigationStack {
             Form {
                 Section("Certificate Details") {
-                    TextField("Name", text: $name)
+                    TextField("Name (Common Name)", text: $name)
+                    TextField("Nickname (Optional)", text: $nickname)
                     SecureField("P12 Password (optional)", text: $password)
                 }
 
@@ -105,6 +107,7 @@ struct ImportCertificateView: View {
             
             let newCert = Certificate(
                 name: name,
+                nickname: nickname.isEmpty ? nil : nickname,
                 p12Data: p12Data,
                 provisioningProfileData: provisionData,
                 password: password.isEmpty ? nil : password,

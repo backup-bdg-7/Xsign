@@ -92,45 +92,28 @@ struct GeneralView: View {
                 Section {
                     Button("Open Documents") {
                         if let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-                            // Use UIDocumentInteractionController or show in app
-                            let activityVC = UIActivityViewController(activityItems: [documentsURL], applicationActivities: nil)
-                            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                               let rootVC = windowScene.keyWindow?.rootViewController {
-                                rootVC.present(activityVC, animated: true)
-                            }
+                            UIApplication.shared.open(documentsURL)
                         }
                     }
                     Button("Open Apps") {
                         if let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
                             let appsDir = documentsURL.appendingPathComponent("apps", isDirectory: true)
                             try? FileManager.default.createDirectory(at: appsDir, withIntermediateDirectories: true)
-                            let activityVC = UIActivityViewController(activityItems: [appsDir], applicationActivities: nil)
-                            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                               let rootVC = windowScene.keyWindow?.rootViewController {
-                                rootVC.present(activityVC, animated: true)
-                            }
+                            UIApplication.shared.open(appsDir)
                         }
                     }
                     Button("Open Certificates") {
                         if let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
                             let certsDir = documentsURL.appendingPathComponent("certificates", isDirectory: true)
                             try? FileManager.default.createDirectory(at: certsDir, withIntermediateDirectories: true)
-                            let activityVC = UIActivityViewController(activityItems: [certsDir], applicationActivities: nil)
-                            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                               let rootVC = windowScene.keyWindow?.rootViewController {
-                                rootVC.present(activityVC, animated: true)
-                            }
+                            UIApplication.shared.open(certsDir)
                         }
                     }
                     Button("Open Signed Apps") {
                         if let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
                             let signedDir = documentsURL.appendingPathComponent("signed", isDirectory: true)
                             try? FileManager.default.createDirectory(at: signedDir, withIntermediateDirectories: true)
-                            let activityVC = UIActivityViewController(activityItems: [signedDir], applicationActivities: nil)
-                            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                               let rootVC = windowScene.keyWindow?.rootViewController {
-                                rootVC.present(activityVC, animated: true)
-                            }
+                            UIApplication.shared.open(signedDir)
                         }
                     }
                 } header: {

@@ -9,6 +9,7 @@ enum CertificateType: String, Codable {
 final class Certificate: Identifiable, @unchecked Sendable {
     @Attribute(.unique) var id: UUID
     var name: String
+    var nickname: String?
     var encryptedP12Data: Data
     var provisioningProfileData: Data?
     var encryptedPassword: Data?
@@ -21,6 +22,7 @@ final class Certificate: Identifiable, @unchecked Sendable {
 
     init(id: UUID = UUID(),
          name: String,
+         nickname: String? = nil,
          p12Data: Data,
          provisioningProfileData: Data? = nil,
          password: String? = nil,
@@ -32,6 +34,7 @@ final class Certificate: Identifiable, @unchecked Sendable {
          entitlements: [Entitlement]? = nil) {
         self.id = id
         self.name = name
+        self.nickname = nickname
         self.encryptedP12Data = (try? SecurityService.shared.encrypt(p12Data)) ?? p12Data
         self.provisioningProfileData = provisioningProfileData
         if let password = password, let passwordData = password.data(using: .utf8) {

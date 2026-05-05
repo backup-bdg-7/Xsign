@@ -10,6 +10,9 @@ struct CertificateDetailView: View {
         List {
             // Certificate Info Section
             Section("Certificate Information") {
+                if let nickname = certificate.nickname, !nickname.isEmpty {
+                    InfoRow(label: "Nickname", value: nickname)
+                }
                 InfoRow(label: "Name", value: certificate.name)
                 InfoRow(label: "Common Name", value: certificate.commonName)
                 InfoRow(label: "Type", value: certificate.type.rawValue.capitalized)
@@ -55,6 +58,12 @@ struct CertificateDetailView: View {
                     }
                 }) {
                     Label("Export Certificate", systemImage: "square.and.arrow.up")
+                }
+                
+                if let entitlements = certificate.entitlements, !entitlements.isEmpty {
+                    NavigationLink(destination: EntitlementsListView(entitlements: entitlements)) {
+                        Label("View Entitlements", systemImage: "list.bullet")
+                    }
                 }
                 
                 Button(role: .destructive, action: {
@@ -142,5 +151,31 @@ struct EntitlementDetailView: View {
         }
         .navigationTitle(entitlement.name)
         .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+struct EntitlementsListView: View {
+    let entitlements: [Entitlement]
+    @State private var selectedEntitlement: Entitlement?
+    @State private var showingDetail = false
+    
+    var body: some View {
+        List {
+            ForEach(entitlements) { entitlement in
+                EntitlementRow(entitlement: entitlement)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        selectedEntitlement = entitlement
+                        showingDetail = true
+                    }
+            }
+        }
+        .navigationTitle("Entitlements")
+        .navigationBarTitleDisplayMode(.inline)
+        .sheet(isPresented: $showingDetail) {
+            if let entitlement = selectedEntitlement {
+                EntitlementDetailView(entitlement: entitlement)
+            }
+        }
     }
 }

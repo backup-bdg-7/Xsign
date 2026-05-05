@@ -58,6 +58,13 @@ struct LibraryView: View {
                             Label("Import Files", systemImage: "plus")
                         }
                     }
+                    ToolbarItem(placement: .secondaryAction) {
+                        Button {
+                            showingCategoryCreator = true
+                        } label: {
+                            Label("Categories", systemImage: "folder.badge.gearshape")
+                        }
+                    }
                 }
                 
                 ToolbarItem(placement: .cancellationAction) {
@@ -113,6 +120,9 @@ struct LibraryView: View {
                         }
                     }
                 }
+            }
+            .sheet(isPresented: $showingCategoryCreator) {
+                CategoryManagementView()
             }
             .onChange(of: editMode) { mode in
                 if mode == .inactive {
