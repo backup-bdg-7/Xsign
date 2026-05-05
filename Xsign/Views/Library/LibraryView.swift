@@ -9,6 +9,7 @@ struct LibraryView: View {
     @State private var selectedCategoryID: UUID?
     @State private var importedFileURL: URL?
     @State private var showingCategoryPicker = false
+    @State private var refreshID = UUID() // Force refresh after delete
     
     // Search and selection states like Feather
     @State private var searchText = ""
@@ -38,6 +39,7 @@ struct LibraryView: View {
                 categoryPills
                 Divider()
                 content
+                    .id(refreshID) // Force refresh after delete
             }
             .navigationTitle("Library")
             .searchable(text: $searchText)
@@ -319,6 +321,8 @@ struct LibraryView: View {
             // Delete from database
             PersistenceService.shared.context.delete(file)
             PersistenceService.shared.save()
+            // Force refresh
+            refreshID = UUID()
         } catch {
             print("Failed to delete file: \(error)")
         }
@@ -336,5 +340,7 @@ struct LibraryView: View {
         
         selectedAppIDs.removeAll()
         editMode = .inactive
+        // Force refresh
+        refreshID = UUID()
     }
 }
