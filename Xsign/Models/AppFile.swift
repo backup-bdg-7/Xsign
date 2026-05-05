@@ -2,7 +2,7 @@ import Foundation
 import SwiftData
 
 enum FileType: String, Codable {
-    case ipa, dylib, deb, zip
+    case ipa, dylib, deb, tipa, zip
 }
 
 enum SignatureStatus: String, Codable {
