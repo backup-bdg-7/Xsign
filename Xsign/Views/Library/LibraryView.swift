@@ -210,8 +210,8 @@ struct LibraryView: View {
         }
     }
     
-    private func handleImportedFile(_ url: URL) {
-        // Handle the imported file - process ipa, dylib, deb files
+        private func handleImportedFile(_ url: URL) {
+        // Handle the imported file - process ipa, dylib, deb, tipa files
         let fileExtension = url.pathExtension.lowercased()
         
         do {
@@ -226,6 +226,8 @@ struct LibraryView: View {
                 fileType = .dylib
             case "deb":
                 fileType = .deb
+            case "tipa":
+                fileType = .tipa
             default:
                 return
             }
@@ -242,37 +244,31 @@ struct LibraryView: View {
                 signatureStatus: .unsigned
             )
             
-            // If categories exist, prompt user to select one
-            if !categories.isEmpty {
-                // Set the imported file URL to trigger category picker
-                importedFileURL = url
-                showingCategoryPicker = true
-                // Store the file temporarily and handle category assignment in the sheet
-                PersistenceService.shared.context.insert(appFile)
-                // We'll set the category after user picks one
-            } else {
-                // No categories, just save
-                PersistenceService.shared.context.insert(appFile)
-            }
-            
             // Save file to documents directory
             let documentsDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             let importsDir = documentsDir.appendingPathComponent("imports", isDirectory: true)
-            
-            if !FileManager.default.fileExists(atPath: importsDir.path) {
-                try FileManager.default.createDirectory(at: importsDir, withIntermediateDirectories: true)
-            }
-            
+            try FileManager.default.createDirectory(at: importsDir, withIntermediateDirectories: true)
             let destinationURL = importsDir.appendingPathComponent(fileName)
             try data.write(to: destinationURL)
             
+            // Insert and save the AppFile
+            PersistenceService.shared.context.insert(appFile)
             PersistenceService.shared.save()
             
+            // If categories exist, prompt user to select one
+            if !categories.isEmpty {
+                importedFileURL = url
+                showingCategoryPicker = true
+            }
+            
+            PersistenceService.shared.log(level: .info, category: "Import", message: "Imported file: \(fileName)")
         } catch {
             print("Failed to import file: \(error)")
+            PersistenceService.shared.log(level: .error, category: "Import", message: "Failed to import file", details: error.localizedDescription)
         }
     }
     
+
     private func deleteCategory(_ cat: Category) {
         // Set category to nil for all apps in this category
         if let apps = cat.appFiles {
