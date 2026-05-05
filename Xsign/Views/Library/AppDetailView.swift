@@ -64,9 +64,7 @@ struct AppDetailView: View {
                     
                     InfoSection(title: "Entitlements") {
                         Group {
-                            if entitlements.isEmpty {
-                                Text("No entitlements found").font(.caption).foregroundColor(.gray)
-                            } else {
+                            if appFile.type == .ipa && !entitlements.isEmpty {
                                 VStack(alignment: .leading, spacing: 4) {
                                     ForEach(Array(entitlements.keys.sorted()), id: \.self) { key in
                                         VStack(alignment: .leading) {
@@ -80,6 +78,8 @@ struct AppDetailView: View {
                                         }.padding(.bottom, 4)
                                     }
                                 }
+                            } else {
+                                Text("No entitlements found").font(.caption).foregroundColor(.gray)
                             }
                         }
                     }.padding()

@@ -92,28 +92,45 @@ struct GeneralView: View {
                 Section {
                     Button("Open Documents") {
                         if let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-                            UIApplication.shared.open(documentsURL)
+                            // Use UIDocumentInteractionController or show in app
+                            let activityVC = UIActivityViewController(activityItems: [documentsURL], applicationActivities: nil)
+                            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                               let rootVC = windowScene.keyWindow?.rootViewController {
+                                rootVC.present(activityVC, animated: true)
+                            }
                         }
                     }
                     Button("Open Apps") {
                         if let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
                             let appsDir = documentsURL.appendingPathComponent("apps", isDirectory: true)
                             try? FileManager.default.createDirectory(at: appsDir, withIntermediateDirectories: true)
-                            UIApplication.shared.open(appsDir)
+                            let activityVC = UIActivityViewController(activityItems: [appsDir], applicationActivities: nil)
+                            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                               let rootVC = windowScene.keyWindow?.rootViewController {
+                                rootVC.present(activityVC, animated: true)
+                            }
                         }
                     }
                     Button("Open Certificates") {
                         if let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
                             let certsDir = documentsURL.appendingPathComponent("certificates", isDirectory: true)
                             try? FileManager.default.createDirectory(at: certsDir, withIntermediateDirectories: true)
-                            UIApplication.shared.open(certsDir)
+                            let activityVC = UIActivityViewController(activityItems: [certsDir], applicationActivities: nil)
+                            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                               let rootVC = windowScene.keyWindow?.rootViewController {
+                                rootVC.present(activityVC, animated: true)
+                            }
                         }
                     }
                     Button("Open Signed Apps") {
                         if let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
                             let signedDir = documentsURL.appendingPathComponent("signed", isDirectory: true)
                             try? FileManager.default.createDirectory(at: signedDir, withIntermediateDirectories: true)
-                            UIApplication.shared.open(signedDir)
+                            let activityVC = UIActivityViewController(activityItems: [signedDir], applicationActivities: nil)
+                            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                               let rootVC = windowScene.keyWindow?.rootViewController {
+                                rootVC.present(activityVC, animated: true)
+                            }
                         }
                     }
                 } header: {
@@ -212,17 +229,78 @@ struct GeneralView: View {
 
 // MARK: - ResetView
 struct ResetView: View {
+    @Environment(\.dismiss) private var dismiss
+    @State private var showConfirmation = false
+    
     var body: some View {
         List {
             Section {
                 Button("Reset All Data") {
-                    // Implement reset functionality
+                    showConfirmation = true
                 }
                 .foregroundColor(.red)
+                .confirmationDialog(
+                    "Are you sure you want to reset all data?",
+                    isPresented: $showConfirmation,
+                    titleVisibility: .visible
+                ) {
+                    Button("Reset Everything", role: .destructive) {
+                        resetAllData()
+                        dismiss()
+                    }
+                } message: {
+                    Text("This will delete all certificates, apps, and settings. This action cannot be undone.")
+                }
             } footer: {
                 Text("This will delete all certificates, apps, and settings.")
             }
         }
+    }
+    
+    private func resetAllData() {
+        let persistence = PersistenceService.shared
+        let context = persistence.context
+        
+        // Delete all AppFiles
+        let appFiles = persistence.fetchSignedApps()
+        for file in appFiles {
+            if FileManager.default.fileExists(atPath: file.filePath.path) {
+                try? FileManager.default.removeItem(at: file.filePath)
+            }
+            context.delete(file)
+        }
+        
+        // Delete all Certificates
+        let descriptor = FetchDescriptor<Certificate>()
+        if let certificates = try? context.fetch(descriptor) {
+            for cert in certificates {
+                context.delete(cert)
+            }
+        }
+        
+        // Delete all Categories
+        let catDescriptor = FetchDescriptor<Category>()
+        if let categories = try? context.fetch(catDescriptor) {
+            for cat in categories {
+                context.delete(cat)
+            }
+        }
+        
+        // Delete all Logs
+        let logDescriptor = FetchDescriptor<AppLog>()
+        if let logs = try? context.fetch(logDescriptor) {
+            for log in logs {
+                context.delete(log)
+            }
+        }
+        
+        // Reset UserDefaults
+        if let bundleID = Bundle.main.bundleIdentifier {
+            UserDefaults.standard.removePersistentDomain(forName: bundleID)
+        }
+        
+        persistence.save()
+        persistence.log(level: .info, category: "System", message: "All data has been reset")
     }
 }
 
