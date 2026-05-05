@@ -128,6 +128,9 @@ struct SigningOptionsView: View {
                     Label("Install After Signing", systemImage: "arrow.down.circle")
                 }
                 .tint(.blue)
+                Text("Automatically install the app after signing is complete.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
                 
                 Toggle(isOn: $options.post_deleteAppAfterSigned) {
                     Label("Delete After Signing", systemImage: "trash")
@@ -147,6 +150,9 @@ struct SigningOptionsView: View {
                     Label("Replace Substrate with ElleKit", systemImage: "pencil")
                 }
                 .tint(.blue)
+                Text("Replace Cydia Substrate with ElleKit for tweak injection.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
                 
                 Toggle(isOn: $options.experiment_supportLiquidGlass) {
                     Label("Enable Liquid Glass", systemImage: "26.circle")

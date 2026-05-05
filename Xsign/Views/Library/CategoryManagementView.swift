@@ -13,26 +13,30 @@ struct CategoryManagementView: View {
         NavigationStack {
             List {
                 ForEach(categories) { category in
-                    CategoryRowView(category: category)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            categoryToEdit = category
+                    HStack {
+                        Image(systemName: category.icon)
+                            .foregroundColor(colorForName(category.color))
+                            .frame(width: 30)
+                        Text(category.name)
+                        Spacer()
+                        if let count = category.appFiles?.count {
+                            Text("\(count) files")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
                         }
-                        .swipeActions(edge: .trailing) {
-                            Button(role: .destructive) {
-                                categoryToDelete = category
-                                showingDeleteConfirmation = true
-                            } label: {
-                                Label("Delete", systemImage: "trash")
-                            }
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        categoryToEdit = category
+                    }
+                    .swipeActions(edge: .trailing) {
+                        Button(role: .destructive) {
+                            categoryToDelete = category
+                            showingDeleteConfirmation = true
+                        } label: {
+                            Label("Delete", systemImage: "trash")
                         }
-                        .contextMenu {
-                            Button("Edit") { categoryToEdit = category }
-                            Button("Delete", role: .destructive) {
-                                categoryToDelete = category
-                                showingDeleteConfirmation = true
-                            }
-                        }
+                    }
                 }
             }
             .navigationTitle("Categories")
@@ -67,7 +71,6 @@ struct CategoryManagementView: View {
     }
     
     private func deleteCategory(_ category: Category) {
-        // Remove category from all apps
         if let apps = category.appFiles {
             for app in apps {
                 app.category = nil
@@ -77,25 +80,18 @@ struct CategoryManagementView: View {
         PersistenceService.shared.save()
         PersistenceService.shared.log(level: .info, category: "Category", message: "Deleted category: \(category.name)")
     }
-}
-
-struct CategoryRowView: View {
-    let category: Category
     
-    var body: some View {
-        HStack {
-            Image(systemName: category.icon)
-                .foregroundColor(Color(hex: category.color) ?? .blue)
-                .frame(width: 30)
-            Text(category.name)
-            Spacer()
-            if let count = category.appFiles?.count {
-                Text("\(count) files")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
+    private func colorForName(_ colorName: String) -> Color {
+        switch colorName.lowercased() {
+        case "red": return .red
+        case "blue": return .blue
+        case "green": return .green
+        case "orange": return .orange
+        case "purple": return .purple
+        case "pink": return .pink
+        case "yellow": return .yellow
+        default: return .gray
         }
-        .padding(.vertical, 4)
     }
 }
 
@@ -141,7 +137,7 @@ struct CategoryEditView: View {
                     LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 4), spacing: 10) {
                         ForEach(colors, id: \.self) { color in
                             Circle()
-                                .fill(Color(hex: color) ?? .blue)
+                                .fill(colorForName(color))
                                 .frame(width: 44, height: 44)
                                 .overlay(
                                     selectedColor == color ?
@@ -197,20 +193,17 @@ struct CategoryEditView: View {
         PersistenceService.shared.save()
         dismiss()
     }
-}
-
-extension Color {
-    init?(hex: String) {
-        switch hex.lowercased() {
-        case "red": self = .red
-        case "blue": self = .blue
-        case "green": self = .green
-        case "orange": self = .orange
-        case "purple": self = .purple
-        case "pink": self = .pink
-        case "yellow": self = .yellow
-        case "gray": self = .gray
-        default: return nil
+    
+    private func colorForName(_ colorName: String) -> Color {
+        switch colorName.lowercased() {
+        case "red": return .red
+        case "blue": return .blue
+        case "green": return .green
+        case "orange": return .orange
+        case "purple": return .purple
+        case "pink": return .pink
+        case "yellow": return .yellow
+        default: return .gray
         }
     }
 }

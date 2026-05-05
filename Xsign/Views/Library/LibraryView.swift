@@ -43,22 +43,18 @@ struct LibraryView: View {
             .searchable(text: $searchText)
             .scrollDismissesKeyboard(.interactively)
             .toolbar {
-                if editMode.isEditing {
-                    ToolbarItem(placement: .destructiveAction) {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    if editMode.isEditing {
                         Button("Delete (\(selectedAppIDs.count))") {
                             bulkDeleteSelectedApps()
                         }
                         .disabled(selectedAppIDs.isEmpty)
-                    }
-                } else {
-                    ToolbarItem(placement: .primaryAction) {
+                    } else {
                         Button {
                             showingImportPicker = true
                         } label: {
                             Label("Import Files", systemImage: "plus")
                         }
-                    }
-                    ToolbarItem(placement: .secondaryAction) {
                         Button {
                             showingCategoryCreator = true
                         } label: {
@@ -67,7 +63,7 @@ struct LibraryView: View {
                     }
                 }
                 
-                ToolbarItem(placement: .cancellationAction) {
+                ToolbarItem(placement: .navigationBarLeading) {
                     EditButton()
                 }
             }
