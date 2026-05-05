@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		077810ABE2724D01920D2411 /* XsignApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047CF1F92C7FD3C0D4AAE46C /* XsignApp.swift */; };
+		0C3A7B94E365FCD739F51D2A /* SigningOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9641DE24385142D19489CE49 /* SigningOptionsView.swift */; };
 		0F238DDAB713E760D785A47A /* AppModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331A304AB08F24B674187BB0 /* AppModifier.swift */; };
 		1C21705ED9B47C5085DB7D13 /* CertificateManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486717146114366405A39CD7 /* CertificateManagementView.swift */; };
 		2136D7B36703691BDB6A35CA /* Crypto in Frameworks */ = {isa = PBXBuildFile; productRef = 79062023EA53BD41F69D9181 /* Crypto */; };
@@ -19,10 +20,12 @@
 		4A3405A53F28E5C2C096D9D3 /* BitByteData in Frameworks */ = {isa = PBXBuildFile; productRef = BB58180DC547BEBD161EB448 /* BitByteData */; };
 		4DE01B583BFECC4AD3473717 /* Vapor in Frameworks */ = {isa = PBXBuildFile; productRef = 4A77FF2C9E3D895ED101AD35 /* Vapor */; };
 		55D5C04D5E45584848B41D03 /* LottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D589735A9AB3AB8DE9984C80 /* LottieView.swift */; };
+		6FF4A019DEE6F65D77EE5445 /* FileImporterRepresentableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901632891C973FC91B80A149 /* FileImporterRepresentableView.swift */; };
 		730C1E2FC92347AF5658225F /* ZipService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5917AB144DA85B703FBB4423 /* ZipService.swift */; };
 		7B0D6943DB731749E9A220C0 /* BackdoorTLS.swift in Sources */ = {isa = PBXBuildFile; fileRef = B60C3EDD7AD3FD3EE23D54AA /* BackdoorTLS.swift */; };
 		7EE40819B5D471D9FCF0C157 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97F6C47994DE4070977F2224 /* MainTabView.swift */; };
 		7FDF123EABD02B6A9FDBB071 /* AppDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E8BE7B3B05679046427CC9 /* AppDetailView.swift */; };
+		8991B16C96D6406EAE8D259B /* FolderSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159D602FD6CB802EB4DF59FA /* FolderSetup.swift */; };
 		8EB7441903E3E8FD65EC4030 /* AppFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655C4BF5E94F67D61DEFA56D /* AppFile.swift */; };
 		8F42B8F94C6D70BDF823E9AA /* CreateCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204290FE9FE5106D8F15AEF7 /* CreateCategoryView.swift */; };
 		906E4865414B343951A363A0 /* CommonUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DD7AFFF63EFF6E0CFE4CA5 /* CommonUI.swift */; };
@@ -30,16 +33,19 @@
 		9152EFCEED55E99D8ADA78DA /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80816F4D552F2692EAC764B1 /* LibraryView.swift */; };
 		9318439ED2F3FF7767D5C924 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D815C2DAE8DC805E63635E /* Category.swift */; };
 		9458CCB6B501EB9A6CBBF7F1 /* CategoryPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7846FC39C995AF98647BCFEE /* CategoryPickerView.swift */; };
+		9D7169B9194B63C6614BDDA1 /* XSignView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2976B7F5254683F1B53E068 /* XSignView.swift */; };
 		A098C368A2C5FF062D7F6324 /* GeneralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B59A4DA29C6920C4504DDF /* GeneralView.swift */; };
 		A2D77AAE0A5EB9FB29E4A9C0 /* SignModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6965F14F1F159D77AF31F0F0 /* SignModalView.swift */; };
 		AE16DBF0E1623116127A3CDD /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = F545D861AB51586D2854E00B /* Lottie */; };
 		B24F2D2A26576E3F49F1AB3F /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = 19DE7AF3FEB5B1343EF93580 /* Zip */; };
 		BE9594B1761BB66CDD005362 /* AppFileCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29AE627B0D17B85C685FB903 /* AppFileCard.swift */; };
 		D62F5F5193E3AED28FA57988 /* Zsign in Frameworks */ = {isa = PBXBuildFile; productRef = 88D2C9C10DAF578467661FE4 /* Zsign */; };
+		D7F5F38F85997D855183DF83 /* SigningOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF804878723955E0AA00D39 /* SigningOptions.swift */; };
 		D97577F26BE87A11BDA97684 /* LocalServerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA629EC58711CA60E47FE40 /* LocalServerService.swift */; };
 		DC68EA776318F6E0F31FB203 /* BinaryInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CF3263DC77749C8BC6A95F /* BinaryInfo.swift */; };
 		E0CBD5C8D1F4F342CB4EAF01 /* AppLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7C00F7818A12B94D439691 /* AppLog.swift */; };
 		E273DFB969FD298429D70005 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E312B1F48D6995A2E70D140 /* Theme.swift */; };
+		E2BB6882673DC87C98E793A7 /* LogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DA2258AF46364CEA502FBE /* LogsView.swift */; };
 		E3312836E613907A2620E40C /* BinaryParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67CBC595E06126783D981AAB /* BinaryParser.swift */; };
 		E3FBC1A198F0ABAEFFC19C67 /* CategoryPill.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E23FA8CE92C04EE48EA96F /* CategoryPill.swift */; };
 		E898D9EC8665DFC2EF52BC54 /* ImportCertificateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F60E1BAE39877BABEBB3D63 /* ImportCertificateView.swift */; };
@@ -49,13 +55,6 @@
 		F89D222923E601DA5DB7ACF4 /* FileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E7AE47639383126AAE5A623 /* FileService.swift */; };
 		F99C5243079D2DA5E3423781 /* Entitlement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487B89EDC40E05392287B921 /* Entitlement.swift */; };
 		FAA91139D9A8BE522259B8DD /* SWCompression in Frameworks */ = {isa = PBXBuildFile; productRef = 8D69F21E55FC668A00B9FF58 /* SWCompression */; };
-
-		FD64F15A824D461D9F8CBF89 /* SigningOptions.swift */ = {isa = PBXBuildFile; fileRef = 4B77641277C94F5FB2FC5F91 /* SigningOptions.swift */; };
-		BC506853330C4F69B76B2684 /* FileImporterRepresentableView.swift */ = {isa = PBXBuildFile; fileRef = 338446595B804A58B645FB64 /* FileImporterRepresentableView.swift */; };
-		366F8CA2FBEB4CA48AA5A364 /* XSignView.swift */ = {isa = PBXBuildFile; fileRef = 567D370B58B84335A82D308E /* XSignView.swift */; };
-		0F1475BC2FB74E0F9CD2379E /* SigningOptionsView.swift */ = {isa = PBXBuildFile; fileRef = F2C3EF61B7AA45B0A5725D03 /* SigningOptionsView.swift */; };
-		E50F82E70BEE41869C76EBF8 /* LogsView.swift */ = {isa = PBXBuildFile; fileRef = 5C2BE24DE55D49EEA280BAF7 /* LogsView.swift */; };
-		C616212B4A174EBE8177EDC6 /* FolderSetup.swift */ = {isa = PBXBuildFile; fileRef = 35AF6CBCE3254BD1AB032DD0 /* FolderSetup.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -64,10 +63,12 @@
 		047CF1F92C7FD3C0D4AAE46C /* XsignApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XsignApp.swift; sourceTree = "<group>"; };
 		0E7AE47639383126AAE5A623 /* FileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileService.swift; sourceTree = "<group>"; };
 		0F60E1BAE39877BABEBB3D63 /* ImportCertificateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportCertificateView.swift; sourceTree = "<group>"; };
+		159D602FD6CB802EB4DF59FA /* FolderSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderSetup.swift; sourceTree = "<group>"; };
 		204290FE9FE5106D8F15AEF7 /* CreateCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCategoryView.swift; sourceTree = "<group>"; };
 		28CF3263DC77749C8BC6A95F /* BinaryInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryInfo.swift; sourceTree = "<group>"; };
 		29AE627B0D17B85C685FB903 /* AppFileCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFileCard.swift; sourceTree = "<group>"; };
 		331A304AB08F24B674187BB0 /* AppModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModifier.swift; sourceTree = "<group>"; };
+		33DA2258AF46364CEA502FBE /* LogsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsView.swift; sourceTree = "<group>"; };
 		45D815C2DAE8DC805E63635E /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		486717146114366405A39CD7 /* CertificateManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificateManagementView.swift; sourceTree = "<group>"; };
 		487B89EDC40E05392287B921 /* Entitlement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entitlement.swift; sourceTree = "<group>"; };
@@ -78,9 +79,12 @@
 		6965F14F1F159D77AF31F0F0 /* SignModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignModalView.swift; sourceTree = "<group>"; };
 		7846FC39C995AF98647BCFEE /* CategoryPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPickerView.swift; sourceTree = "<group>"; };
 		7DA629EC58711CA60E47FE40 /* LocalServerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalServerService.swift; sourceTree = "<group>"; };
+		7DF804878723955E0AA00D39 /* SigningOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigningOptions.swift; sourceTree = "<group>"; };
 		80816F4D552F2692EAC764B1 /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
 		89709A707B112BBD856AB5CA /* PersistenceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceService.swift; sourceTree = "<group>"; };
 		8E312B1F48D6995A2E70D140 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		901632891C973FC91B80A149 /* FileImporterRepresentableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileImporterRepresentableView.swift; sourceTree = "<group>"; };
+		9641DE24385142D19489CE49 /* SigningOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigningOptionsView.swift; sourceTree = "<group>"; };
 		97F6C47994DE4070977F2224 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		97F8CBE86E8D19D7E666164F /* Certificate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Certificate.swift; sourceTree = "<group>"; };
 		9A772C721A5FE10E49D81DDF /* TweakManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweakManager.swift; sourceTree = "<group>"; };
@@ -89,6 +93,7 @@
 		B60C3EDD7AD3FD3EE23D54AA /* BackdoorTLS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackdoorTLS.swift; sourceTree = "<group>"; };
 		B6D33887A2E5CE7D00912185 /* Xsign-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Xsign-Bridging-Header.h"; sourceTree = "<group>"; };
 		BE7C00F7818A12B94D439691 /* AppLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLog.swift; sourceTree = "<group>"; };
+		C2976B7F5254683F1B53E068 /* XSignView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XSignView.swift; sourceTree = "<group>"; };
 		C6582E6831F4D79E0A798891 /* EntitlementManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntitlementManager.swift; sourceTree = "<group>"; };
 		CA00C3AF8E61D7FDC519105E /* SecurityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityService.swift; sourceTree = "<group>"; };
 		D589735A9AB3AB8DE9984C80 /* LottieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieView.swift; sourceTree = "<group>"; };
@@ -96,13 +101,6 @@
 		D8A55AE27A20E6C607CB1A29 /* SigningService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigningService.swift; sourceTree = "<group>"; };
 		E2E8BE7B3B05679046427CC9 /* AppDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDetailView.swift; sourceTree = "<group>"; };
 		E8E23FA8CE92C04EE48EA96F /* CategoryPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPill.swift; sourceTree = "<group>"; };
-
-		4B77641277C94F5FB2FC5F91 /* SigningOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigningOptions.swift; sourceTree = "<group>"; };
-		338446595B804A58B645FB64 /* FileImporterRepresentableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileImporterRepresentableView.swift; sourceTree = "<group>"; };
-		567D370B58B84335A82D308E /* XSignView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XSignView.swift; sourceTree = "<group>"; };
-		F2C3EF61B7AA45B0A5725D03 /* SigningOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigningOptionsView.swift; sourceTree = "<group>"; };
-		5C2BE24DE55D49EEA280BAF7 /* LogsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsView.swift; sourceTree = "<group>"; };
-		35AF6CBCE3254BD1AB032DD0 /* FolderSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderSetup.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,7 +129,9 @@
 				29AE627B0D17B85C685FB903 /* AppFileCard.swift */,
 				0F60E1BAE39877BABEBB3D63 /* ImportCertificateView.swift */,
 				80816F4D552F2692EAC764B1 /* LibraryView.swift */,
+				9641DE24385142D19489CE49 /* SigningOptionsView.swift */,
 				6965F14F1F159D77AF31F0F0 /* SignModalView.swift */,
+				C2976B7F5254683F1B53E068 /* XSignView.swift */,
 				F287EE0FC892E1EACD8A6AE1 /* Components */,
 			);
 			path = Library;
@@ -155,6 +155,7 @@
 				45D815C2DAE8DC805E63635E /* Category.swift */,
 				97F8CBE86E8D19D7E666164F /* Certificate.swift */,
 				487B89EDC40E05392287B921 /* Entitlement.swift */,
+				7DF804878723955E0AA00D39 /* SigningOptions.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -198,6 +199,7 @@
 				67CBC595E06126783D981AAB /* BinaryParser.swift */,
 				C6582E6831F4D79E0A798891 /* EntitlementManager.swift */,
 				0E7AE47639383126AAE5A623 /* FileService.swift */,
+				159D602FD6CB802EB4DF59FA /* FolderSetup.swift */,
 				7DA629EC58711CA60E47FE40 /* LocalServerService.swift */,
 				89709A707B112BBD856AB5CA /* PersistenceService.swift */,
 				011D3D14A6F465826C5F3E02 /* ProvisioningParser.swift */,
@@ -229,6 +231,7 @@
 			isa = PBXGroup;
 			children = (
 				D6DD7AFFF63EFF6E0CFE4CA5 /* CommonUI.swift */,
+				901632891C973FC91B80A149 /* FileImporterRepresentableView.swift */,
 				D589735A9AB3AB8DE9984C80 /* LottieView.swift */,
 				9EF70CA9C264020E52D4F770 /* StatusBadge.swift */,
 			);
@@ -240,6 +243,7 @@
 			children = (
 				486717146114366405A39CD7 /* CertificateManagementView.swift */,
 				51B59A4DA29C6920C4504DDF /* GeneralView.swift */,
+				33DA2258AF46364CEA502FBE /* LogsView.swift */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -365,21 +369,27 @@
 				8F42B8F94C6D70BDF823E9AA /* CreateCategoryView.swift in Sources */,
 				F99C5243079D2DA5E3423781 /* Entitlement.swift in Sources */,
 				3B1D0B453E59E047F81B358C /* EntitlementManager.swift in Sources */,
+				6FF4A019DEE6F65D77EE5445 /* FileImporterRepresentableView.swift in Sources */,
 				F89D222923E601DA5DB7ACF4 /* FileService.swift in Sources */,
+				8991B16C96D6406EAE8D259B /* FolderSetup.swift in Sources */,
 				A098C368A2C5FF062D7F6324 /* GeneralView.swift in Sources */,
 				E898D9EC8665DFC2EF52BC54 /* ImportCertificateView.swift in Sources */,
 				9152EFCEED55E99D8ADA78DA /* LibraryView.swift in Sources */,
 				D97577F26BE87A11BDA97684 /* LocalServerService.swift in Sources */,
+				E2BB6882673DC87C98E793A7 /* LogsView.swift in Sources */,
 				55D5C04D5E45584848B41D03 /* LottieView.swift in Sources */,
 				7EE40819B5D471D9FCF0C157 /* MainTabView.swift in Sources */,
 				F48F3451823767322A22980A /* PersistenceService.swift in Sources */,
 				374DE514DA7E31DF3BE873B5 /* ProvisioningParser.swift in Sources */,
 				25F639445CA922B940011E3A /* SecurityService.swift in Sources */,
 				A2D77AAE0A5EB9FB29E4A9C0 /* SignModalView.swift in Sources */,
+				D7F5F38F85997D855183DF83 /* SigningOptions.swift in Sources */,
+				0C3A7B94E365FCD739F51D2A /* SigningOptionsView.swift in Sources */,
 				46E4B27D829D98D424F7614A /* SigningService.swift in Sources */,
 				EA74DE8EA687F1DB7072BA91 /* StatusBadge.swift in Sources */,
 				E273DFB969FD298429D70005 /* Theme.swift in Sources */,
 				EB1FF551425D73216F091B7C /* TweakManager.swift in Sources */,
+				9D7169B9194B63C6614BDDA1 /* XSignView.swift in Sources */,
 				077810ABE2724D01920D2411 /* XsignApp.swift in Sources */,
 				730C1E2FC92347AF5658225F /* ZipService.swift in Sources */,
 			);
