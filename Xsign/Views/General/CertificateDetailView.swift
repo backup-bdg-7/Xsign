@@ -94,11 +94,16 @@ struct EntitlementRow: View {
     
     private func iconForCapability(_ type: CapabilityType) -> String {
         switch type {
+        // Core Certificate Entitlements
+        case .applicationIdentifier: return "signature"
+        case .keychainAccessGroups: return "key.2"
+        case .getTaskAllow: return "hammer"
+        case .teamIdentifier: return "person.3"
+        
+        // App Services
         case .pushNotifications: return "bell.badge"
-        case .icloud: return "icloud"
-        case .appGroups: return "person.3"
-        case .networkExtensions: return "network"
         case .applePay: return "creditcard.circle"
+        case .appGroups: return "person.3"
         case .backgroundModes: return "arrow.up.arrow.down.circle"
         case .dataProtection: return "lock.shield"
         case .fileAccess: return "folder"
@@ -112,17 +117,54 @@ struct EntitlementRow: View {
         case .siri: return "mic.circle"
         case .wallet: return "wallet.bifold"
         case .wirelessAccessory: return "wifi"
-        case .custom: return "gear"
+        
+        // Networking
+        case .networkExtensions: return "network"
+        case .hotspotHelper: return "personalhotspot"
+        case .multipath: return "antenna.radiowaves.left.and.right"
+        case .vpnConfiguration: return "lock.shield"
+        
+        // Hardware
+        case .nfc: return "radiowaves.right"
+        case .camera: return "camera"
+        case .microphone: return "mic"
+        case .bluetooth: return "bluetooth"
+        case .externalAccessory: return "cable.connector"
+        
+        // Security
+        case .sharedPassword: return "person.crop.circle.badge.checkmark"
+        case .associatedDomains: return "link"
+        
+        // Media
+        case .mediaLibrary: return "photo.on.rectangle"
+        case .musicRecognition: return "music.note"
+        case .photoLibrary: return "photo"
+        case .videoSubscriber: return "tv"
+        
+        // Communication
+        case .callKit: return "phone"
+        case .messageFilter: return "message"
+        case .contacts: return "person.2"
+        
+        // iCloud
+        case .icloud: return "icloud"
+        case .ubiquityContainer: return "internaldrive"
+        case .ubiquityKVStore: return "key"
         }
     }
     
     private func colorForCapability(_ type: CapabilityType) -> Color {
         switch type {
+        // Core Certificate Entitlements
+        case .applicationIdentifier: return .blue
+        case .keychainAccessGroups: return .yellow
+        case .getTaskAllow: return .gray
+        case .teamIdentifier: return .green
+        
+        // App Services
         case .pushNotifications: return .orange
-        case .icloud: return .blue
-        case .appGroups: return .green
-        case .networkExtensions: return .purple
         case .applePay: return .black
+        case .appGroups: return .green
         case .backgroundModes: return .gray
         case .dataProtection: return .red
         case .fileAccess: return .brown
@@ -136,7 +178,39 @@ struct EntitlementRow: View {
         case .siri: return .pink
         case .wallet: return .black
         case .wirelessAccessory: return .blue
-        case .custom: return .gray
+        
+        // Networking
+        case .networkExtensions: return .purple
+        case .hotspotHelper: return .green
+        case .multipath: return .blue
+        case .vpnConfiguration: return .red
+        
+        // Hardware
+        case .nfc: return .blue
+        case .camera: return .gray
+        case .microphone: return .pink
+        case .bluetooth: return .blue
+        case .externalAccessory: return .gray
+        
+        // Security
+        case .sharedPassword: return .green
+        case .associatedDomains: return .blue
+        
+        // Media
+        case .mediaLibrary: return .purple
+        case .musicRecognition: return .orange
+        case .photoLibrary: return .blue
+        case .videoSubscriber: return .red
+        
+        // Communication
+        case .callKit: return .green
+        case .messageFilter: return .orange
+        case .contacts: return .blue
+        
+        // iCloud
+        case .icloud: return .blue
+        case .ubiquityContainer: return .purple
+        case .ubiquityKVStore: return .yellow
         }
     }
 }
@@ -179,22 +253,29 @@ struct EntitlementDetailView: View {
     
     private func descriptionForEntitlement(_ entitlement: Entitlement) -> String {
         switch entitlement.capabilityType {
+        // Core Certificate Entitlements
+        case .applicationIdentifier:
+            return "Application Identifier (App ID) is the unique identifier for your app (e.g., ABCDE12345.com.example.app). This is the primary entitlement that ties your app to your developer account."
+        case .keychainAccessGroups:
+            return "Keychain Access Groups allow sharing keychain items between apps from the same developer. More specific than general keychain access. Format: <team-id>.<group-name>"
+        case .getTaskAllow:
+            return "Get Task Allow is a debugging entitlement that allows attaching a debugger to the app. Should be set to 'false' for production apps distributed on the App Store."
+        case .teamIdentifier:
+            return "Team Identifier is your Apple Developer Team ID (e.g., ABCDE12345). This entitlement identifies which development team the app belongs to."
+        
+        // App Services
         case .pushNotifications:
             return "Push Notifications allow your app to receive notifications from a server even when the app is not running. This requires setting up push notification certificates in your Apple Developer account."
-        case .icloud:
-            return "iCloud capability allows your app to store data in iCloud, sync across devices, and use CloudKit for database storage. Requires iCloud containers setup."
-        case .appGroups:
-            return "App Groups allow multiple apps from the same developer to share data (UserDefaults, files) between them. Useful for app suites or shared extensions."
-        case .networkExtensions:
-            return "Network Extensions allow your app to perform custom network processing, create VPN configurations, or implement content filtering. Requires special entitlements."
         case .applePay:
             return "Apple Pay allows your app to make secure payments using Apple Pay. Requires merchant ID setup and certification."
+        case .appGroups:
+            return "App Groups allow multiple apps from the same developer to share data (UserDefaults, files) between them. Useful for app suites or shared extensions."
         case .backgroundModes:
             return "Background Modes allow your app to continue running in the background for specific tasks like audio playback, location updates, VoIP, or background fetch."
         case .dataProtection:
-            return "Data Protection adds an additional layer of encryption to user data stored by your app. Files are encrypted using the user's passcode."
+            return "Data Protection adds an additional layer of encryption to user data stored by your app. Files are encrypted using the user's passcode. Levels: Complete, UnlessOpen, UntilFirstAuth."
         case .fileAccess:
-            return "File Access entitlements allow your app to access user files and folders. This includes read/write access to specific directories."
+            return "File Access entitlements allow your app to access user files and folders. This includes read/write access to specific directories like Documents, Library, etc."
         case .gameCenter:
             return "Game Center enables leaderboards, achievements, and multiplayer functionality in your game. Users need an Apple ID to use Game Center."
         case .healthKit:
@@ -215,8 +296,60 @@ struct EntitlementDetailView: View {
             return "Wallet allows your app to add passes, tickets, boarding passes, and loyalty cards to Apple Wallet. Requires pass certificate."
         case .wirelessAccessory:
             return "Wireless Accessory Configuration allows your app to configure Wi-Fi networks and Bluetooth accessories. Used for IoT devices."
-        case .custom:
-            return entitlement.entitlementDescription.isEmpty ? "This is a custom entitlement. Check Apple's documentation for more details." : entitlement.entitlementDescription
+        
+        // Networking
+        case .networkExtensions:
+            return "Network Extensions allow your app to perform custom network processing, create VPN configurations, or implement content filtering. Requires special entitlements."
+        case .hotspotHelper:
+            return "Hotspot Helper allows your app to participate in Wi-Fi hotspot authentication. The app can help users connect to hotspots and handle authentication."
+        case .multipath:
+            return "Multipath allows your app to use multiple network paths simultaneously for improved performance and reliability. Requires special entitlement."
+        case .vpnConfiguration:
+            return "VPN Configuration allows your app to create and manage VPN configurations. Similar to Personal VPN but with different implementation approach."
+        
+        // Hardware
+        case .nfc:
+            return "NFC (Near Field Communication) allows your app to read NFC tags. Used for contactless payments, access cards, and smart home devices. Requires NFC capability."
+        case .camera:
+            return "Camera entitlement allows your app to access the device's camera for taking photos and videos. Requires user permission at runtime."
+        case .microphone:
+            return "Microphone entitlement allows your app to record audio. Requires user permission at runtime. Used for voice recording, calls, etc."
+        case .bluetooth:
+            return "Bluetooth entitlement allows your app to communicate with Bluetooth peripherals. Requires user permission for BLE devices."
+        case .externalAccessory:
+            return "External Accessory allows your app to communicate with hardware accessories connected via the Apple Lightning or USB-C port. Requires MFi program."
+        
+        // Security
+        case .sharedPassword:
+            return "Shared Password entitlement allows your app to share passwords with other apps using the same App ID prefix. Used for SSO flows."
+        case .associatedDomains:
+            return "Associated Domains allow your app to link with your website for Handoff, Universal Links, and Shared Web Credentials. Requires domain verification."
+        
+        // Media
+        case .mediaLibrary:
+            return "Media Library allows your app to access the user's media library (music, videos, podcasts). Requires user permission."
+        case .musicRecognition:
+            return "Music Recognition (Shazam) allows your app to identify music playing around the device. Requires Shazam entitlement from Apple."
+        case .photoLibrary:
+            return "Photo Library allows your app to access the user's photo library to read and write photos and videos. Requires user permission."
+        case .videoSubscriber:
+            return "Video Subscriber entitlement allows your app to authenticate users for streaming video services. Used by TV providers."
+        
+        // Communication
+        case .callKit:
+            return "CallKit allows your app to integrate with the iOS calling interface. Used for VoIP apps to show incoming calls like native calls."
+        case .messageFilter:
+            return "Message Filter allows your app to filter SMS and MMS messages. The app can classify messages as spam or organize them."
+        case .contacts:
+            return "Contacts entitlement allows your app to access the user's contacts. Requires user permission. Used for social and communication apps."
+        
+        // iCloud
+        case .icloud:
+            return "iCloud capability allows your app to store data in iCloud, sync across devices, and use CloudKit for database storage. Requires iCloud containers setup."
+        case .ubiquityContainer:
+            return "Ubiquity Container (iCloud) specifies which iCloud container your app can access. Format: <team-id>.<container-name>. Used for CloudKit and iCloud Drive."
+        case .ubiquityKVStore:
+            return "Ubiquity Key-Value Store (iCloud) allows your app to sync key-value data across devices using iCloud KV Store. Similar to UserDefaults but synced."
         }
     }
 }
