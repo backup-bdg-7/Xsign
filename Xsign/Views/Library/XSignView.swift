@@ -214,3 +214,4 @@ struct SignedAppRow: View {
         .padding(.vertical, 4)
     }
 }
+// Final update
