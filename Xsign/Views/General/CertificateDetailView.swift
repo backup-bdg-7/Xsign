@@ -98,7 +98,21 @@ struct EntitlementRow: View {
         case .icloud: return "icloud"
         case .appGroups: return "person.3"
         case .networkExtensions: return "network"
-        case .other: return "gear"
+        case .applePay: return "creditcard.circle"
+        case .backgroundModes: return "arrow.up.arrow.down.circle"
+        case .dataProtection: return "lock.shield"
+        case .fileAccess: return "folder"
+        case .gameCenter: return "gamecontroller"
+        case .healthKit: return "heart.text.square"
+        case .homeKit: return "house"
+        case .inAppPurchase: return "cart"
+        case .keychainAccess: return "key"
+        case .maps: return "map"
+        case .personalVPN: return "vpn.bond"
+        case .siri: return "mic.circle"
+        case .wallet: return "wallet.bifold"
+        case .wirelessAccessory: return "wifi"
+        case .custom: return "gear"
         }
     }
     
@@ -108,7 +122,21 @@ struct EntitlementRow: View {
         case .icloud: return .blue
         case .appGroups: return .green
         case .networkExtensions: return .purple
-        case .other: return .gray
+        case .applePay: return .black
+        case .backgroundModes: return .gray
+        case .dataProtection: return .red
+        case .fileAccess: return .brown
+        case .gameCenter: return .pink
+        case .healthKit: return .red
+        case .homeKit: return .orange
+        case .inAppPurchase: return .blue
+        case .keychainAccess: return .yellow
+        case .maps: return .green
+        case .personalVPN: return .purple
+        case .siri: return .pink
+        case .wallet: return .black
+        case .wirelessAccessory: return .blue
+        case .custom: return .gray
         }
     }
 }
@@ -159,7 +187,35 @@ struct EntitlementDetailView: View {
             return "App Groups allow multiple apps from the same developer to share data (UserDefaults, files) between them. Useful for app suites or shared extensions."
         case .networkExtensions:
             return "Network Extensions allow your app to perform custom network processing, create VPN configurations, or implement content filtering. Requires special entitlements."
-        case .other:
+        case .applePay:
+            return "Apple Pay allows your app to make secure payments using Apple Pay. Requires merchant ID setup and certification."
+        case .backgroundModes:
+            return "Background Modes allow your app to continue running in the background for specific tasks like audio playback, location updates, VoIP, or background fetch."
+        case .dataProtection:
+            return "Data Protection adds an additional layer of encryption to user data stored by your app. Files are encrypted using the user's passcode."
+        case .fileAccess:
+            return "File Access entitlements allow your app to access user files and folders. This includes read/write access to specific directories."
+        case .gameCenter:
+            return "Game Center enables leaderboards, achievements, and multiplayer functionality in your game. Users need an Apple ID to use Game Center."
+        case .healthKit:
+            return "HealthKit allows your app to read and write health and fitness data to the Health app. Requires privacy policy and user consent."
+        case .homeKit:
+            return "HomeKit allows your app to control HomeKit accessories and set up home automation scenes. Users need iOS devices with HomeKit setup."
+        case .inAppPurchase:
+            return "In-App Purchase allows your app to sell content, features, or subscriptions within the app. Requires App Store Connect setup."
+        case .keychainAccess:
+            return "Keychain Access allows your app to share credentials and sensitive data securely between your apps using the same keychain group."
+        case .maps:
+            return "Maps capability allows your app to integrate with Apple Maps for directions, display points of interest, and use map-based features."
+        case .personalVPN:
+            return "Personal VPN allows your app to create and manage VPN configurations on the device. Requires special entitlements from Apple."
+        case .siri:
+            return "Siri allows your app to integrate with Siri for voice commands and shortcuts. Users can control your app with voice commands."
+        case .wallet:
+            return "Wallet allows your app to add passes, tickets, boarding passes, and loyalty cards to Apple Wallet. Requires pass certificate."
+        case .wirelessAccessory:
+            return "Wireless Accessory Configuration allows your app to configure Wi-Fi networks and Bluetooth accessories. Used for IoT devices."
+        case .custom:
             return entitlement.entitlementDescription.isEmpty ? "This is a custom entitlement. Check Apple's documentation for more details." : entitlement.entitlementDescription
         }
     }

@@ -25,6 +25,24 @@ final class Entitlement: Identifiable {
     }
 }
 
-enum CapabilityType: String, Codable {
-    case pushNotifications, icloud, appGroups, networkExtensions, other
+enum CapabilityType: String, Codable, CaseIterable {
+    case pushNotifications = "push-notifications"
+    case icloud = "icloud"
+    case appGroups = "app-groups"
+    case networkExtensions = "network-extensions"
+    case applePay = "apple-pay"
+    case backgroundModes = "background-modes"
+    case dataProtection = "data-protection"
+    case fileAccess = "file-access"
+    case gameCenter = "game-center"
+    case healthKit = "health-kit"
+    case homeKit = "home-kit"
+    case inAppPurchase = "in-app-purchase"
+    case keychainAccess = "keychain-access"
+    case maps = "maps"
+    case personalVPN = "personal-vpn"
+    case siri = "siri"
+    case wallet = "wallet"
+    case wirelessAccessory = "wireless-accessory"
+    case custom = "custom"
 }
