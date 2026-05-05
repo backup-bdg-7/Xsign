@@ -35,20 +35,23 @@ struct CertificateDetailView: View {
             // Actions Section
             Section {
                 Button(action: {
-                    // Export certificate - export the .p12 file
-                    let panel = NSSavePanel()
-                    panel.allowedContentTypes = [.p12]
-                    panel.nameFieldStringValue = "\(certificate.name).p12"
-                    panel.begin { response in
-                        if response == .OK, let url = panel.url {
-                            do {
-                                let p12Data = try certificate.decryptedP12Data()
-                                try p12Data.write(to: url)
-                                PersistenceService.shared.log(level: .info, category: "Certificate", message: "Exported certificate: \(certificate.name)")
-                            } catch {
-                                PersistenceService.shared.log(level: .error, category: "Certificate", message: "Failed to export certificate", details: error.localizedDescription)
-                            }
+                    // Export certificate - save the .p12 file to documents and share
+                    do {
+                        let p12Data = try certificate.decryptedP12Data()
+                        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+                        let fileURL = documentsURL.appendingPathComponent("\(certificate.name).p12")
+                        try p12Data.write(to: fileURL)
+                        
+                        // Share the file using UIActivityViewController
+                        let activityVC = UIActivityViewController(activityItems: [fileURL], applicationActivities: nil)
+                        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                           let rootVC = windowScene.keyWindow?.rootViewController {
+                            rootVC.present(activityVC, animated: true)
                         }
+                        
+                        PersistenceService.shared.log(level: .info, category: "Certificate", message: "Exported certificate: \(certificate.name)")
+                    } catch {
+                        PersistenceService.shared.log(level: .error, category: "Certificate", message: "Failed to export certificate", details: error.localizedDescription)
                     }
                 }) {
                     Label("Export Certificate", systemImage: "square.and.arrow.up")
@@ -72,5 +75,72 @@ struct CertificateDetailView: View {
                 EntitlementDetailView(entitlement: entitlement)
             }
         }
+    }
+}
+
+struct EntitlementRow: View {
+    let entitlement: Entitlement
+    
+    var body: some View {
+        HStack {
+            Image(systemName: iconForCapability(entitlement.capabilityType))
+                .foregroundColor(colorForCapability(entitlement.capabilityType))
+                .frame(width: 24)
+            
+            VStack(alignment: .leading, spacing: 2) {
+                Text(entitlement.name)
+                    .font(.headline)
+                Text(entitlement.capabilityType.rawValue)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            
+            Spacer()
+            
+            if entitlement.isRequired {
+                Text("Required")
+                    .font(.caption2)
+                    .padding(4)
+                    .background(Color.red.opacity(0.2))
+                    .foregroundColor(.red)
+                    .cornerRadius(4)
+            }
+            
+            Image(systemName: "chevron.right")
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .padding(.vertical, 4)
+    }
+    
+    private func iconForCapability(_ type: CapabilityType) -> String {
+        // Return appropriate icon for each capability type
+        return "questionmark"
+    }
+    
+    private func colorForCapability(_ type: CapabilityType) -> Color {
+        return .blue
+    }
+}
+
+struct EntitlementDetailView: View {
+    let entitlement: Entitlement
+    
+    var body: some View {
+        List {
+            Section("Details") {
+                InfoRow(label: "Name", value: entitlement.name)
+                InfoRow(label: "Type", value: entitlement.capabilityType.rawValue)
+                InfoRow(label: "Required", value: entitlement.isRequired ? "Yes" : "No")
+            }
+            
+            Section("Description") {
+                Text(entitlement.capabilityType.description)
+                    .font(.body)
+                    .foregroundColor(.secondary)
+            }
+        }
+        .navigationTitle(entitlement.name)
+        .navigationBarTitleDisplayMode(.inline)
     }
 }

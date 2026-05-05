@@ -6,6 +6,7 @@ struct FolderSetup {
     static let shared = FolderSetup()
     private init() { setupFolders() }
     
+    @MainActor
     func setupFolders() {
         let fileManager = FileManager.default
         let documentsDir = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]

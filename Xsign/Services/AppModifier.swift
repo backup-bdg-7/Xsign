@@ -1,96 +1,55 @@
 import Foundation
-import ZsignC
+import SwiftData
 
 /**
- * AppModifier handles app bundle modifications.
- * Based on Feather's approach for modifying app properties.
+ * AppModifier handles app modifications like signing, renaming, etc.
+ * Based on Feather's AppModifier implementation.
  */
 class AppModifier {
     static let shared = AppModifier()
     private init() {}
-
-    /// Modify an app's Info.plist with new properties
-    func modifyInfoPlist(appURL: URL, properties: [String: Any]) throws {
-        let infoPlistURL = appURL.appendingPathComponent("Info.plist")
-
-        guard FileManager.default.fileExists(atPath: infoPlistURL.path) else {
-            throw AppModifierError.plistNotFound
-        }
-
-        guard let plist = try NSMutableDictionary(contentsOf: infoPlistURL) else {
-            throw NSError(domain: "AppModifier", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to read Info.plist"])
-        }
-
-        for (key, value) in properties {
-            plist[key] = value
-        }
-
-        try plist.write(to: infoPlistURL)
-    }
-
-    /// Change an app's bundle ID
-    func changeBundleID(appURL: URL, newBundleID: String) throws {
-        try modifyInfoPlist(appURL: appURL, properties: ["CFBundleIdentifier": newBundleID])
-    }
-
-    /// Change an app's display name
-    func changeDisplayName(appURL: URL, newName: String) throws {
-        try modifyInfoPlist(appURL: appURL, properties: ["CFBundleDisplayName": newName])
-    }
-
-    /// Change an app's version
-    func changeVersion(appURL: URL, newVersion: String) throws {
-        try modifyInfoPlist(appURL: appURL, properties: ["CFBundleVersion": newVersion])
-    }
-
-    /// Change an app's short version
-    func changeShortVersion(appURL: URL, newVersion: String) throws {
-        try modifyInfoPlist(appURL: appURL, properties: ["CFBundleShortVersionString": newVersion])
-    }
-
-    /// Remove files from an app bundle
-    func removeFiles(from appURL: URL, fileNames: [String]) throws {
-        let fileManager = FileManager.default
-
-        for fileName in fileNames {
-            let fileURL = appURL.appendingPathComponent(fileName)
-            if fileManager.fileExists(atPath: fileURL.path) {
-                try fileManager.removeItem(at: fileURL)
-            }
-        }
-    }
-
-    /// Add a file to an app bundle
-    func addFile(to appURL: URL, fileURL: URL, destinationPath: String? = nil) throws {
-        let fileName = destinationPath ?? fileURL.lastPathComponent
-        let destinationURL = appURL.appendingPathComponent(fileName)
-
-        if FileManager.default.fileExists(atPath: destinationURL.path) {
-            try FileManager.default.removeItem(at: destinationURL)
-        }
-
-        try FileManager.default.copyItem(at: fileURL, to: destinationURL)
-    }
-
-    /// Resign an app with zsign (after modifications)
-    func resignApp(at appURL: URL, certificate: Certificate) async throws -> URL {
-        // Create AppFile properly
-        let fileName = appURL.lastPathComponent
-        let relativePath = fileName // Simplified - in reality would need proper relative path
-        let attributes = try FileManager.default.attributesOfItem(atPath: appURL.path)
-        let size = attributes[.size] as? Int64 ?? 0
-        let type = appURL.pathExtension.lowercased() == "ipa" ? FileType.ipa : .dylib
+    
+    /// Sign an app file with the given certificate
+    func signApp(_ appFile: AppFile, certificate: Certificate) async throws -> URL {
+        let size = FileManager.default.fileSize(atPath: appFile.filePath.path) ?? 0
+        let type = appFile.type
         
-        let appFile = AppFile(
-            name: fileName,
-            fileName: fileName,
-            relativePath: relativePath,
+        // Create AppFile for signing
+        let newAppFile = AppFile(
+            name: appFile.name,
+            fileName: appFile.fileName,
+            relativePath: appFile.relativePath,
             type: type,
             size: size,
             creationDate: Date()
         )
         
-        let options = SigningService.SigningOptions()
+        // Use default options for signing
+        let options = SigningOptions(
+            ppqProtection: OptionsManager.shared.options.ppqProtection,
+            appAppearance: OptionsManager.shared.options.appAppearance,
+            minimumAppRequirement: OptionsManager.shared.options.minimumAppRequirement,
+            signingOption: OptionsManager.shared.options.signingOption,
+            fileSharing: OptionsManager.shared.options.fileSharing,
+            itunesFileSharing: OptionsManager.shared.options.itunesFileSharing,
+            proMotion: OptionsManager.shared.options.proMotion,
+            gameMode: OptionsManager.shared.options.gameMode,
+            ipadFullscreen: OptionsManager.shared.options.ipadFullscreen,
+            removeURLScheme: OptionsManager.shared.options.removeURLScheme,
+            removeProvisioning: OptionsManager.shared.options.removeProvisioning,
+            changeLanguageFilesForCustomDisplayName: OptionsManager.shared.options.changeLanguageFilesForCustomDisplayName,
+            post_installAppAfterSigned: OptionsManager.shared.options.post_installAppAfterSigned,
+            post_deleteAppAfterSigned: OptionsManager.shared.options.post_deleteAppAfterSigned,
+            experiment_replaceSubstrateWithEllekit: OptionsManager.shared.options.experiment_replaceSubstrateWithEllekit,
+            experiment_supportLiquidGlass: OptionsManager.shared.options.experiment_supportLiquidGlass,
+            customBundleID: nil,
+            customDisplayName: nil,
+            customVersion: nil,
+            customBuildVersion: nil,
+            customAppIcon: nil,
+            entitlements: nil,
+            dylibsToInject: nil
+        )
         return try await SigningService.shared.sign(appFile: appFile, certificate: certificate, options: options)
     }
 }

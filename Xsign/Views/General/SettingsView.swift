@@ -170,13 +170,7 @@ struct GeneralView: View {
             }
             .sheet(isPresented: $showingSigningOptions) {
                 NavigationStack {
-                    SigningOptionsView(options: .constant(SigningOptions()))
-                        .navigationTitle("Signing Options")
-                        .toolbar {
-                            ToolbarItem(placement: .cancellationAction) {
-                                Button("Done") { showingSigningOptions = false }
-                            }
-                        }
+                    SigningOptionsView()
                 }
             }
             .sheet(isPresented: $showingLogsView) {

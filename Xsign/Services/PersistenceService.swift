@@ -87,6 +87,7 @@ class PersistenceService {
         return try? context.fetch(descriptor).first
     }
     
+    @MainActor
     func createDefaultCategories() {
         let defaultCategories = [
             (name: "IPA Files", icon: "doc.fill", color: "blue"),
