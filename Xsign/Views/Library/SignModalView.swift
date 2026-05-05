@@ -189,11 +189,33 @@ struct SignModalView: View {
         guard let cert = certificates.first(where: { $0.id == selectedCertificateID }) else { return }
         isSigning = true
         
-        let options = SigningService.SigningOptions(
-            bundleID: newID.isEmpty ? nil : newID,
-            bundleName: newName.isEmpty ? nil : newName,
-            bundleVersion: newVersion.isEmpty ? nil : newVersion,
-            injectDylibs: availableDylibs.filter { selectedDylibIDs.contains($0.id) }.map { $0.filePath }
+        // Create SigningOptions from the model
+        let options = SigningOptions(
+            ppqProtection: false, // User can set this in Settings
+            appAppearance: .default,
+            minimumAppRequirement: .default,
+            signingOption: .default,
+            fileSharing: false,
+            itunesFileSharing: false,
+            proMotion: false,
+            gameMode: false,
+            ipadFullscreen: false,
+            removeURLScheme: false,
+            removeProvisioning: false,
+            changeLanguageFilesForCustomDisplayName: false,
+            post_installAppAfterSigned: false,
+            post_deleteAppAfterSigned: false,
+            experiment_replaceSubstrateWithEllekit: false,
+            experiment_supportLiquidGlass: false,
+            customBundleID: newID.isEmpty ? nil : newID,
+            customDisplayName: newName.isEmpty ? nil : newName,
+            customVersion: newVersion.isEmpty ? nil : newVersion,
+            customBuildVersion: nil,
+            customAppIcon: nil,
+            entitlements: nil,
+            dylibsToInject: selectedDylibIDs.compactMap { id in
+                availableDylibs.first { $0.id == id }?.filePath
+            }
         )
         
         Task {

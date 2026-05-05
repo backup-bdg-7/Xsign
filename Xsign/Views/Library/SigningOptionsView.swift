@@ -3,8 +3,8 @@ import SwiftUI
 // MARK: - SigningOptionsView
 // Based on Feather's SigningOptionsView
 struct SigningOptionsView: View {
-    @Binding var options: SigningOptions
-    var temporaryOptions: SigningOptions?
+    @State private var options = OptionsManager.shared.options
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         Form {
@@ -120,7 +120,7 @@ struct SigningOptionsView: View {
                 .tint(.blue)
                 
                 if options.post_deleteAppAfterSigned {
-                    Text("This will delete your imported application after signing, to save on using unneeded space.")
+                    Text("This will delete your imported application after signing, to save on unused space.")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -147,5 +147,13 @@ struct SigningOptionsView: View {
         }
         .navigationTitle("Signing Options")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                Button("Done") {
+                    OptionsManager.shared.options = options
+                    dismiss()
+                }
+            }
+        }
     }
 }

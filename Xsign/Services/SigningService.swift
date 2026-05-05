@@ -8,58 +8,23 @@ import ZsignC
 class SigningService {
     static let shared = SigningService()
     private init() {}
-
-    struct SigningOptions {
-        var bundleID: String?
-        var bundleName: String?
-        var bundleVersion: String?
-        var bundleBuildVersion: String?
-        var appIcon: Data?
-        var removeFiles: [String]?
-        var injectDylibs: [URL]?
-        var entitlementsURL: URL?
-        var signingOption: SigningOption = .default
-        
-        // Additional options from Feather
-        var ppqProtection: Bool = false
-        var appAppearance: AppAppearance = .default
-        var minimumAppRequirement: MinimumAppRequirement = .default
-        var fileSharing: Bool = false
-        var itunesFileSharing: Bool = false
-        var proMotion: Bool = false
-        var gameMode: Bool = false
-        var ipadFullscreen: Bool = false
-        var removeURLScheme: Bool = false
-        var removeProvisioning: Bool = false
-        var changeLanguageFilesForCustomDisplayName: Bool = false
-        var post_installAppAfterSigned: Bool = false
-        var post_deleteAppAfterSigned: Bool = false
-        var experiment_replaceSubstrateWithEllekit: Bool = false
-        var experiment_supportLiquidGlass: Bool = false
-    }
-
-    enum SigningOption: String {
-        case `default` = "default"
-        case adhoc = "adhoc"
-        case onlyModify = "onlyModify"
-    }
-
+    
     /// Sign an app with the given certificate and options
     func sign(appFile: AppFile, certificate: Certificate, options: SigningOptions) async throws -> URL {
         let fileManager = FileManager.default
         let tempURL = fileManager.temporaryDirectory
             .appendingPathComponent(UUID().uuidString, isDirectory: true)
         try fileManager.createDirectory(at: tempURL, withIntermediateDirectories: true)
-
-        // Get app file path
+        
+        // Get app path
         let appPath = appFile.filePath.path
         let signedAppPath = tempURL.appendingPathComponent("signed_\(appFile.fileName)").path
-
+        
         // Write P12 data to temp file
         let p12Data = try certificate.decryptedP12Data()
         let p12Path = tempURL.appendingPathComponent("cert.p12")
         try p12Data.write(to: p12Path)
-
+        
         // Write provisioning profile to temp file if available
         var provisionPath: String = ""
         if let provData = certificate.provisioningProfileData {
@@ -67,12 +32,12 @@ class SigningService {
             try provData.write(to: provURL)
             provisionPath = provURL.path
         }
-
+        
         // Get password
         let password = certificate.decryptedPassword() ?? ""
-
+        
         // Determine bundle ID (apply PPQ protection if enabled)
-        var bundleID = options.bundleID ?? appFile.bundleID ?? ""
+        var bundleID = options.customBundleID ?? options.customDisplayName ?? appFile.bundleID ?? ""
         if options.ppqProtection {
             // Append random string to bundle ID for PPQ protection
             let randomString = UUID().uuidString.prefix(8).lowercased()
@@ -82,17 +47,17 @@ class SigningService {
                 bundleID = "com.xsign.\(randomString)"
             }
         }
-
+        
         // Determine display name
-        let displayName = options.bundleName ?? appFile.name
-
+        let displayName = options.customDisplayName ?? appFile.name
+        
         // Determine version
-        let version = options.bundleVersion ?? appFile.version ?? "1.0"
-        let buildVersion = options.bundleBuildVersion ?? appFile.build ?? "1"
-
+        let version = options.customVersion ?? appFile.version ?? "1.0"
+        let buildVersion = options.customBuildVersion ?? appFile.build ?? "1"
+        
         // Determine if adhoc
         let adhoc = options.signingOption == .adhoc
-
+        
         // Call C function from ZsignC module
         let signSuccess = c_zsign_sign_app(
             appPath,
@@ -106,31 +71,41 @@ class SigningService {
             buildVersion,
             adhoc
         )
-
+        
         // Clean up temp files
         try? fileManager.removeItem(at: p12Path)
         if !provisionPath.isEmpty {
             try? fileManager.removeItem(at: URL(fileURLWithPath: provisionPath))
         }
-
+        
         guard signSuccess else {
             throw NSError(domain: "Signing", code: 1, userInfo: [NSLocalizedDescriptionKey: "Signing failed"])
         }
-
+        
         // Apply post-signing options
-        if options.post_deleteAppAfterSigned {
-            try? fileManager.removeItem(at: appFile.filePath)
-        }
-
+        try applyPostSigningOptions(to: URL(fileURLWithPath: signedAppPath), options: options)
+        
         // Return signed app path
         return URL(fileURLWithPath: signedAppPath)
     }
-
+    
+    /// Apply post-signing options to the signed app
+    private func applyPostSigningOptions(to appURL: URL, options: SigningOptions) throws {
+        let fileManager = FileManager.default
+        
+        if options.post_deleteAppAfterSigned {
+            try? fileManager.removeItem(at: appURL)
+        }
+        
+        // TODO: Apply other options like fileSharing, itunesFileSharing, etc.
+        // This would require modifying the app bundle's Info.plist
+    }
+    
     /// Check if a certificate is valid
     func checkCertificate(at path: String, password: String) -> Bool {
         return c_zsign_check_certificate(path, password)
     }
-
+    
     /// Get certificate info
     func getCertificateInfo(at path: String, password: String) -> String? {
         guard let infoPtr = c_zsign_get_certificate_info(path, password) else {
@@ -138,7 +113,7 @@ class SigningService {
         }
         return String(cString: infoPtr)
     }
-
+    
     /// Ad-hoc sign an app (no certificate needed)
     func adhocSign(appPath: String, entitlementsPath: String?) -> Bool {
         let tempPath = NSTemporaryDirectory() + "signed_app"
@@ -156,32 +131,3 @@ class SigningService {
         )
     }
 }
-
-// MARK: - C Function Declarations
-@_silgen_name("c_zsign_sign_app_simple")
-func c_zsign_sign_app_simple(
-    _ bundle_path: UnsafePointer<CChar>,
-    _ certificate_path: UnsafePointer<CChar>,
-    _ password: UnsafePointer<CChar>,
-    _ provisioning_profile_path: UnsafePointer<CChar>
-) -> Bool
-
-@_silgen_name("c_zsign_sign_app")
-func c_zsign_sign_app(
-    _ bundle_path: UnsafePointer<CChar>,
-    _ certificate_path: UnsafePointer<CChar>,
-    _ password: UnsafePointer<CChar>,
-    _ provisioning_profile_path: UnsafePointer<CChar>,
-    _ output_path: UnsafePointer<CChar>,
-    _ bundle_id: UnsafePointer<CChar>,
-    _ display_name: UnsafePointer<CChar>,
-    _ version: UnsafePointer<CChar>,
-    _ short_version: UnsafePointer<CChar>,
-    _ adhoc: Bool
-) -> Bool
-
-@_silgen_name("c_zsign_check_certificate")
-func c_zsign_check_certificate(_ certificate_path: UnsafePointer<CChar>, _ password: UnsafePointer<CChar>) -> Bool
-
-@_silgen_name("c_zsign_get_certificate_info")
-func c_zsign_get_certificate_info(_ certificate_path: UnsafePointer<CChar>, _ password: UnsafePointer<CChar>) -> UnsafePointer<CChar>?
