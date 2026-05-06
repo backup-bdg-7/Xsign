@@ -217,7 +217,11 @@ struct LibraryView: View {
                                 }
                         }
                         
-                        NavigationLink(destination: AppDetailView(appFile: file)) {
+                        NavigationLink(destination: 
+                            file.type == .dylib || file.type == .deb 
+                            ? AnyView(FileInfoView(appFile: file)) 
+                            : AnyView(AppDetailView(appFile: file))
+                        ) {
                             AppFileCard(appFile: file)
                                 .contentShape(Rectangle())
                         }
